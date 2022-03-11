@@ -74,11 +74,11 @@ public class Main {
             if(!(file.exists() && file.isFile())) {
                 continue;
             }
-            String name = file.getName();
-            String csvName = String.join(".", name.substring(0, name.lastIndexOf(".")), "csv");
+
+            String csvName = FileNameUtil.mainName(file.getName()) + ".csv";
 
             try (InputStream in = FileUtil.getInputStream(file);
-                 FileWriter writer = new FileWriter(new File("/home/caiwillie/anki", csvName))) {
+                 FileWriter writer = new FileWriter(new File(file.getParent(), csvName))) {
                 Opml opml = new OpmlParser().parse(in);
                 MubuOutline outline = new MubuConverter().convert(opml);
                 Anki anki = new AnkiConverter().converter(outline);
