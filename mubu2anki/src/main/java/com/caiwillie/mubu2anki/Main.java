@@ -54,7 +54,7 @@ public class Main {
             return;
         } else if (StrUtil.isNotBlank(filePath)) {
             // 如果指定文件
-            if(filePath.charAt(0) != '/') {
+            if(!FileUtil.isAbsolutePath(filePath)) {
                 // 如果是相对路径， 转换成绝对路径
                filePath = WORK_DIR + "/" + filePath;
             }
