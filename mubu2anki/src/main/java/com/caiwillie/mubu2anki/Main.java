@@ -5,6 +5,7 @@ import be.ceau.opml.OpmlParser;
 import be.ceau.opml.entity.Opml;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.io.file.PathUtil;
 import cn.hutool.core.io.resource.Resource;
@@ -23,6 +24,7 @@ import com.opencsv.ICSVWriter;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.JarFile;
@@ -77,8 +79,10 @@ public class Main {
 
             String csvName = FileNameUtil.mainName(file.getName()) + ".csv";
 
+
+
             try (InputStream in = FileUtil.getInputStream(file);
-                 FileWriter writer = new FileWriter(new File(file.getParent(), csvName))) {
+                 Writer writer = IoUtil.getWriter(new FileOutputStream(new File(file.getParent(), csvName)), StandardCharsets.UTF_8)) {
                 Opml opml = new OpmlParser().parse(in);
                 MubuOutline outline = new MubuConverter().convert(opml);
                 Anki anki = new AnkiConverter().converter(outline);
