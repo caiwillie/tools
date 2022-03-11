@@ -14,6 +14,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class MubuConverter {
             return ret;
         }
 
-        String html = URLDecoder.decode(text, Charset.defaultCharset());
+        String html = URLDecoder.decode(text, StandardCharsets.UTF_8);
         Document doc = Jsoup.parse(html);
         Elements spans = doc.getElementsByTag("span");
         if(CollUtil.isEmpty(spans)) {
