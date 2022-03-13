@@ -5,4 +5,6 @@ public interface Constant {
     String MUBU_TEXT = "_mubu_text";
 
     String OPML = "opml";
+
+    String SN = "sn";
 }
