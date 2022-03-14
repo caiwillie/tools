@@ -106,13 +106,19 @@ public class MubuConverter {
             return ret;
         }
 
-        int index = span0.indexOf(" ");
-        Assert.isTrue(index > 0, "内容 {} 未找到序号", span0);
-        String sn = StrUtil.trimToEmpty(span0.substring(0, index));
-        boolean match = ReUtil.isMatch(SN_PATTERN, sn);
-        Assert.isTrue(match, "内容 {} 未匹配到序号", span0);
-        String content = span0.substring(index + 1);
+        int index1 = span0.indexOf(" ");
+        int index2 = span0.indexOf("：");
+        Assert.isTrue(index1 > 0 || index2 > 0, "内容 {} 未找到序号", span0);
+        String sn = null;
+        if(index1 > 0) {
+            sn = StrUtil.trimToEmpty(span0.substring(0, index1));
+            boolean match = ReUtil.isMatch(SN_PATTERN, sn);
+            Assert.isTrue(match, "内容 {} 未匹配到序号", span0);
+        } else {
+            sn = StrUtil.trimToEmpty(span0.substring(0, index2));
+        }
 
+        String content = span0.substring(index1 + 1);
         ret[0] = sn;
         ret[1] = content;
 
