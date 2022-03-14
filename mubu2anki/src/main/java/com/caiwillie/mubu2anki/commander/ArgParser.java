@@ -21,16 +21,23 @@ public class ArgParser {
 
     private static final String WORK_DIR = System.getProperty("user.dir");
 
+    public static void parseHelp(JCommander commander, Arg arg) {
+        if(arg.isHelp()) {
+            commander.usage();
+            System.exit(0);
+        }
+    }
+
     public static List<File> parseFiles(JCommander commander, Arg arg) {
         // 最终需要扫描的文件
         List<File> ret = new ArrayList<>();
 
         String filePath = arg.getFile();
-        if(StrUtil.isBlank(filePath) && CollUtil.isNotEmpty(arg.getParameters())) {
+        if(StrUtil.isBlank(filePath)) {
             // 如果没指定文件 并且 参数也不为空
             commander.usage();
             System.exit(0);
-        } else if (StrUtil.isNotBlank(filePath)) {
+        } else  {
             // 如果指定文件
             if(!FileUtil.isAbsolutePath(filePath)) {
                 // 如果是相对路径， 转换成绝对路径
@@ -44,8 +51,6 @@ public class ArgParser {
             } else {
                 ret.addAll(loopDir(file));
             }
-        } else {
-            ret.addAll(loopDir(new File(WORK_DIR)));
         }
 
         return ret;

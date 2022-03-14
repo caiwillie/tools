@@ -36,6 +36,9 @@ public class Main {
         commander.setProgramName("mubu2anki");
         commander.parse(argv);
 
+        // 显示是否需要显示帮助
+        ArgParser.parseHelp(commander, arg);
+
         // 最终需要扫描的文件
         List<File> files = ArgParser.parseFiles(commander, arg);
 
