@@ -51,7 +51,7 @@ public class ArgParser {
         return ret;
     }
 
-    public static boolean isSN(JCommander commander, Arg arg) {
+    public static boolean hasSN(JCommander commander, Arg arg) {
         if(StrUtil.equals(arg.getFormat(), Constant.SN)) {
             return true;
         } else {

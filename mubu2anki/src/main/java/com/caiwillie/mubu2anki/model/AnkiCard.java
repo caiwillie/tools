@@ -8,6 +8,8 @@ import lombok.Data;
 @Data
 public class AnkiCard {
 
+    private String sn;
+
     private String front;
 
     private String back;

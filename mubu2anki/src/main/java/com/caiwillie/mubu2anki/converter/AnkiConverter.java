@@ -69,21 +69,24 @@ public class AnkiConverter {
         for (MubuOutline outline : ss.get(0).getChildern()) {
             back.add(outline.getText());
         }
+
+        String sn = ss.get(0).getSn();
         AnkiCard ankiCard = new AnkiCard();
+        ankiCard.setSn(sn);
         ankiCard.setFront(Formatter.formatIndent(front));
         ankiCard.setBack(Formatter.formatList(back));
         cards.add(ankiCard);
-        return;
     }
 
     public static List<String[]> toCSV(Anki anki) {
         List<String[]> ret = new ArrayList<>();
         String tag = anki.getTag();
         for (AnkiCard card : anki.getCards()) {
-            String[] arr = new String[3];
-            arr[0] = card.getFront();
-            arr[1] = card.getBack();
-            arr[2] = tag;
+            String[] arr = new String[4];
+            arr[0] = card.getSn();
+            arr[1] = card.getFront();
+            arr[2] = card.getBack();
+            arr[3] = tag;
             ret.add(arr);
         }
         return ret;

@@ -11,6 +11,7 @@ import com.caiwillie.mubu2anki.commander.Arg;
 import com.caiwillie.mubu2anki.commander.ArgParser;
 import com.caiwillie.mubu2anki.converter.AnkiConverter;
 import com.caiwillie.mubu2anki.converter.MubuConverter;
+import com.caiwillie.mubu2anki.generator.Generator;
 import com.caiwillie.mubu2anki.model.Anki;
 import com.caiwillie.mubu2anki.model.MubuOutline;
 import com.opencsv.CSVWriterBuilder;
@@ -38,30 +39,11 @@ public class Main {
         // 最终需要扫描的文件
         List<File> files = ArgParser.parseFiles(commander, arg);
 
-        boolean isSN = ArgParser.isSN(commander, arg);
+        boolean hasSN = ArgParser.hasSN(commander, arg);
 
-        for (File file : files) {
-            if(!(file.exists() && file.isFile())) {
-                continue;
-            }
-
-            String csvName = FileNameUtil.mainName(file.getName()) + ".csv";
-
-
-
-            try (InputStream in = FileUtil.getInputStream(file);
-                 Writer writer = IoUtil.getWriter(new FileOutputStream(new File(file.getParent(), csvName)), StandardCharsets.UTF_8)) {
-                Opml opml = new OpmlParser().parse(in);
-                MubuOutline outline = new MubuConverter().convert(opml);
-                Anki anki = new AnkiConverter().converter(outline);
-                List<String[]> csv = AnkiConverter.toCSV(anki);
-                CSVWriterBuilder builder = new CSVWriterBuilder(writer);
-                ICSVWriter csvWriter = builder.withSeparator('\t').build();
-                csvWriter.writeAll(csv);
-            } catch (IOException | OpmlParseException e) {
-                e.printStackTrace();
-            }
-        }
+        // 生成
+        Generator generator = new Generator();
+        generator.generator(files, hasSN);
     }
 
 

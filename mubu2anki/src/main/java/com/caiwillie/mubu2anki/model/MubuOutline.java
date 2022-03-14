@@ -10,6 +10,8 @@ import java.util.List;
 @Data
 public class MubuOutline {
 
+    private String sn;
+
     private String text;
 
     private List<MubuOutline> childern;
