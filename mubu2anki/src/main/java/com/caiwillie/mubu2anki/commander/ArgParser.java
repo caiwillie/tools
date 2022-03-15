@@ -5,7 +5,6 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.StrUtil;
 import com.beust.jcommander.JCommander;
-import com.caiwillie.mubu2anki.commander.Arg;
 import com.caiwillie.mubu2anki.common.Constant;
 
 import java.io.File;

@@ -4,7 +4,6 @@ import be.ceau.opml.entity.Opml;
 import be.ceau.opml.entity.Outline;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.lang.RegexPool;
 import cn.hutool.core.net.URLDecoder;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
@@ -22,7 +21,7 @@ import static com.caiwillie.mubu2anki.common.Constant.MUBU_TEXT;
 
 public class MubuConverter {
 
-    private static final Pattern SN_PATTERN = Pattern.compile("^[1-9]\\d{0,}(\\.[1-9]\\d{0,}){0,}$");
+    private static final Pattern SN_PATTERN = Pattern.compile("^\\d{1,}(\\.\\d{1,}){0,}$");
 
 
     public MubuOutline convert(Opml opml, boolean hasSN) {
@@ -120,7 +119,7 @@ public class MubuConverter {
             sn = StrUtil.trimToEmpty(span0.substring(0, index2));
             content = span0.substring(index2 + 1);
         }
-        
+
         ret[0] = sn;
         ret[1] = content;
 
