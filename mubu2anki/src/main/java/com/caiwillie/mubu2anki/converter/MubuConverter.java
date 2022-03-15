@@ -47,14 +47,14 @@ public class MubuConverter {
 
         if(CollUtil.isNotEmpty(outlines)) {
             for (Outline outline : outlines) {
-                children.add(convert(outline, hasSN));
+                children.add(convert(title, outline, hasSN));
             }
         }
 
         return ret;
     }
 
-    private MubuOutline convert(Outline o, boolean hasSN) {
+    private MubuOutline convert(String title, Outline o, boolean hasSN) {
         MubuOutline ret = null;
         if(o == null) {
             return null;
@@ -64,7 +64,7 @@ public class MubuConverter {
 
         List<Outline> subElements = o.getSubElements();
 
-        String[] strArr = convert(o.getAttribute(MUBU_TEXT), !CollUtil.isEmpty(subElements) && hasSN);
+        String[] strArr = convert(title, o.getAttribute(MUBU_TEXT), !CollUtil.isEmpty(subElements) && hasSN);
 
         ret.setSn(strArr[0]);
 
@@ -76,14 +76,14 @@ public class MubuConverter {
 
         if(CollUtil.isNotEmpty(subElements)) {
             for (Outline outline : subElements) {
-                children.add(convert(outline, hasSN));
+                children.add(convert(title, outline, hasSN));
             }
         }
 
         return ret;
     }
 
-    String[] convert (String text, boolean hasSN) {
+    String[] convert (String title, String text, boolean hasSN) {
         String[] ret = new String[2];
         if(text == null) {
             return ret;
@@ -110,11 +110,14 @@ public class MubuConverter {
         String content = null;
 
         if(group0 != null) {
+            String temp = null;
             if(group0.charAt(0) == '（') {
-                sn = group0.substring(1, group0.length() - 1);
+                temp = group0.substring(1, group0.length() - 1);
             } else {
-                sn = group0.substring(0, group0.length() - 1);
+                temp = group0.substring(0, group0.length() - 1);
             }
+
+            sn = StrUtil.format("{}_{}", title, temp);
 
             content = span0.substring(group0.length());
         } else {
