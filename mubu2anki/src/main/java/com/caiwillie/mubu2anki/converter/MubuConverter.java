@@ -98,25 +98,28 @@ public class MubuConverter {
         }
 
         String span0 = spans.get(0).text();
-        if(!hasSN) {
-            ret[0] = span0;
-            ret[1] = span0;
-            return ret;
-        }
 
         String group0 = ReUtil.getGroup0(SN_PATTERN, span0);
-        Assert.notNull(group0, "内容 {} 未匹配到序号", span0);
+
+        if(group0 == null && hasSN) {
+            // 如果需要有sn，但是没有检测到，报错
+            Assert.notNull(group0, "内容 {} 未匹配到序号", span0);
+        }
 
         String sn = null;
         String content = null;
 
-        if(group0.charAt(0) == '（') {
-            sn = group0.substring(1, group0.length() - 1);
-        } else {
-            sn = group0.substring(0, group0.length() - 1);
-        }
+        if(group0 != null) {
+            if(group0.charAt(0) == '（') {
+                sn = group0.substring(1, group0.length() - 1);
+            } else {
+                sn = group0.substring(0, group0.length() - 1);
+            }
 
-        content = span0.substring(group0.length());
+            content = span0.substring(group0.length());
+        } else {
+            content = span0;
+        }
 
         ret[0] = sn;
         ret[1] = content;
