@@ -21,8 +21,7 @@ import static com.caiwillie.mubu2anki.common.Constant.MUBU_TEXT;
 
 public class MubuConverter {
 
-    private static final Pattern SN_PATTERN = Pattern.compile("^\\d{1,}(\\.\\d{1,}){0,}$");
-
+    private static final Pattern SN_PATTERN = Pattern.compile("^(\\d{1,}(\\.\\d{1,}){0,} |（([\\u2E80-\\u9FFF]|\\w){1,}）)");
 
     public MubuOutline convert(Opml opml, boolean hasSN) {
         MubuOutline ret = null;
@@ -63,7 +62,9 @@ public class MubuConverter {
 
         ret = new MubuOutline();
 
-        String[] strArr = convert(o.getAttribute(MUBU_TEXT), hasSN);
+        List<Outline> subElements = o.getSubElements();
+
+        String[] strArr = convert(o.getAttribute(MUBU_TEXT), !CollUtil.isEmpty(subElements) && hasSN);
 
         ret.setSn(strArr[0]);
 
@@ -73,10 +74,8 @@ public class MubuConverter {
 
         ret.setChildern(children);
 
-        List<Outline> outlines = o.getSubElements();
-
-        if(CollUtil.isNotEmpty(outlines)) {
-            for (Outline outline : outlines) {
+        if(CollUtil.isNotEmpty(subElements)) {
+            for (Outline outline : subElements) {
                 children.add(convert(outline, hasSN));
             }
         }
@@ -105,24 +104,22 @@ public class MubuConverter {
             return ret;
         }
 
-        int index1 = span0.indexOf(" ");
-        int index2 = span0.indexOf("：");
-        Assert.isTrue(index1 > 0 || index2 > 0, "内容 {} 未找到序号", span0);
+        String group0 = ReUtil.getGroup0(SN_PATTERN, span0);
+        Assert.notNull(group0, "内容 {} 未匹配到序号", span0);
+
         String sn = null;
         String content = null;
-        if(index1 > 0) {
-            sn = StrUtil.trimToEmpty(span0.substring(0, index1));
-            boolean match = ReUtil.isMatch(SN_PATTERN, sn);
-            Assert.isTrue(match, "内容 {} 未匹配到序号", span0);
-            content = span0.substring(index1 + 1);
+
+        if(group0.charAt(0) == '（') {
+            sn = group0.substring(1, group0.length() - 1);
         } else {
-            sn = StrUtil.trimToEmpty(span0.substring(0, index2));
-            content = span0.substring(index2 + 1);
+            sn = group0.substring(0, group0.length() - 1);
         }
+
+        content = span0.substring(group0.length());
 
         ret[0] = sn;
         ret[1] = content;
-
         return ret;
     }
 
