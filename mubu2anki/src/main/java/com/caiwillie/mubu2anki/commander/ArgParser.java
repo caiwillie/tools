@@ -38,12 +38,13 @@ public class ArgParser {
             System.exit(0);
         } else  {
             // 如果指定文件
+            File file = null;
             if(!FileUtil.isAbsolutePath(filePath)) {
                 // 如果是相对路径， 转换成绝对路径
-                filePath = WORK_DIR + "/" + filePath;
+                file = new File(WORK_DIR, filePath);
+            } else {
+                file = new File(filePath);
             }
-
-            File file = new File(filePath);
 
             if(StrUtil.isNotBlank(FileNameUtil.extName(filePath))) {
                 ret.add(file);

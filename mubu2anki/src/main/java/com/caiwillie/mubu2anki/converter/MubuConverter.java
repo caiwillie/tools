@@ -28,7 +28,7 @@ public class MubuConverter {
         if (opml == null) {
             return ret;
         }
-        String title = opml.getHead().getTitle();
+        String title = StrUtil.trim(opml.getHead().getTitle());
 
         Assert.notNull(title, "标题不能为空");
 
@@ -97,7 +97,7 @@ public class MubuConverter {
             return ret;
         }
 
-        String span0 = spans.get(0).text();
+        String span0 = StrUtil.trim(spans.get(0).text());
 
         String group0 = ReUtil.getGroup0(SN_PATTERN, span0);
 
