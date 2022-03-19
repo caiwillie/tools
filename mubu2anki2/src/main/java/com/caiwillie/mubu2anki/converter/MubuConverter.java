@@ -8,6 +8,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.net.URLDecoder;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import com.caiwillie.mubu2anki.model.MubuOutline;
@@ -15,6 +16,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -31,7 +33,15 @@ public class MubuConverter {
 
     private static final Pattern SN_PATTERN = Pattern.compile("^(\\d{1,}(\\.\\d{1,}){0,} |（([\\u2E80-\\u9FFF]|\\w){1,}）)");
 
-    public static MubuOutline convert(String path) {
+    private static final String SN_TEMPLATE = "{}_{}";
+
+    private File path;
+
+    private String title = null;
+
+    private boolean hasSN = false;
+
+    public MubuOutline convert(File path) {
 
         Opml opml = null;
         try (InputStream in = FileUtil.getInputStream(path)) {
@@ -42,21 +52,32 @@ public class MubuConverter {
             throw new IllegalArgumentException(StrUtil.format("文件 {} 不是opml格式", path));
         }
 
-        String title = StrUtil.trim(opml.getHead().getTitle());
+        title = StrUtil.trim(opml.getHead().getTitle());
 
         Assert.notNull(title, "文件 {} 文档标题不能为空", path);
 
-
+        this.path = path;
         MubuOutline root = new MubuOutline();
-        root.setSn(null);
         root.setText(title);
 
         List<MubuOutline> mubuOutlines = convert(opml.getBody().getOutlines());
 
-        return null;
+        // 判断第一个是不是有序号，如果有的，需要处理sn
+        hasSN = CollUtil.isNotEmpty(mubuOutlines) && StrUtil.isNotBlank(mubuOutlines.get(0).getSn());
+
+        check(mubuOutlines, null);
+
+        if(hasSN) {
+            root.setSn(title);
+            completeSN(mubuOutlines);
+        }
+
+        root.setChildern(mubuOutlines);
+
+        return root;
     }
 
-    private static List<MubuOutline> convert(List<Outline> outlines) {
+    private List<MubuOutline> convert(List<Outline> outlines) {
         List<MubuOutline> ret = new ArrayList<>();
 
         if(CollUtil.isEmpty(outlines)) {
@@ -70,7 +91,7 @@ public class MubuConverter {
         return ret;
     }
 
-    private static MubuOutline convert(Outline outline) {
+    private MubuOutline convert(Outline outline) {
         String mubuText = outline.getAttribute(MUBU_TEXT);
         String html = URLDecoder.decode(mubuText, StandardCharsets.UTF_8);
         // 将html格式的text内容解析成doc
@@ -89,11 +110,71 @@ public class MubuConverter {
         return ret;
     }
 
-    private static void removeSN(List<MubuOutline> mubuOutlines) {
+    private void check(List<MubuOutline> mubuOutlines, String parentSN) {
         if(CollUtil.isEmpty(mubuOutlines)) {
             return;
         }
 
 
+        int preSiblingSerial = -1;
+
+        for (int i = 0; i < mubuOutlines.size(); i++) {
+            MubuOutline mubuOutline = mubuOutlines.get(i);
+
+            String sn = mubuOutline.getSn();
+            String text = mubuOutline.getText();
+            if(StrUtil.isBlank(text)) {
+                throw new RuntimeException(StrUtil.format("文件 {} 中存在空行", path.getAbsolutePath()));
+            }
+
+            if(hasSN) {
+                if (StrUtil.isBlank(sn)) {
+                    throw new RuntimeException(StrUtil.format("文件 {} 中的 {} 没有序号", path.getAbsolutePath(), text));
+                }
+
+                // 去除text前面的sn前缀
+                mubuOutline.setText(text.substring(sn.length()));
+
+                if (sn.charAt(0) != '(') {
+
+                    sn = sn.substring(0, sn.length() - 1);
+                    // 序号是x.x.x
+                    int dotIndex = sn.lastIndexOf('.');
+
+                    int serial = NumberUtil.parseInt(sn.substring(dotIndex + 1));
+
+                    if(parentSN != null && parentSN.charAt(0) != '(') {
+                        // 并且父级不为空，并且也是x.x.x开头
+                        if(!StrUtil.equals(sn.substring(0, dotIndex), parentSN)) {
+                            throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 和上级 {} 不匹配", path.getAbsolutePath(), sn, parentSN));
+                        }
+                    }
+
+                    if(preSiblingSerial < serial) {
+                        preSiblingSerial = serial;
+                    } else {
+                        throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 必须递增", path.getAbsolutePath(), sn));
+                    }
+
+                } else {
+                    sn = sn.substring(0, sn.length() - 1);
+                }
+                mubuOutline.setSn(sn);
+            }
+
+            check(mubuOutline.getChildern(), sn);
+        }
     }
+
+    private void completeSN(List<MubuOutline> mubuOutlines) {
+        if(CollUtil.isEmpty(mubuOutlines)) {
+            return;
+        }
+
+        for (MubuOutline mubuOutline : mubuOutlines) {
+            mubuOutline.setSn(StrUtil.format(SN_TEMPLATE, title, mubuOutline.getSn()));
+            completeSN(mubuOutline.getChildern());
+        }
+    }
+
 }

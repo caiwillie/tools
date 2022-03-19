@@ -7,6 +7,8 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.file.FileNameUtil;
+import cn.hutool.core.util.StrUtil;
+import com.beust.jcommander.JCommander;
 import com.opencsv.CSVWriterBuilder;
 import com.opencsv.ICSVWriter;
 
@@ -19,29 +21,20 @@ import java.util.List;
  */
 public class Generator {
 
-    public static void generate(List<File> paths) {
+    public static void generate(JCommander commander, List<File> paths) {
         if(CollUtil.isEmpty(paths)) {
             return;
         }
 
         for (File path : paths) {
-            if(!(path.exists() && path.isFile())) {
-                continue;
-            }
-
             String csvName = FileNameUtil.mainName(path.getName()) + ".csv";
 
-            try (InputStream in = FileUtil.getInputStream(path);
-                 Writer writer = IoUtil.getWriter(new FileOutputStream(new File(path.getParent(), csvName)), StandardCharsets.UTF_8)) {
-                Opml opml = new OpmlParser().parse(in);
-                /*MubuOutline outline = new MubuConverter().convert(opml, hasSN);
-                Anki anki = new AnkiConverter().converter(outline);
-                List<String[]> csv = AnkiConverter.toCSV(anki);*/
+            try (Writer writer = IoUtil.getWriter(new FileOutputStream(new File(path.getParent(), csvName)), StandardCharsets.UTF_8)) {
                 CSVWriterBuilder builder = new CSVWriterBuilder(writer);
                 ICSVWriter csvWriter = builder.withSeparator('\t').build();
-                // csvWriter.writeAll(csv);
-            } catch (IOException | OpmlParseException e) {
-                e.printStackTrace();
+                csvWriter.writeAll(null);
+            } catch (IOException e) {
+                commander.getConsole().println(StrUtil.format("写入文件 {} 错误", csvName));
             }
         }
     }
