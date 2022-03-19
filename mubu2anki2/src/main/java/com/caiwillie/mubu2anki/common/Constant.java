@@ -7,4 +7,6 @@ public interface Constant {
     String OPML = "opml";
 
     String SN = "sn";
+
+    char LEFT_BRACKET = '（';
 }

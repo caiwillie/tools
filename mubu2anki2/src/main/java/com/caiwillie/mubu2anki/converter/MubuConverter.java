@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.caiwillie.mubu2anki.common.Constant.LEFT_BRACKET;
 import static com.caiwillie.mubu2anki.common.Constant.MUBU_TEXT;
 
 /**
@@ -122,47 +123,49 @@ public class MubuConverter {
             MubuOutline mubuOutline = mubuOutlines.get(i);
 
             String sn = mubuOutline.getSn();
+            String nextSN = null;
             String text = mubuOutline.getText();
             if(StrUtil.isBlank(text)) {
                 throw new RuntimeException(StrUtil.format("文件 {} 中存在空行", path.getAbsolutePath()));
             }
 
             if(hasSN) {
-                if (StrUtil.isBlank(sn)) {
+                if (StrUtil.isNotBlank(sn)) {
+                    // 去除text前面的sn前缀
+                    mubuOutline.setText(text.substring(sn.length()));
+
+                    if (sn.charAt(0) != LEFT_BRACKET) {
+
+                        sn = sn.substring(0, sn.length() - 1);
+                        nextSN = sn;
+                        // 序号是x.x.x
+                        int dotIndex = sn.lastIndexOf('.');
+
+                        int serial = NumberUtil.parseInt(sn.substring(dotIndex + 1));
+
+                        if(parentSN != null) {
+                            // 并且父级不为空，并且也是x.x.x开头
+                            if(!StrUtil.equals(sn.substring(0, dotIndex), parentSN)) {
+                                throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 和上级 {} 不匹配", path.getAbsolutePath(), sn, parentSN));
+                            }
+                        }
+
+                        if(preSiblingSerial < serial) {
+                            preSiblingSerial = serial;
+                        } else {
+                            throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 必须递增", path.getAbsolutePath(), sn));
+                        }
+
+                    } else {
+                        sn = sn.substring(1, sn.length() - 1);
+                    }
+                    mubuOutline.setSn(sn);
+                } else if (CollUtil.isNotEmpty(mubuOutline.getChildern())) {
                     throw new RuntimeException(StrUtil.format("文件 {} 中的 {} 没有序号", path.getAbsolutePath(), text));
                 }
-
-                // 去除text前面的sn前缀
-                mubuOutline.setText(text.substring(sn.length()));
-
-                if (sn.charAt(0) != '(') {
-
-                    sn = sn.substring(0, sn.length() - 1);
-                    // 序号是x.x.x
-                    int dotIndex = sn.lastIndexOf('.');
-
-                    int serial = NumberUtil.parseInt(sn.substring(dotIndex + 1));
-
-                    if(parentSN != null && parentSN.charAt(0) != '(') {
-                        // 并且父级不为空，并且也是x.x.x开头
-                        if(!StrUtil.equals(sn.substring(0, dotIndex), parentSN)) {
-                            throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 和上级 {} 不匹配", path.getAbsolutePath(), sn, parentSN));
-                        }
-                    }
-
-                    if(preSiblingSerial < serial) {
-                        preSiblingSerial = serial;
-                    } else {
-                        throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 必须递增", path.getAbsolutePath(), sn));
-                    }
-
-                } else {
-                    sn = sn.substring(0, sn.length() - 1);
-                }
-                mubuOutline.setSn(sn);
             }
 
-            check(mubuOutline.getChildern(), sn);
+            check(mubuOutline.getChildern(), nextSN);
         }
     }
 

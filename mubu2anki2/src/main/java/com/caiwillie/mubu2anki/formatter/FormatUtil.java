@@ -2,13 +2,16 @@ package com.caiwillie.mubu2anki.formatter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.caiwillie.mubu2anki.model.Anki;
+import com.caiwillie.mubu2anki.model.AnkiCard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author caiwillie
  */
-public class Formatter {
+public class FormatUtil {
 
     private static final String P = "<p>{}</p>";
 
@@ -59,6 +62,20 @@ public class Formatter {
 
     public static String br(String str) {
         return StrUtil.format(BR, str);
+    }
+
+    public static List<String[]> toCSV(Anki anki) {
+        List<String[]> ret = new ArrayList<>();
+        String tag = anki.getTag();
+        for (AnkiCard card : anki.getCards()) {
+            String[] arr = new String[4];
+            arr[0] = card.getSn();
+            arr[1] = card.getFront();
+            arr[2] = card.getBack();
+            arr[3] = tag;
+            ret.add(arr);
+        }
+        return ret;
     }
 
 }

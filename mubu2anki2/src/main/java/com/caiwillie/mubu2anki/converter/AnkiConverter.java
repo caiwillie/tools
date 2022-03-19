@@ -1,7 +1,7 @@
 package com.caiwillie.mubu2anki.converter;
 
 import cn.hutool.core.collection.CollUtil;
-import com.caiwillie.mubu2anki.formatter.Formatter;
+import com.caiwillie.mubu2anki.formatter.FormatUtil;
 import com.caiwillie.mubu2anki.model.Anki;
 import com.caiwillie.mubu2anki.model.AnkiCard;
 import com.caiwillie.mubu2anki.model.MubuOutline;
@@ -14,8 +14,6 @@ import java.util.List;
  * @author caiwillie
  */
 public class AnkiConverter {
-
-
     private final List<AnkiCard> cards = new ArrayList<>();
     private MubuOutline parent = null;
     private final LinkedList<MubuOutline> cs = new LinkedList<>();
@@ -73,22 +71,8 @@ public class AnkiConverter {
         String sn = ss.get(0).getSn();
         AnkiCard ankiCard = new AnkiCard();
         ankiCard.setSn(sn);
-        ankiCard.setFront(Formatter.formatIndent(front));
-        ankiCard.setBack(Formatter.formatList(back));
+        ankiCard.setFront(FormatUtil.formatIndent(front));
+        ankiCard.setBack(FormatUtil.formatList(back));
         cards.add(ankiCard);
-    }
-
-    public static List<String[]> toCSV(Anki anki) {
-        List<String[]> ret = new ArrayList<>();
-        String tag = anki.getTag();
-        for (AnkiCard card : anki.getCards()) {
-            String[] arr = new String[4];
-            arr[0] = card.getSn();
-            arr[1] = card.getFront();
-            arr[2] = card.getBack();
-            arr[3] = tag;
-            ret.add(arr);
-        }
-        return ret;
     }
 }
