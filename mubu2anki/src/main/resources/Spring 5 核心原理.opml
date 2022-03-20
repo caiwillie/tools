@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Spring 5 核心原理</title>
+  </head>
+  <body>
+    <outline text="（一）Spring内功心法" _mubu_text="%3Cspan%3E%EF%BC%88%E4%B8%80%EF%BC%89Spring%E5%86%85%E5%8A%9F%E5%BF%83%E6%B3%95%3C/span%3E" _note="" _mubu_note="">
+      <outline text="1 软件架构设计原则" _mubu_text="%3Cspan%3E1%20%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="2 Spring中常用的设计模式" _mubu_text="%3Cspan%3E2%20Spring%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+    </outline>
+    <outline text="（二）Spring环境预热" _mubu_text="%3Cspan%3E%EF%BC%88%E4%BA%8C%EF%BC%89Spring%E7%8E%AF%E5%A2%83%E9%A2%84%E7%83%AD%3C/span%3E" _note="" _mubu_note="">
+      <outline text="3 Spring的前世今生" _mubu_text="%3Cspan%3E3%20Spring%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="4 Spring 5 系统架构" _mubu_text="%3Cspan%3E4%20Spring%205%20%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="5 Spring版本命名规则" _mubu_text="%3Cspan%3E5%20Spring%E7%89%88%E6%9C%AC%E5%91%BD%E5%90%8D%E8%A7%84%E5%88%99%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="6 Spring源码下载及构建技巧" _mubu_text="%3Cspan%3E6%20Spring%E6%BA%90%E7%A0%81%E4%B8%8B%E8%BD%BD%E5%8F%8A%E6%9E%84%E5%BB%BA%E6%8A%80%E5%B7%A7%3C/span%3E" _note="" _mubu_note=""/>
+    </outline>
+    <outline text="（三）Spring核心原理" _mubu_text="%3Cspan%3E%EF%BC%88%E4%B8%89%EF%BC%89Spring%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note="">
+      <outline text="7 用300行代码手写提炼Spring核心原理" _mubu_text="%3Cspan%3E7%20%E7%94%A8300%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%89%8B%E5%86%99%E6%8F%90%E7%82%BCSpring%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="8 一步一步手绘Spring IoC运行时序图" _mubu_text="%3Cspan%3E8%20%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E6%89%8B%E7%BB%98Spring%20IoC%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BA%8F%E5%9B%BE%3C/span%3E" _note="" _mubu_note="">
+        <outline text="8.1 Spring核心之IoC容器初体验" _mubu_text="%3Cspan%3E8.1%20Spring%E6%A0%B8%E5%BF%83%E4%B9%8BIoC%E5%AE%B9%E5%99%A8%E5%88%9D%E4%BD%93%E9%AA%8C%3C/span%3E" _note="" _mubu_note="">
+          <outline text="再谈IoC与DI" _mubu_text="%3Cspan%3E%E5%86%8D%E8%B0%88IoC%E4%B8%8EDI%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="Spring核心容器类图" _mubu_text="%3Cspan%3ESpring%E6%A0%B8%E5%BF%83%E5%AE%B9%E5%99%A8%E7%B1%BB%E5%9B%BE%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="Web IoC容器初体验" _mubu_text="%3Cspan%3EWeb%20IoC%E5%AE%B9%E5%99%A8%E5%88%9D%E4%BD%93%E9%AA%8C%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="8.2 基于XML的IoC容器的初始化" _mubu_text="%3Cspan%3E8.2%20%E5%9F%BA%E4%BA%8EXML%E7%9A%84IoC%E5%AE%B9%E5%99%A8%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%3C/span%3E" _note="" _mubu_note="">
+          <outline text="寻找入口" _mubu_text="%3Cspan%3E%E5%AF%BB%E6%89%BE%E5%85%A5%E5%8F%A3%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="获取配置路径" _mubu_text="%3Cspan%3E%E8%8E%B7%E5%8F%96%E9%85%8D%E7%BD%AE%E8%B7%AF%E5%BE%84%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="开始启动" _mubu_text="%3Cspan%3E%E5%BC%80%E5%A7%8B%E5%90%AF%E5%8A%A8%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="创建容器" _mubu_text="%3Cspan%3E%E5%88%9B%E5%BB%BA%E5%AE%B9%E5%99%A8%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="载入配置路径" _mubu_text="%3Cspan%3E%E8%BD%BD%E5%85%A5%E9%85%8D%E7%BD%AE%E8%B7%AF%E5%BE%84%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="分配路径处理策略" _mubu_text="%3Cspan%3E%E5%88%86%E9%85%8D%E8%B7%AF%E5%BE%84%E5%A4%84%E7%90%86%E7%AD%96%E7%95%A5%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="解析配置文件路径" _mubu_text="%3Cspan%3E%E8%A7%A3%E6%9E%90%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="开始读取配置内容" _mubu_text="%3Cspan%3E%E5%BC%80%E5%A7%8B%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E5%86%85%E5%AE%B9%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="准备文档对象" _mubu_text="%3Cspan%3E%E5%87%86%E5%A4%87%E6%96%87%E6%A1%A3%E5%AF%B9%E8%B1%A1%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="分配解析策略" _mubu_text="%3Cspan%3E%E5%88%86%E9%85%8D%E8%A7%A3%E6%9E%90%E7%AD%96%E7%95%A5%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="将配置载入内存" _mubu_text="%3Cspan%3E%E5%B0%86%E9%85%8D%E7%BD%AE%E8%BD%BD%E5%85%A5%E5%86%85%E5%AD%98%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="载入&lt;bean&gt;元素" _mubu_text="%3Cspan%3E%E8%BD%BD%E5%85%A5&amp;lt;bean&amp;gt;%E5%85%83%E7%B4%A0%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="载入&lt;property&gt;元素" _mubu_text="%3Cspan%3E%E8%BD%BD%E5%85%A5&amp;lt;property&amp;gt;%E5%85%83%E7%B4%A0%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="载入&lt;property&gt;子元素" _mubu_text="%3Cspan%3E%E8%BD%BD%E5%85%A5&amp;lt;property&amp;gt;%E5%AD%90%E5%85%83%E7%B4%A0%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="载入&lt;list&gt;子元素" _mubu_text="%3Cspan%3E%E8%BD%BD%E5%85%A5&amp;lt;list&amp;gt;%E5%AD%90%E5%85%83%E7%B4%A0%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="分配注册策略" _mubu_text="%3Cspan%3E%E5%88%86%E9%85%8D%E6%B3%A8%E5%86%8C%E7%AD%96%E7%95%A5%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="向容器注册" _mubu_text="%3Cspan%3E%E5%90%91%E5%AE%B9%E5%99%A8%E6%B3%A8%E5%86%8C%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="8.3 基于注解的IoC初始化" _mubu_text="%3Cspan%3E8.3%20%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E7%9A%84IoC%E5%88%9D%E5%A7%8B%E5%8C%96%3C/span%3E" _note="" _mubu_note="">
+          <outline text="注解的前世今生" _mubu_text="%3Cspan%3E%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="定位Bean扫描路径" _mubu_text="%3Cspan%3E%E5%AE%9A%E4%BD%8DBean%E6%89%AB%E6%8F%8F%E8%B7%AF%E5%BE%84%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="读取注解的元数据" _mubu_text="%3Cspan%3E%E8%AF%BB%E5%8F%96%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%85%83%E6%95%B0%E6%8D%AE%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="扫描指定包并解析为BeanDefinition" _mubu_text="%3Cspan%3E%E6%89%AB%E6%8F%8F%E6%8C%87%E5%AE%9A%E5%8C%85%E5%B9%B6%E8%A7%A3%E6%9E%90%E4%B8%BABeanDefinition%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="注册注解BeanDefinition" _mubu_text="%3Cspan%3E%E6%B3%A8%E5%86%8C%E6%B3%A8%E8%A7%A3BeanDefinition%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="8.4 IoC容器初始化小结" _mubu_text="%3Cspan%3E8.4%20IoC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B0%8F%E7%BB%93%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="9 一步一步手绘Spring DI运行时序图" _mubu_text="%3Cspan%3E9%20%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E6%89%8B%E7%BB%98Spring%20DI%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BA%8F%E5%9B%BE%3C/span%3E" _note="" _mubu_note="">
+        <outline text="9.1 Spring自动装配之依赖注入" _mubu_text="%3Cspan%3E9.1%20Spring%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%E4%B9%8B%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%3C/span%3E" _note="" _mubu_note="">
+          <outline text="依赖注入发生的时间" _mubu_text="%3Cspan%3E%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%8F%91%E7%94%9F%E7%9A%84%E6%97%B6%E9%97%B4%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="寻找获取Bean的入口" _mubu_text="%3Cspan%3E%E5%AF%BB%E6%89%BE%E8%8E%B7%E5%8F%96Bean%E7%9A%84%E5%85%A5%E5%8F%A3%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="开始实例化" _mubu_text="%3Cspan%3E%E5%BC%80%E5%A7%8B%E5%AE%9E%E4%BE%8B%E5%8C%96%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="选择Bean实例化策略" _mubu_text="%3Cspan%3E%E9%80%89%E6%8B%A9Bean%E5%AE%9E%E4%BE%8B%E5%8C%96%E7%AD%96%E7%95%A5%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="执行Bean实例化" _mubu_text="%3Cspan%3E%E6%89%A7%E8%A1%8CBean%E5%AE%9E%E4%BE%8B%E5%8C%96%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="准备依赖注入" _mubu_text="%3Cspan%3E%E5%87%86%E5%A4%87%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="解析属性依赖注入规则" _mubu_text="%3Cspan%3E%E8%A7%A3%E6%9E%90%E5%B1%9E%E6%80%A7%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E8%A7%84%E5%88%99%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="注入赋值" _mubu_text="%3Cspan%3E%E6%B3%A8%E5%85%A5%E8%B5%8B%E5%80%BC%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="9.2 Spring IoC容器中那些鲜为人知的细节" _mubu_text="%3Cspan%3E9.2%20Spring%20IoC%E5%AE%B9%E5%99%A8%E4%B8%AD%E9%82%A3%E4%BA%9B%E9%B2%9C%E4%B8%BA%E4%BA%BA%E7%9F%A5%E7%9A%84%E7%BB%86%E8%8A%82%3C/span%3E" _note="" _mubu_note="">
+          <outline text="关于延迟加载" _mubu_text="%3Cspan%3E%E5%85%B3%E4%BA%8E%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="关于FactoryBean和BeanFactory" _mubu_text="%3Cspan%3E%E5%85%B3%E4%BA%8EFactoryBean%E5%92%8CBeanFactory%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="再述autowiring" _mubu_text="%3Cspan%3E%E5%86%8D%E8%BF%B0autowiring%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+      <outline text="10 一步一步手绘Spring AOP运行时序图" _mubu_text="%3Cspan%3E10%20%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E6%89%8B%E7%BB%98Spring%20AOP%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BA%8F%E5%9B%BE%3C/span%3E" _note="" _mubu_note="">
+        <outline text="10.1 Spring AOP初体验" _mubu_text="%3Cspan%3E10.1%20Spring%20AOP%E5%88%9D%E4%BD%93%E9%AA%8C%3C/span%3E" _note="" _mubu_note="">
+          <outline text="再述Spring AOP应用场景" _mubu_text="%3Cspan%3E%E5%86%8D%E8%BF%B0Spring%20AOP%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="AOP中必须明白的几个概念" _mubu_text="%3Cspan%3EAOP%E4%B8%AD%E5%BF%85%E9%A1%BB%E6%98%8E%E7%99%BD%E7%9A%84%E5%87%A0%E4%B8%AA%E6%A6%82%E5%BF%B5%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="使用Spring AOP的两种方式" _mubu_text="%3Cspan%3E%E4%BD%BF%E7%94%A8Spring%20AOP%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="切入点表达式的配置规则" _mubu_text="%3Cspan%3E%E5%88%87%E5%85%A5%E7%82%B9%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E9%85%8D%E7%BD%AE%E8%A7%84%E5%88%99%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="10.2 Spring AOP源码分析" _mubu_text="%3Cspan%3E10.2%20Spring%20AOP%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%3C/span%3E" _note="" _mubu_note="">
+          <outline text="寻找入口" _mubu_text="%3Cspan%3E%E5%AF%BB%E6%89%BE%E5%85%A5%E5%8F%A3%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="选择代理策略" _mubu_text="%3Cspan%3E%E9%80%89%E6%8B%A9%E4%BB%A3%E7%90%86%E7%AD%96%E7%95%A5%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="调用代理方法" _mubu_text="%3Cspan%3E%E8%B0%83%E7%94%A8%E4%BB%A3%E7%90%86%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="触发通知" _mubu_text="%3Cspan%3E%E8%A7%A6%E5%8F%91%E9%80%9A%E7%9F%A5%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+      <outline text="11 一步一步手绘Spring MVC运行时序图" _mubu_text="%3Cspan%3E11%20%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E6%89%8B%E7%BB%98Spring%20MVC%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BA%8F%E5%9B%BE%3C/span%3E" _note="" _mubu_note="">
+        <outline text="11.1 初探Spring MVC请求处理流程" _mubu_text="%3Cspan%3E11.1%20%E5%88%9D%E6%8E%A2Spring%20MVC%E8%AF%B7%E6%B1%82%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="11.2 Spring MVC九大组件" _mubu_text="%3Cspan%3E11.2%20Spring%20MVC%E4%B9%9D%E5%A4%A7%E7%BB%84%E4%BB%B6%3C/span%3E" _note="" _mubu_note="">
+          <outline text="HandlerMapping" _mubu_text="%3Cspan%3EHandlerMapping%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="HandlerAdapter" _mubu_text="%3Cspan%3EHandlerAdapter%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="HandlerExceptionResolver" _mubu_text="%3Cspan%3EHandlerExceptionResolver%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="ViewResolver" _mubu_text="%3Cspan%3EViewResolver%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="RequestToViewNameTranslator" _mubu_text="%3Cspan%3ERequestToViewNameTranslator%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="LocaleResolver" _mubu_text="%3Cspan%3ELocaleResolver%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="MultipartResolver" _mubu_text="%3Cspan%3EMultipartResolver%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="FlashMapManager" _mubu_text="%3Cspan%3EFlashMapManager%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="11.3 Spring MVC源码分析" _mubu_text="%3Cspan%3E11.3%20Spring%20MVC%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%3C/span%3E" _note="" _mubu_note="">
+          <outline text="初始化阶段" _mubu_text="%3Cspan%3E%E5%88%9D%E5%A7%8B%E5%8C%96%E9%98%B6%E6%AE%B5%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="运行调用阶段" _mubu_text="%3Cspan%3E%E8%BF%90%E8%A1%8C%E8%B0%83%E7%94%A8%E9%98%B6%E6%AE%B5%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="11.4 Spring MVC优化建议" _mubu_text="%3Cspan%3E11.4%20Spring%20MVC%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+    </outline>
+    <outline text="（四）Spring手写实战" _mubu_text="%3Cspan%3E%EF%BC%88%E5%9B%9B%EF%BC%89Spring%E6%89%8B%E5%86%99%E5%AE%9E%E6%88%98%3C/span%3E" _note="" _mubu_note="">
+      <outline text="12 环境准备" _mubu_text="%3Cspan%3E12%20%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="13 IoC顶层结构设计" _mubu_text="%3Cspan%3E13%20IoC%E9%A1%B6%E5%B1%82%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="14 完成DI模块的功能" _mubu_text="%3Cspan%3E14%20%E5%AE%8C%E6%88%90DI%E6%A8%A1%E5%9D%97%E7%9A%84%E5%8A%9F%E8%83%BD%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="15 完成MVC模块的功能" _mubu_text="%3Cspan%3E15%20%E5%AE%8C%E6%88%90MVC%E6%A8%A1%E5%9D%97%E7%9A%84%E5%8A%9F%E8%83%BD%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="16完成AOP代码织入" _mubu_text="%3Cspan%3E16%E5%AE%8C%E6%88%90AOP%E4%BB%A3%E7%A0%81%E7%BB%87%E5%85%A5%3C/span%3E" _note="" _mubu_note=""/>
+    </outline>
+    <outline text="（五）Spring数据访问" _mubu_text="%3Cspan%3E%EF%BC%88%E4%BA%94%EF%BC%89Spring%E6%95%B0%E6%8D%AE%E8%AE%BF%E9%97%AE%3C/span%3E" _note="" _mubu_note="">
+      <outline text="17 数据库事务原理详解" _mubu_text="%3Cspan%3E17%20%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="18 Spring JDBC源码初探" _mubu_text="%3Cspan%3E18%20Spring%20JDBC%E6%BA%90%E7%A0%81%E5%88%9D%E6%8E%A2%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="19 基于Spring JDBC手写ORM框架" _mubu_text="%3Cspan%3E19%20%E5%9F%BA%E4%BA%8ESpring%20JDBC%E6%89%8B%E5%86%99ORM%E6%A1%86%E6%9E%B6%3C/span%3E" _note="" _mubu_note=""/>
+    </outline>
+    <outline text="（六）Spring经验分享" _mubu_text="%3Cspan%3E%EF%BC%88%E5%85%AD%EF%BC%89Spring%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB%3C/span%3E" _note="" _mubu_note="">
+      <outline text="20 Spring 5 新特性总结" _mubu_text="%3Cspan%3E20%20Spring%205%20%E6%96%B0%E7%89%B9%E6%80%A7%E6%80%BB%E7%BB%93%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="21 关于Spring的经典高频面试题" _mubu_text="%3Cspan%3E21%20%E5%85%B3%E4%BA%8ESpring%E7%9A%84%E7%BB%8F%E5%85%B8%E9%AB%98%E9%A2%91%E9%9D%A2%E8%AF%95%E9%A2%98%3C/span%3E" _note="" _mubu_note="">
+        <outline text="21.1 什么是Spring框架，Spring框架有哪些主要模块" _mubu_text="%3Cspan%3E21.1%20%E4%BB%80%E4%B9%88%E6%98%AFSpring%E6%A1%86%E6%9E%B6%EF%BC%8CSpring%E6%A1%86%E6%9E%B6%E6%9C%89%E5%93%AA%E4%BA%9B%E4%B8%BB%E8%A6%81%E6%A8%A1%E5%9D%97%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.2 使用Spring框架能带来哪些好处" _mubu_text="%3Cspan%3E21.2%20%E4%BD%BF%E7%94%A8Spring%E6%A1%86%E6%9E%B6%E8%83%BD%E5%B8%A6%E6%9D%A5%E5%93%AA%E4%BA%9B%E5%A5%BD%E5%A4%84%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.3 什么是控制反转（IoC），什么是依赖注入" _mubu_text="%3Cspan%3E21.3%20%E4%BB%80%E4%B9%88%E6%98%AF%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%AC%EF%BC%88IoC%EF%BC%89%EF%BC%8C%E4%BB%80%E4%B9%88%E6%98%AF%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.4 在Java中依赖注入有哪些方式" _mubu_text="%3Cspan%3E21.4%20%E5%9C%A8Java%E4%B8%AD%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E6%9C%89%E5%93%AA%E4%BA%9B%E6%96%B9%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.5 BeanFactory和ApplicationContext有什么区别" _mubu_text="%3Cspan%3E21.5%20BeanFactory%E5%92%8CApplicationContext%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.6 Spring提供几种配置方式来设置元数据" _mubu_text="%3Cspan%3E21.6%20Spring%E6%8F%90%E4%BE%9B%E5%87%A0%E7%A7%8D%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F%E6%9D%A5%E8%AE%BE%E7%BD%AE%E5%85%83%E6%95%B0%E6%8D%AE%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.7 如何使用XML配置方式配置Spring" _mubu_text="%3Cspan%3E21.7%20%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8XML%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AESpring%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.8 Spring提供哪些配置形式" _mubu_text="%3Cspan%3E21.8%20Spring%E6%8F%90%E4%BE%9B%E5%93%AA%E4%BA%9B%E9%85%8D%E7%BD%AE%E5%BD%A2%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.9 怎样用注解的方式配置Spring" _mubu_text="%3Cspan%3E21.9%20%E6%80%8E%E6%A0%B7%E7%94%A8%E6%B3%A8%E8%A7%A3%E7%9A%84%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AESpring%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.10 请解释Spring  Bean的生命周期" _mubu_text="%3Cspan%3E21.10%20%E8%AF%B7%E8%A7%A3%E9%87%8ASpring%20%20Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.11 Spring Bean作用域的区别是什么" _mubu_text="%3Cspan%3E21.11%20Spring%20Bean%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.12 什么是Spring Inner Bean" _mubu_text="%3Cspan%3E21.12%20%E4%BB%80%E4%B9%88%E6%98%AFSpring%20Inner%20Bean%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.13 Spring中的单例Bean是线程安全的吗" _mubu_text="%3Cspan%3E21.13%20Spring%E4%B8%AD%E7%9A%84%E5%8D%95%E4%BE%8BBean%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%90%97%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.14 请举例说明如何在Spring中注入一个Java集合" _mubu_text="%3Cspan%3E21.14%20%E8%AF%B7%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E%E5%A6%82%E4%BD%95%E5%9C%A8Spring%E4%B8%AD%E6%B3%A8%E5%85%A5%E4%B8%80%E4%B8%AAJava%E9%9B%86%E5%90%88%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.15 如何向Spring Bean中注入java.util.Properties" _mubu_text="%3Cspan%3E21.15%20%E5%A6%82%E4%BD%95%E5%90%91Spring%20Bean%E4%B8%AD%E6%B3%A8%E5%85%A5java.util.Properties%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.16 请解释Spring Bean的自动装配" _mubu_text="%3Cspan%3E21.16%20%E8%AF%B7%E8%A7%A3%E9%87%8ASpring%20Bean%E7%9A%84%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.17 自动装配有哪些局限性" _mubu_text="%3Cspan%3E21.17%20%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%E6%9C%89%E5%93%AA%E4%BA%9B%E5%B1%80%E9%99%90%E6%80%A7%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.18 请解释各种自动装配模式的区别" _mubu_text="%3Cspan%3E21.18%20%E8%AF%B7%E8%A7%A3%E9%87%8A%E5%90%84%E7%A7%8D%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.19 请举例解释@Required注解" _mubu_text="%3Cspan%3E21.19%20%E8%AF%B7%E4%B8%BE%E4%BE%8B%E8%A7%A3%E9%87%8A%3C/span%3E%3Cspan%20class=%22tag%22%3E@Required%E6%B3%A8%E8%A7%A3%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.20 请举例说明@Qualifier注解" _mubu_text="%3Cspan%3E21.20%20%E8%AF%B7%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E%3C/span%3E%3Cspan%20class=%22tag%22%3E@Qualifier%E6%B3%A8%E8%A7%A3%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.21 构造方法注入和设值注入有什么区别" _mubu_text="%3Cspan%3E21.21%20%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E6%B3%A8%E5%85%A5%E5%92%8C%E8%AE%BE%E5%80%BC%E6%B3%A8%E5%85%A5%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.22 Spring中有哪些不同类型的事件" _mubu_text="%3Cspan%3E21.22%20Spring%E4%B8%AD%E6%9C%89%E5%93%AA%E4%BA%9B%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BA%8B%E4%BB%B6%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.23 FileSystemResource和ClassPathResource有什么区别" _mubu_text="%3Cspan%3E21.23%20FileSystemResource%E5%92%8CClassPathResource%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.24 Spring中用到了哪些设计模式" _mubu_text="%3Cspan%3E21.24%20Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E4%BA%86%E5%93%AA%E4%BA%9B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.25 在Spring中如何更有效地使用JDBC" _mubu_text="%3Cspan%3E21.25%20%E5%9C%A8Spring%E4%B8%AD%E5%A6%82%E4%BD%95%E6%9B%B4%E6%9C%89%E6%95%88%E5%9C%B0%E4%BD%BF%E7%94%A8JDBC%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.26 请解释Spring中的IoC容器" _mubu_text="%3Cspan%3E21.26%20%E8%AF%B7%E8%A7%A3%E9%87%8ASpring%E4%B8%AD%E7%9A%84IoC%E5%AE%B9%E5%99%A8%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="21.27 在Spring中可以注入null或者空字符串吗" _mubu_text="%3Cspan%3E21.27%20%E5%9C%A8Spring%E4%B8%AD%E5%8F%AF%E4%BB%A5%E6%B3%A8%E5%85%A5null%E6%88%96%E8%80%85%E7%A9%BA%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%90%97%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+    </outline>
+  </body>
+</opml>

@@ -43,10 +43,8 @@ public class AnkiConverter {
             }
         }
 
-        String tag = outline.getText();
-
         Anki ret = new Anki();
-        ret.setTag(ReUtil.replaceAll(tag, BLANK_PATTERN, ""));
+        ret.setTag(ReUtil.replaceAll(outline.getText(), BLANK_PATTERN, ""));
         ret.setCards(cards);
 
         return ret;
