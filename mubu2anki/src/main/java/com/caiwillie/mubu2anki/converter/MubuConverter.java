@@ -34,6 +34,8 @@ public class MubuConverter {
 
     private static final Pattern SN_PATTERN = Pattern.compile("^(\\d{1,}(\\.\\d{1,}){0,} |（([\\u2E80-\\u9FFF]|\\w){1,}）)");
 
+    private static final Pattern SN_PATTERN_2 = Pattern.compile("^\\d{1,}(\\.\\d{1,}){0,}$");
+
     private static final String SN_TEMPLATE = "{}_{}";
 
     private File path;
@@ -66,7 +68,7 @@ public class MubuConverter {
         // 判断第一个是不是有序号，如果有的，需要处理sn
         hasSN = CollUtil.isNotEmpty(mubuOutlines) && StrUtil.isNotBlank(mubuOutlines.get(0).getSn());
 
-        check(mubuOutlines, null);
+        check(mubuOutlines, title);
 
         if(hasSN) {
             root.setSn(title);
@@ -99,7 +101,7 @@ public class MubuConverter {
         Document doc = Jsoup.parse(html);
         Elements spans = doc.getElementsByTag("span");
 
-        String span0 = StrUtil.trim(spans.get(0).text());
+        String span0 = CollUtil.isEmpty(spans) ? null : StrUtil.trim(spans.get(0).text());
         String group0 = ReUtil.getGroup0(SN_PATTERN, span0);
 
         MubuOutline ret = new MubuOutline();
@@ -123,10 +125,9 @@ public class MubuConverter {
             MubuOutline mubuOutline = mubuOutlines.get(i);
 
             String sn = mubuOutline.getSn();
-            String nextSN = null;
             String text = mubuOutline.getText();
             if(StrUtil.isBlank(text)) {
-                throw new RuntimeException(StrUtil.format("文件 {} 中存在空行", path.getAbsolutePath()));
+                throw new RuntimeException(StrUtil.format("文件 {} 中 父级 {} 下存在空行", path.getAbsolutePath(), parentSN));
             }
 
             if(hasSN) {
@@ -137,13 +138,12 @@ public class MubuConverter {
                     if (sn.charAt(0) != LEFT_BRACKET) {
 
                         sn = sn.substring(0, sn.length() - 1);
-                        nextSN = sn;
                         // 序号是x.x.x
                         int dotIndex = sn.lastIndexOf('.');
 
                         int serial = NumberUtil.parseInt(sn.substring(dotIndex + 1));
 
-                        if(parentSN != null) {
+                        if(ReUtil.isMatch(SN_PATTERN_2, parentSN)) {
                             // 并且父级不为空，并且也是x.x.x开头
                             if(!StrUtil.equals(sn.substring(0, dotIndex), parentSN)) {
                                 throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 和上级 {} 不匹配", path.getAbsolutePath(), sn, parentSN));
@@ -165,7 +165,7 @@ public class MubuConverter {
                 }
             }
 
-            check(mubuOutline.getChildern(), nextSN);
+            check(mubuOutline.getChildern(), sn);
         }
     }
 

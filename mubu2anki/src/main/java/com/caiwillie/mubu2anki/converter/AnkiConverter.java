@@ -1,6 +1,8 @@
 package com.caiwillie.mubu2anki.converter;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.StrUtil;
 import com.caiwillie.mubu2anki.formatter.FormatUtil;
 import com.caiwillie.mubu2anki.model.Anki;
 import com.caiwillie.mubu2anki.model.AnkiCard;
@@ -9,11 +11,14 @@ import com.caiwillie.mubu2anki.model.MubuOutline;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author caiwillie
  */
 public class AnkiConverter {
+    private static final Pattern BLANK_PATTERN = Pattern.compile("\\s{1,}");
+
     private final List<AnkiCard> cards = new ArrayList<>();
     private MubuOutline parent = null;
     private final LinkedList<MubuOutline> cs = new LinkedList<>();
@@ -41,7 +46,7 @@ public class AnkiConverter {
         String tag = outline.getText();
 
         Anki ret = new Anki();
-        ret.setTag(tag);
+        ret.setTag(ReUtil.replaceAll(tag, BLANK_PATTERN, ""));
         ret.setCards(cards);
 
         return ret;
@@ -70,7 +75,7 @@ public class AnkiConverter {
 
         String sn = ss.get(0).getSn();
         AnkiCard ankiCard = new AnkiCard();
-        ankiCard.setSn(sn);
+        ankiCard.setSn(ReUtil.replaceAll(sn, BLANK_PATTERN, ""));
         ankiCard.setFront(FormatUtil.formatIndent(front));
         ankiCard.setBack(FormatUtil.formatList(back));
         cards.add(ankiCard);
