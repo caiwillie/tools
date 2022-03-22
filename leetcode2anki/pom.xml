@@ -15,6 +15,13 @@
 
     <dependencies>
 
+        <!-- https://mvnrepository.com/artifact/jalopy/jalopy -->
+        <dependency>
+            <groupId>jalopy</groupId>
+            <artifactId>jalopy</artifactId>
+            <version>1.5rc3</version>
+        </dependency>
+
         <dependency>
             <groupId>com.caiwillie.tools</groupId>
             <artifactId>common</artifactId>
