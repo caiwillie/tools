@@ -1,9 +1,9 @@
-package com.caiwillie.mubu2anki;
+package com.caiwillie.tools.mubu2anki;
 
 import com.beust.jcommander.JCommander;
-import com.caiwillie.mubu2anki.commander.Arg;
-import com.caiwillie.mubu2anki.commander.CommanderUtil;
-import com.caiwillie.mubu2anki.generator.Generator;
+import com.caiwillie.tools.mubu2anki.commander.Arg;
+import com.caiwillie.tools.mubu2anki.commander.CommanderUtil;
+import com.caiwillie.tools.mubu2anki.generator.Generator;
 
 import java.io.File;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.caiwillie.mubu2anki.common;
+package com.caiwillie.tools.mubu2anki.common;
 
 public interface Constant {
 

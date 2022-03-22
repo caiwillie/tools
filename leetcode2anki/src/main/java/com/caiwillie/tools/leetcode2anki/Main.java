@@ -1,4 +1,4 @@
-package com.caiwillie.leetcode2anki;
+package com.caiwillie.tools.leetcode2anki;
 
 public class Main {
 

@@ -11,6 +11,7 @@
     <modules>
         <module>mubu2anki</module>
         <module>leetcode2anki</module>
+        <module>common</module>
     </modules>
 
     <properties>

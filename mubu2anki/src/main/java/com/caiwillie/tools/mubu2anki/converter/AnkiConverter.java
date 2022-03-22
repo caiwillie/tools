@@ -1,12 +1,11 @@
-package com.caiwillie.mubu2anki.converter;
+package com.caiwillie.tools.mubu2anki.converter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ReUtil;
-import cn.hutool.core.util.StrUtil;
-import com.caiwillie.mubu2anki.formatter.FormatUtil;
-import com.caiwillie.mubu2anki.model.Anki;
-import com.caiwillie.mubu2anki.model.AnkiCard;
-import com.caiwillie.mubu2anki.model.MubuOutline;
+import com.caiwillie.tools.mubu2anki.formatter.FormatUtil;
+import com.caiwillie.tools.mubu2anki.model.Anki;
+import com.caiwillie.tools.mubu2anki.model.AnkiCard;
+import com.caiwillie.tools.mubu2anki.model.MubuOutline;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package com.caiwillie.mubu2anki.commander;
+package com.caiwillie.tools.mubu2anki.commander;
 
 import com.beust.jcommander.Parameter;
 import lombok.Data;

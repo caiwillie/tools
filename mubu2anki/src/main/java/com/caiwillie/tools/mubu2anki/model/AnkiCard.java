@@ -1,4 +1,4 @@
-package com.caiwillie.mubu2anki.model;
+package com.caiwillie.tools.mubu2anki.model;
 
 import lombok.Data;
 

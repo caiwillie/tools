@@ -1,4 +1,4 @@
-package com.caiwillie.mubu2anki;
+package com.caiwillie.tools.mubu2anki;
 
 import cn.hutool.core.util.ReUtil;
 import org.junit.jupiter.api.Test;

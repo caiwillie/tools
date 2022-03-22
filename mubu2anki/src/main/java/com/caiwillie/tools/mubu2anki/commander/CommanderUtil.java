@@ -1,4 +1,4 @@
-package com.caiwillie.mubu2anki.commander;
+package com.caiwillie.tools.mubu2anki.commander;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.caiwillie.mubu2anki.common.Constant.OPML;
+import static com.caiwillie.tools.mubu2anki.common.Constant.OPML;
 
 /**
  * @author caiwillie

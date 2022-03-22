@@ -1,4 +1,4 @@
-package com.caiwillie.mubu2anki.converter;
+package com.caiwillie.tools.mubu2anki.converter;
 
 import be.ceau.opml.OpmlParseException;
 import be.ceau.opml.OpmlParser;
@@ -11,7 +11,7 @@ import cn.hutool.core.net.URLDecoder;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
-import com.caiwillie.mubu2anki.model.MubuOutline;
+import com.caiwillie.tools.mubu2anki.model.MubuOutline;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.caiwillie.mubu2anki.common.Constant.LEFT_BRACKET;
-import static com.caiwillie.mubu2anki.common.Constant.MUBU_TEXT;
+import static com.caiwillie.tools.mubu2anki.common.Constant.LEFT_BRACKET;
+import static com.caiwillie.tools.mubu2anki.common.Constant.MUBU_TEXT;
 
 /**
  * @author caiwillie

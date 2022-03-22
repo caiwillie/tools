@@ -1,9 +1,9 @@
-package com.caiwillie.mubu2anki.formatter;
+package com.caiwillie.tools.mubu2anki.formatter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.caiwillie.mubu2anki.model.Anki;
-import com.caiwillie.mubu2anki.model.AnkiCard;
+import com.caiwillie.tools.mubu2anki.model.Anki;
+import com.caiwillie.tools.mubu2anki.model.AnkiCard;
 
 import java.util.ArrayList;
 import java.util.List;
