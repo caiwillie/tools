@@ -8,12 +8,10 @@ import cn.hutool.core.util.StrUtil;
 import com.caiwillie.tools.leetcode2anki.commander.ArgDto;
 import com.caiwillie.tools.leetcode2anki.common.Constant;
 import com.caiwillie.tools.leetcode2anki.model.Question;
+import de.hunsicker.jalopy.Jalopy;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -22,6 +20,8 @@ import java.util.regex.Pattern;
 public class LeetCodeConverter {
 
     private static final Pattern SN_PATTERN = Pattern.compile("^_(\\d{1,})_");
+
+    private static final Pattern CODE_PATTERN = Pattern.compile("//leetcode submit region begin\\(Prohibit modification and deletion\\)((.|\\n){0,})//leetcode submit region end\\(Prohibit modification and deletion\\)");
 
     public List<Question> convert(ArgDto arg) {
         List<Question> ret = new ArrayList<>();
@@ -39,11 +39,20 @@ public class LeetCodeConverter {
 
             File contentFile = contentMap.get(sn);
 
+            String codeTemp = FileUtil.readUtf8String(codeFile);
+
+            String code = ReUtil.getGroup1(CODE_PATTERN, codeTemp);
+
+            String code2 = formatCode(code);
+
             String content = FileUtil.readUtf8String(contentFile);
 
+            Question question = new Question();
+            question.setSn(String.valueOf(sn));
+            question.setCode(code);
+            question.setContent(content);
 
-
-
+            ret.add(question);
         }
 
         return ret;
@@ -81,6 +90,17 @@ public class LeetCodeConverter {
         }
 
         return ret;
+    }
+
+
+    private String formatCode(String code) {
+        StringBuffer sb = new StringBuffer();
+        Jalopy jalopy = new Jalopy();
+        jalopy.setEncoding("UTF-8");
+        jalopy.setInput(code, "A.java");
+        jalopy.setOutput(sb);
+        jalopy.format();
+        return sb.toString();
     }
 
 }

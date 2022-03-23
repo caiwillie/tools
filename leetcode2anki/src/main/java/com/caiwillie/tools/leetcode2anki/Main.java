@@ -4,6 +4,7 @@ import com.beust.jcommander.JCommander;
 import com.caiwillie.tools.leetcode2anki.commander.Arg;
 import com.caiwillie.tools.leetcode2anki.commander.CommanderUtil;
 import com.caiwillie.tools.leetcode2anki.commander.ArgDto;
+import com.caiwillie.tools.leetcode2anki.generator.Generator;
 
 public class Main {
 
@@ -30,7 +31,7 @@ public class Main {
             System.exit(1);
         }
 
-        
+        Generator.generate(commander, argDto);
     }
 
 }
