@@ -74,9 +74,7 @@ public class CommanderUtil {
         if(!FileUtil.exist(output)) {
             return FileUtil.mkParentDirs(output);
         } else {
-            if(output.isFile()) {
-                throw new IllegalArgumentException(StrUtil.format("输出路径 {} 必须是文件夹", output));
-            }
+            FileUtil2.assertDirectory(output);
             return output;
         }
     }

@@ -5,6 +5,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
+import com.caiwillie.tools.file.FileUtil2;
 import com.caiwillie.tools.leetcode2anki.commander.InputPath;
 import com.caiwillie.tools.leetcode2anki.common.Constant;
 import com.caiwillie.tools.leetcode2anki.model.Question;
@@ -68,21 +69,9 @@ public class LeetCodeConverter {
         return ret;
     }
 
-    private TreeMap<Integer, File> getFileMap(File root, String suffix) {
+    private TreeMap<Integer, File> getFileMap(File root, String extension) {
         TreeMap<Integer, File> ret = new TreeMap<>();
-        List<File> list = FileUtil.loopFiles(root, 1, path -> {
-            if(!path.isFile()) {
-                // 不是文件，返回false
-                return false;
-            }
-
-            if(!StrUtil.equals(FileNameUtil.extName(path), suffix)) {
-                // 后缀名不是符合, 过滤
-                return false;
-            }
-
-            return true;
-        });
+        List<File> list = FileUtil2.loopFiles(root, extension);
 
         if(CollUtil.isEmpty(list)) {
             return ret;
