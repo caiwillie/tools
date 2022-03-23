@@ -1,6 +1,7 @@
-import de.hunsicker.jalopy.Jalopy;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -8,40 +9,54 @@ import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 public class FormatterTest {
 
     @Test
-    void test() {
-        StringBuffer sb = new StringBuffer();
-        Jalopy jalopy = new Jalopy();
-        jalopy.setEncoding("UTF-8");
-        jalopy.setInput("    class Solution {\n" +
+    void test2() {
+
+        // retrieve the source to format
+        String source = "\n" +
+                "    class Solution {\n" +
                 "        public int[] twoSum(int[] nums, int target) {\n" +
-                "            Map<Integer, Integer> map = new HashMap<>();\n" +
+                "            Map<Integer, Integer>  map = new HashMap<>();\n" +
                 "            int i = 0;\n" +
                 "            while (i < nums.length) {\n" +
                 "                int num = nums[i];\n" +
-                "                if (map.containsKey(target - num)) {\n" +
-                "                    return new int[]{i,\n" +
-                "                            map.get(target - num)};\n" +
+                "                if(map.containsKey(target - num)) {\n" +
+                "                    return new int[] {i, map.get(target- num)};\n" +
                 "                } else {\n" +
                 "                    map.put(num, i);\n" +
                 "                }\n" +
                 "                i++;\n" +
-                "            } return new int[]{-1, -1};\n" +
+                "            }\n" +
+                "            return new int[]{-1, -1};\n" +
                 "        }\n" +
-                "    }", "A.java");
-        jalopy.setOutput(sb);
-        jalopy.format();
-        return;
-    }
+                "    }\n" +
+                "    ";
 
-    @Test
-    void test2() {
-        CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(null);
 
-        // retrieve the source to format
-        String source = "public class TestFormatter{public static void main(String[] args){System.out.println(\"Hello World\");}}";
+        // take default Eclipse formatting options
+        Map options = DefaultCodeFormatterConstants.getEclipseDefaultSettings();
+
+        // initialize the compiler settings to be able to format 1.5 code
+        options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
+        options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
+        options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
+
+        // change the option to wrap each enum constant on a new line
+        options.put(
+                DefaultCodeFormatterConstants.FORMATTER_ALIGNMENT_FOR_ENUM_CONSTANTS,
+                DefaultCodeFormatterConstants.createAlignmentValue(
+                        true,
+                        DefaultCodeFormatterConstants.WRAP_ONE_PER_LINE,
+                        DefaultCodeFormatterConstants.INDENT_ON_COLUMN));
+
+        options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR, JavaCore.SPACE);
+        options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE, "4");
+
+        CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(options);
 
         final TextEdit edit = codeFormatter.format(
                 CodeFormatter.K_COMPILATION_UNIT, // format a compilation unit
