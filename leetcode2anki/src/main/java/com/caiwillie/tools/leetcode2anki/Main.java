@@ -8,14 +8,15 @@ import com.caiwillie.tools.leetcode2anki.generator.Generator;
 
 public class Main {
 
+    private static String PROGRAM_NAME = "leetcode2anki";
+
     public static void main(String[] args) {
         Arg arg = new Arg();
         JCommander commander = JCommander.newBuilder()
                 .addObject(arg)
                 .build();
-        commander.setProgramName("leetcode2anki");
+        commander.setProgramName(PROGRAM_NAME);
         commander.parse(args);
-
 
         ArgDto argDto = null;
         try {
