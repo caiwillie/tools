@@ -15,13 +15,6 @@
 
     <dependencies>
 
-        <!-- https://mvnrepository.com/artifact/jalopy/jalopy -->
-        <dependency>
-            <groupId>jalopy</groupId>
-            <artifactId>jalopy</artifactId>
-            <version>1.5rc3</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.eclipse.jdt/org.eclipse.jdt.core -->
         <dependency>
             <groupId>org.eclipse.jdt</groupId>
