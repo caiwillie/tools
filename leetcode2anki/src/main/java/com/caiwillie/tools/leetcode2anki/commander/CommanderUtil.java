@@ -59,13 +59,15 @@ public class CommanderUtil {
 
             FileAssert.assertDirectory(contentPath);
 
-            ret = new ArgDto(codePath, contentPath);
+            ret = new ArgDto();
+            ret.setCodePath(codePath);
+            ret.setContentPath(contentPath);
+            ret.setRoot(path);
+
+            return ret;
         }
 
         return ret;
     }
-
-
-
 
 }

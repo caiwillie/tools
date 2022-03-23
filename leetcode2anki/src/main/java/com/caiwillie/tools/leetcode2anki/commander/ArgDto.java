@@ -10,12 +10,9 @@ import java.io.File;
 @Data
 public class ArgDto {
 
+    private File root;
+
     private File codePath;
 
     private File contentPath;
-
-    public ArgDto(File codePath, File contentPath) {
-        this.codePath = codePath;
-        this.contentPath = contentPath;
-    }
 }

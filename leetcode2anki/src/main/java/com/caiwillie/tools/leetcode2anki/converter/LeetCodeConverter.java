@@ -143,8 +143,6 @@ public class LeetCodeConverter {
                         DefaultCodeFormatterConstants.WRAP_ONE_PER_LINE,
                         DefaultCodeFormatterConstants.INDENT_ON_COLUMN));
 
-
-
         return ToolFactory.createCodeFormatter(options);
     }
 

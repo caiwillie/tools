@@ -1,3 +1,4 @@
+import cn.hutool.core.util.StrUtil;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
@@ -80,5 +81,12 @@ public class FormatterTest {
         System.out.println(document.get());
     }
 
+
+    @Test
+    void test3() {
+        String a = null;
+        String format = StrUtil.format("{}_1", a);
+        return;
+    }
 
 }
