@@ -36,13 +36,7 @@ public class MubuConverter {
 
     private static final Pattern SN_PATTERN_2 = Pattern.compile("^\\d{1,}(\\.\\d{1,}){0,}$");
 
-    private static final String SN_TEMPLATE = "{}_{}";
-
     private File path;
-
-    private String title = null;
-
-    private boolean hasSN = false;
 
     public MubuOutline convert(File path) {
 
@@ -55,7 +49,7 @@ public class MubuConverter {
             throw new IllegalArgumentException(StrUtil.format("文件 {} 不是opml格式", path));
         }
 
-        title = StrUtil.trim(opml.getHead().getTitle());
+        String title = StrUtil.trim(opml.getHead().getTitle());
 
         Assert.notNull(title, "文件 {} 文档标题不能为空", path);
 
@@ -65,15 +59,9 @@ public class MubuConverter {
 
         List<MubuOutline> mubuOutlines = convert(opml.getBody().getOutlines());
 
-        // 判断第一个是不是有序号，如果有的，需要处理sn
-        hasSN = CollUtil.isNotEmpty(mubuOutlines) && StrUtil.isNotBlank(mubuOutlines.get(0).getSn());
-
-        check(mubuOutlines, title);
-
-        if(hasSN) {
-            root.setSn(title);
-            completeSN(mubuOutlines);
-        }
+        // 检查sn
+        checkSN(mubuOutlines, title);
+        root.setSn(title);
 
         root.setChildern(mubuOutlines);
 
@@ -113,11 +101,10 @@ public class MubuConverter {
         return ret;
     }
 
-    private void check(List<MubuOutline> mubuOutlines, String parentSN) {
+    private void checkSN(List<MubuOutline> mubuOutlines, String parentSN) {
         if(CollUtil.isEmpty(mubuOutlines)) {
             return;
         }
-
 
         int preSiblingSerial = -1;
 
@@ -130,54 +117,40 @@ public class MubuConverter {
                 throw new RuntimeException(StrUtil.format("文件 {} 中 父级 {} 下存在空行", path.getAbsolutePath(), parentSN));
             }
 
-            if(hasSN) {
-                if (StrUtil.isNotBlank(sn)) {
-                    // 去除text前面的sn前缀
-                    mubuOutline.setText(text.substring(sn.length()));
+            if (StrUtil.isNotBlank(sn)) {
+                // 去除text前面的sn前缀
+                mubuOutline.setText(text.substring(sn.length()));
 
-                    if (sn.charAt(0) != LEFT_BRACKET) {
+                if (sn.charAt(0) != LEFT_BRACKET) {
 
-                        sn = sn.substring(0, sn.length() - 1);
-                        // 序号是x.x.x
-                        int dotIndex = sn.lastIndexOf('.');
+                    sn = sn.substring(0, sn.length() - 1);
+                    // 序号是x.x.x
+                    int dotIndex = sn.lastIndexOf('.');
 
-                        int serial = NumberUtil.parseInt(sn.substring(dotIndex + 1));
+                    int serial = NumberUtil.parseInt(sn.substring(dotIndex + 1));
 
-                        if(ReUtil.isMatch(SN_PATTERN_2, parentSN)) {
-                            // 并且父级不为空，并且也是x.x.x开头
-                            if(!StrUtil.equals(sn.substring(0, dotIndex), parentSN)) {
-                                throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 和上级 {} 不匹配", path.getAbsolutePath(), sn, parentSN));
-                            }
+                    if(ReUtil.isMatch(SN_PATTERN_2, parentSN)) {
+                        // 并且父级不为空，并且也是x.x.x开头
+                        if(!StrUtil.equals(sn.substring(0, dotIndex), parentSN)) {
+                            throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 和上级 {} 不匹配", path.getAbsolutePath(), sn, parentSN));
                         }
-
-                        if(preSiblingSerial < serial) {
-                            preSiblingSerial = serial;
-                        } else {
-                            throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 必须递增", path.getAbsolutePath(), sn));
-                        }
-
-                    } else {
-                        sn = sn.substring(1, sn.length() - 1);
                     }
-                    mubuOutline.setSn(sn);
-                } else if (CollUtil.isNotEmpty(mubuOutline.getChildern())) {
-                    throw new RuntimeException(StrUtil.format("文件 {} 中的 {} 没有序号", path.getAbsolutePath(), text));
+
+                    if(preSiblingSerial < serial) {
+                        preSiblingSerial = serial;
+                    } else {
+                        throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 必须递增", path.getAbsolutePath(), sn));
+                    }
+
+                } else {
+                    sn = sn.substring(1, sn.length() - 1);
                 }
+                mubuOutline.setSn(sn);
+            } else if (CollUtil.isNotEmpty(mubuOutline.getChildern())) {
+                throw new RuntimeException(StrUtil.format("文件 {} 中的 {} 没有序号", path.getAbsolutePath(), text));
             }
 
-            check(mubuOutline.getChildern(), sn);
+            checkSN(mubuOutline.getChildern(), sn);
         }
     }
-
-    private void completeSN(List<MubuOutline> mubuOutlines) {
-        if(CollUtil.isEmpty(mubuOutlines)) {
-            return;
-        }
-
-        for (MubuOutline mubuOutline : mubuOutlines) {
-            mubuOutline.setSn(StrUtil.format(SN_TEMPLATE, title, mubuOutline.getSn()));
-            completeSN(mubuOutline.getChildern());
-        }
-    }
-
 }

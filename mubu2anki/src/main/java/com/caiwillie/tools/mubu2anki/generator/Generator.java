@@ -5,10 +5,10 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.StrUtil;
 import com.beust.jcommander.JCommander;
+import com.caiwillie.tools.anki.model.Anki;
+import com.caiwillie.tools.formatter.AnkiFormatter;
 import com.caiwillie.tools.mubu2anki.converter.AnkiConverter;
 import com.caiwillie.tools.mubu2anki.converter.MubuConverter;
-import com.caiwillie.tools.mubu2anki.formatter.FormatUtil;
-import com.caiwillie.tools.mubu2anki.model.Anki;
 import com.caiwillie.tools.mubu2anki.model.MubuOutline;
 import com.opencsv.CSVWriterBuilder;
 import com.opencsv.ICSVWriter;
@@ -41,7 +41,7 @@ public class Generator {
 
                 AnkiConverter ankiConverter = new AnkiConverter();
                 Anki anki = ankiConverter.converter(mubuOutline);
-                List<String[]> data = FormatUtil.toCSV(anki);
+                List<String[]> data = AnkiFormatter.formatWithSN(anki);
                 CSVWriterBuilder builder = new CSVWriterBuilder(writer);
                 ICSVWriter csvWriter = builder.withSeparator('\t').build();
                 csvWriter.writeAll(data);

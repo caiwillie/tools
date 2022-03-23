@@ -1,11 +1,11 @@
 package com.caiwillie.tools.mubu2anki.converter;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.StrUtil;
+import com.caiwillie.tools.anki.model.Anki;
+import com.caiwillie.tools.anki.model.AnkiCard;
 import com.caiwillie.tools.formatter.AnkiFormatter;
-import com.caiwillie.tools.mubu2anki.formatter.FormatUtil;
-import com.caiwillie.tools.mubu2anki.model.Anki;
-import com.caiwillie.tools.mubu2anki.model.AnkiCard;
+import com.caiwillie.tools.formatter.HTMLFormatter;
 import com.caiwillie.tools.mubu2anki.model.MubuOutline;
 
 import java.util.ArrayList;
@@ -22,6 +22,8 @@ public class AnkiConverter {
     private String tag = null;
     private final LinkedList<MubuOutline> cs = new LinkedList<>();
     private final LinkedList<MubuOutline> ss = new LinkedList<>();
+
+    private static final String SN_TEMPLATE = "{}_{}";
 
     public Anki converter(MubuOutline outline) {
         if (outline == null) {
@@ -72,11 +74,10 @@ public class AnkiConverter {
             back.add(outline.getText());
         }
 
-        String sn = ss.get(0).getSn();
         AnkiCard ankiCard = new AnkiCard();
-        ankiCard.setSn(sn);
-        ankiCard.setFront(FormatUtil.formatIndent(front));
-        ankiCard.setBack(FormatUtil.formatList(back));
+        ankiCard.setSn(AnkiFormatter.removeBlank(StrUtil.format(SN_TEMPLATE, tag, ss.get(0).getSn())));
+        ankiCard.setFront(AnkiFormatter.replaceTAB(HTMLFormatter.formatIndent(front)));
+        ankiCard.setBack(AnkiFormatter.replaceTAB(HTMLFormatter.formatList(back)));
         cards.add(ankiCard);
     }
 }

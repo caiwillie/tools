@@ -36,9 +36,9 @@ public class AnkiConverter {
             String sn = StrUtil.format(SN_TEMPLATE, TAG, question.getSn());
 
             AnkiCard card = new AnkiCard();
+            card.setSn(AnkiFormatter.removeBlank(sn));
             card.setFront(AnkiFormatter.replaceTAB(front));
             card.setBack(AnkiFormatter.replaceTAB(back));
-            card.setSn(AnkiFormatter.replaceTAB(sn));
             cards.add(card);
         }
 
