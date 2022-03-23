@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
  */
 public class AnkiFormatter {
 
+
+    private static final Pattern BLANK_PATTERN = Pattern.compile("\\s{1,}");
     private static final Pattern TAB_PATTERN = Pattern.compile("\\t");
     private static final String FOUR_SPACE = "    ";
 
@@ -32,6 +34,10 @@ public class AnkiFormatter {
 
     public static String replaceTAB(String str) {
         return ReUtil.replaceAll(str, TAB_PATTERN, FOUR_SPACE);
+    }
+
+    public static String removeBlank(String str) {
+        return ReUtil.replaceAll(str, BLANK_PATTERN, "");
     }
 
 }
