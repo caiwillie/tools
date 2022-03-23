@@ -1,10 +1,8 @@
 package com.caiwillie.tools.mubu2anki.commander;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.StrUtil;
 import com.beust.jcommander.JCommander;
+import com.caiwillie.tools.file.FileUtil2;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,8 +15,6 @@ import static com.caiwillie.tools.mubu2anki.common.Constant.OPML;
  */
 public class CommanderUtil {
 
-    private static final String WORK_DIR = System.getProperty("user.dir");
-
     public static void parseHelp(JCommander commander, Arg arg) {
         if(arg.isHelp()) {
             commander.usage();
@@ -26,53 +22,28 @@ public class CommanderUtil {
         }
     }
 
-    public static List<File> parseFile(JCommander commander, Arg arg) {
+    public static List<File> parseInput(JCommander commander, Arg arg) {
         // 最终需要扫描的文件
         List<File> ret = new ArrayList<>();
 
-        String filePath = arg.getFile();
+        String filePath = arg.getInput();
         if(StrUtil.isBlank(filePath)) {
             // 如果没指定文件 并且 参数也不为空
             commander.usage();
             System.exit(0);
         } else  {
             // 如果指定文件
-            File path = null;
-            if(!FileUtil.isAbsolutePath(filePath)) {
-                // 如果是相对路径， 转换成绝对路径
-                path = new File(WORK_DIR, filePath);
-            } else {
-                path = new File(filePath);
-            }
+            File path = FileUtil2.getAbsoluteFile(filePath);
 
-            if(!path.exists()) {
-                throw new IllegalArgumentException(StrUtil.format("路径 {} 不存在", path.getAbsolutePath()));
-            }
+            FileUtil2.assertExist(path);
 
             if(path.isFile()) {
-                if(StrUtil.equals(FileNameUtil.extName(path), OPML)) {
-                    ret.add(path);
-                } else {
-                    throw new IllegalArgumentException(StrUtil.format("文件 {} 的后缀不是opml", path.getAbsolutePath()));
-                }
+                // 判断后缀
+                FileUtil2.assertExtension(path, OPML);
+                ret.add(path);
             } else {
-                ret.addAll(loopDir(path));
+                ret.addAll(FileUtil2.loopFiles(path, OPML));
             }
-        }
-
-        return ret;
-    }
-
-    private static List<File> loopDir(File file) {
-        List<File> ret = new ArrayList<>();
-        List<File> files = FileUtil.loopFiles(file, 1, pathname -> {
-            // 后缀名是OPML, 并且是文件的话
-            return StrUtil.equals(FileNameUtil.extName(pathname), OPML) && pathname.isFile();
-        });
-
-        if(CollUtil.isNotEmpty(files)) {
-
-            ret.addAll(files);
         }
 
         return ret;

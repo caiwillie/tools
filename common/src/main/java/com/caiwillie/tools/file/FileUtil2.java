@@ -1,9 +1,13 @@
 package com.caiwillie.tools.file;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.StrUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author caiwillie
@@ -24,6 +28,11 @@ public class FileUtil2 {
         }
     }
 
+    public static void assertExtension(File path, String extension) {
+        if(!StrUtil.equals(FileNameUtil.extName(path), extension)) {
+            throw new IllegalArgumentException(StrUtil.format("文件 {} 的后缀不是 {}", path, extension));
+        }
+    }
 
     public static File getAbsoluteFile(String path) {
         // 如果指定文件
@@ -34,6 +43,22 @@ public class FileUtil2 {
             return new File(path);
         }
     }
+
+    public static List<File> loopFiles(File file, String extension) {
+        List<File> ret = new ArrayList<>();
+        List<File> files = FileUtil.loopFiles(file, 1, pathname -> {
+            // 后缀名是OPML, 并且是文件的话
+            return StrUtil.equals(FileNameUtil.extName(pathname), extension) && pathname.isFile();
+        });
+
+        if(CollUtil.isNotEmpty(files)) {
+
+            ret.addAll(files);
+        }
+
+        return ret;
+    }
+
 
 
 }

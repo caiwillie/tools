@@ -25,7 +25,7 @@ public class Main {
             CommanderUtil.parseHelp(commander, arg);
 
             // 解析需要扫描的文件
-            files = CommanderUtil.parseFile(commander, arg);
+            files = CommanderUtil.parseInput(commander, arg);
 
         } catch (Exception e) {
             // 捕获异常，并且展示
