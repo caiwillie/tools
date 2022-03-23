@@ -143,6 +143,7 @@ public class LeetCodeConverter {
                         DefaultCodeFormatterConstants.WRAP_ONE_PER_LINE,
                         DefaultCodeFormatterConstants.INDENT_ON_COLUMN));
 
+        // 使用空格代替tab
         options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR, JavaCore.SPACE);
         options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE, "4");
 

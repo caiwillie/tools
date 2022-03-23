@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.caiwillie.tools.anki.model.Anki;
 import com.caiwillie.tools.anki.model.AnkiCard;
+import com.caiwillie.tools.formatter.AnkiFormatter;
 import com.caiwillie.tools.formatter.HTMLFormatter;
 import com.caiwillie.tools.leetcode2anki.model.Question;
 
@@ -31,13 +32,13 @@ public class AnkiConverter {
 
         for (Question question : questions) {
             String front = question.getContent();
-            String back = HTMLFormatter.wrapCode(HTMLFormatter.escapeAngleBracket(question.getCode()));
+            String back = HTMLFormatter.wrapXMP(question.getCode());
             String sn = StrUtil.format(SN_TEMPLATE, TAG, question.getSn());
 
             AnkiCard card = new AnkiCard();
-            card.setFront(front);
-            card.setBack(back);
-            card.setSn(sn);
+            card.setFront(AnkiFormatter.replaceTAB(front));
+            card.setBack(AnkiFormatter.replaceTAB(back));
+            card.setSn(AnkiFormatter.replaceTAB(sn));
             cards.add(card);
         }
 

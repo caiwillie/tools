@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  */
 public class HTMLFormatter {
 
-    private static String CODE_TEMPLATE = "<code>{}</code>";
+    private static String CODE_TEMPLATE = "<xmp>{}</xmp>";
 
     private static Pattern LESS_THEN_PATTERN = Pattern.compile("<");
 
@@ -20,7 +20,7 @@ public class HTMLFormatter {
 
     private static String GRATE_THEN = "&gt;";
 
-    public static String wrapCode (String str) {
+    public static String wrapXMP(String str) {
         return StrUtil.format(CODE_TEMPLATE, str);
     }
 
