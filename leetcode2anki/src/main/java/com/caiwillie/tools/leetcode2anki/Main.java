@@ -2,9 +2,11 @@ package com.caiwillie.tools.leetcode2anki;
 
 import com.beust.jcommander.JCommander;
 import com.caiwillie.tools.leetcode2anki.commander.Arg;
-import com.caiwillie.tools.leetcode2anki.commander.ArgDto;
+import com.caiwillie.tools.leetcode2anki.commander.InputPath;
 import com.caiwillie.tools.leetcode2anki.commander.CommanderUtil;
 import com.caiwillie.tools.leetcode2anki.generator.Generator;
+
+import java.io.File;
 
 public class Main {
 
@@ -18,13 +20,16 @@ public class Main {
         commander.setProgramName(PROGRAM_NAME);
         commander.parse(args);
 
-        ArgDto argDto = null;
+        InputPath inputPath = null;
+        File output = null;
         try {
             // 显示是否需要显示帮助
             CommanderUtil.parseHelp(commander, arg);
 
             // 解析需要扫描的文件
-            argDto = CommanderUtil.parseSrc(commander, arg);
+            inputPath = CommanderUtil.parseSrc(commander, arg);
+
+            output = CommanderUtil.parseOutput(commander, arg, inputPath.getRoot());
 
         } catch (Exception e) {
             // 捕获异常，并且展示
@@ -32,7 +37,7 @@ public class Main {
             System.exit(1);
         }
 
-        Generator.generate(commander, argDto);
+        Generator.generate(commander, inputPath, output);
     }
 
 }

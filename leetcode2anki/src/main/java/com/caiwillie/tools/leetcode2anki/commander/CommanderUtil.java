@@ -3,7 +3,7 @@ package com.caiwillie.tools.leetcode2anki.commander;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.beust.jcommander.JCommander;
-import com.caiwillie.tools.file.FileAssert;
+import com.caiwillie.tools.file.FileUtil2;
 
 import java.io.File;
 
@@ -16,7 +16,7 @@ public class CommanderUtil {
 
     private static final String CONTENT_SUB_PATH = "leetcode/editor/cn/doc/content/";
 
-    private static final String WORK_DIR = System.getProperty("user.dir");
+
 
     public static void parseHelp(JCommander commander, Arg arg) {
         if(arg.isHelp()) {
@@ -25,8 +25,8 @@ public class CommanderUtil {
         }
     }
 
-    public static ArgDto parseSrc(JCommander commander, Arg arg) {
-        ArgDto ret = null;
+    public static InputPath parseSrc(JCommander commander, Arg arg) {
+        InputPath ret = null;
 
         String srcPath = arg.getSrc();
         if(StrUtil.isBlank(srcPath)) {
@@ -35,31 +35,25 @@ public class CommanderUtil {
             System.exit(0);
         } else  {
             // 如果指定文件
-            File path = null;
-            if(!FileUtil.isAbsolutePath(srcPath)) {
-                // 如果是相对路径， 转换成绝对路径
-                path = new File(WORK_DIR, srcPath);
-            } else {
-                path = new File(srcPath);
-            }
+            File path = FileUtil2.getAbsoluteFile(srcPath);
 
-            FileAssert.assertExist(path);
+            FileUtil2.assertExist(path);
 
-            FileAssert.assertDirectory(path);
+            FileUtil2.assertDirectory(path);
 
             File codePath = new File(path, CODE_SUB_PATH);
 
-            FileAssert.assertExist(codePath);
+            FileUtil2.assertExist(codePath);
 
-            FileAssert.assertDirectory(codePath);
+            FileUtil2.assertDirectory(codePath);
 
             File contentPath = new File(path, CONTENT_SUB_PATH);
 
-            FileAssert.assertExist(contentPath);
+            FileUtil2.assertExist(contentPath);
 
-            FileAssert.assertDirectory(contentPath);
+            FileUtil2.assertDirectory(contentPath);
 
-            ret = new ArgDto();
+            ret = new InputPath();
             ret.setCodePath(codePath);
             ret.setContentPath(contentPath);
             ret.setRoot(path);
@@ -68,6 +62,23 @@ public class CommanderUtil {
         }
 
         return ret;
+    }
+
+    public static File parseOutput(JCommander commander, Arg arg, File root) {
+        if(StrUtil.isBlank(arg.getOutput())) {
+            return root.getParentFile();
+        }
+
+        File output = FileUtil2.getAbsoluteFile(arg.getOutput());
+
+        if(!FileUtil.exist(output)) {
+            return FileUtil.mkParentDirs(output);
+        } else {
+            if(output.isFile()) {
+                throw new IllegalArgumentException(StrUtil.format("输出路径 {} 必须是文件夹", output));
+            }
+            return output;
+        }
     }
 
 }

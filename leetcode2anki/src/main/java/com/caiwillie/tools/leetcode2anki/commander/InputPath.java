@@ -8,7 +8,7 @@ import java.io.File;
  * @author caiwillie
  */
 @Data
-public class ArgDto {
+public class InputPath {
 
     private File root;
 

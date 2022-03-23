@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.beust.jcommander.JCommander;
 import com.caiwillie.tools.anki.model.Anki;
 import com.caiwillie.tools.formatter.AnkiFormatter;
-import com.caiwillie.tools.leetcode2anki.commander.ArgDto;
+import com.caiwillie.tools.leetcode2anki.commander.InputPath;
 import com.caiwillie.tools.leetcode2anki.converter.AnkiConverter;
 import com.caiwillie.tools.leetcode2anki.converter.LeetCodeConverter;
 import com.caiwillie.tools.leetcode2anki.model.Question;
@@ -22,19 +22,17 @@ import static com.caiwillie.tools.leetcode2anki.common.Constant.CSV_NAME;
 
 public class Generator {
 
-    public static void generate(JCommander commander, ArgDto arg) {
+    public static void generate(JCommander commander, InputPath inputPath, File output) {
 
         LeetCodeConverter leetCodeConverter = new LeetCodeConverter();
-        List<Question> questions = leetCodeConverter.convert(arg);
+        List<Question> questions = leetCodeConverter.convert(inputPath);
 
         AnkiConverter ankiConverter = new AnkiConverter();
         Anki anki = ankiConverter.convert(questions);
 
         List<String[]> data = AnkiFormatter.formatWithSN(anki);
 
-        File root = arg.getRoot();
-
-        try (Writer writer = IoUtil.getWriter(new FileOutputStream(new File(root.getParentFile(), CSV_NAME)), StandardCharsets.UTF_8)) {
+        try (Writer writer = IoUtil.getWriter(new FileOutputStream(new File(output, CSV_NAME)), StandardCharsets.UTF_8)) {
             CSVWriterBuilder builder = new CSVWriterBuilder(writer);
             ICSVWriter csvWriter = builder.withSeparator('\t').build();
             csvWriter.writeAll(data);

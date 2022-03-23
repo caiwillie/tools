@@ -14,6 +14,9 @@ public class Arg {
     @Parameter(names = "--src", description = "leetcode src文件路径")
     private String src;
 
+    @Parameter(names = "--output", description = "输出路径")
+    private String output;
+
     @Parameter(names = "--help", description = "显示帮助信息", help = true)
     private boolean help;
 }

@@ -5,7 +5,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
-import com.caiwillie.tools.leetcode2anki.commander.ArgDto;
+import com.caiwillie.tools.leetcode2anki.commander.InputPath;
 import com.caiwillie.tools.leetcode2anki.common.Constant;
 import com.caiwillie.tools.leetcode2anki.model.Question;
 import org.eclipse.jdt.core.JavaCore;
@@ -33,7 +33,7 @@ public class LeetCodeConverter {
 
     private static final CodeFormatter CODE_FORMATTER = getCodeFormatter();
 
-    public List<Question> convert(ArgDto arg) {
+    public List<Question> convert(InputPath arg) {
         List<Question> ret = new ArrayList<>();
 
         TreeMap<Integer, File> codeMap = getFileMap(arg.getCodePath(), Constant.JAVA);
