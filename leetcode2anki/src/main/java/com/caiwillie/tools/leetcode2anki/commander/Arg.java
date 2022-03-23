@@ -11,8 +11,8 @@ public class Arg {
     @Parameter
     private List<String> parameters = new ArrayList<>();
 
-    @Parameter(names = "--src", description = "leetcode src文件路径")
-    private String src;
+    @Parameter(names = "--input", description = "leetcode src文件路径")
+    private String input;
 
     @Parameter(names = "--output", description = "输出路径")
     private String output;

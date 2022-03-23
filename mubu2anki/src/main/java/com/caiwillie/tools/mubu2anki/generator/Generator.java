@@ -25,15 +25,17 @@ import java.util.List;
  */
 public class Generator {
 
-    public static void generate(JCommander commander, List<File> paths) {
+    private static final String CSV_EXTENSION = ".csv";
+
+    public static void generate(JCommander commander, List<File> paths, File output) {
         if(CollUtil.isEmpty(paths)) {
             return;
         }
 
         for (File path : paths) {
-            String csvName = FileNameUtil.mainName(path.getName()) + ".csv";
+            String csvName = FileNameUtil.mainName(path.getName()) + CSV_EXTENSION;
 
-            try (Writer writer = IoUtil.getWriter(new FileOutputStream(new File(path.getParent(), csvName)), StandardCharsets.UTF_8)) {
+            try (Writer writer = IoUtil.getWriter(new FileOutputStream(new File(output, csvName)), StandardCharsets.UTF_8)) {
                 MubuConverter mubuConverter = new MubuConverter();
                 MubuOutline mubuOutline = mubuConverter.convert(path);
 

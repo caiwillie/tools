@@ -10,7 +10,7 @@ import java.io.File;
 @Data
 public class InputPath {
 
-    private File root;
+    private File lastDir;
 
     private File codePath;
 

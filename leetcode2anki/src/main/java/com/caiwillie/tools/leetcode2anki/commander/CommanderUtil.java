@@ -16,8 +16,6 @@ public class CommanderUtil {
 
     private static final String CONTENT_SUB_PATH = "leetcode/editor/cn/doc/content/";
 
-
-
     public static void parseHelp(JCommander commander, Arg arg) {
         if(arg.isHelp()) {
             commander.usage();
@@ -25,10 +23,10 @@ public class CommanderUtil {
         }
     }
 
-    public static InputPath parseSrc(JCommander commander, Arg arg) {
+    public static InputPath parseInput(JCommander commander, Arg arg) {
         InputPath ret = null;
 
-        String srcPath = arg.getSrc();
+        String srcPath = arg.getInput();
         if(StrUtil.isBlank(srcPath)) {
             // 如果没指定文件 并且 参数也不为空
             commander.usage();
@@ -56,7 +54,7 @@ public class CommanderUtil {
             ret = new InputPath();
             ret.setCodePath(codePath);
             ret.setContentPath(contentPath);
-            ret.setRoot(path);
+            ret.setLastDir(path.getParentFile());
 
             return ret;
         }
@@ -64,9 +62,9 @@ public class CommanderUtil {
         return ret;
     }
 
-    public static File parseOutput(JCommander commander, Arg arg, File root) {
+    public static File parseOutput(JCommander commander, Arg arg, File lastDir) {
         if(StrUtil.isBlank(arg.getOutput())) {
-            return root.getParentFile();
+            return lastDir;
         }
 
         File output = FileUtil2.getAbsoluteFile(arg.getOutput());

@@ -1,5 +1,6 @@
 package com.caiwillie.tools.mubu2anki.commander;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.beust.jcommander.JCommander;
 import com.caiwillie.tools.file.FileUtil2;
@@ -22,9 +23,13 @@ public class CommanderUtil {
         }
     }
 
-    public static List<File> parseInput(JCommander commander, Arg arg) {
+    public static InputPath parseInput(JCommander commander, Arg arg) {
+        InputPath ret = new InputPath();
+
         // 最终需要扫描的文件
-        List<File> ret = new ArrayList<>();
+        List<File> files = new ArrayList<>();
+
+        ret.setFiles(files);
 
         String filePath = arg.getInput();
         if(StrUtil.isBlank(filePath)) {
@@ -40,13 +45,30 @@ public class CommanderUtil {
             if(path.isFile()) {
                 // 判断后缀
                 FileUtil2.assertExtension(path, OPML);
-                ret.add(path);
+                files.add(path);
+                ret.setLastDir(path.getParentFile());
             } else {
-                ret.addAll(FileUtil2.loopFiles(path, OPML));
+                files.addAll(FileUtil2.loopFiles(path, OPML));
+                ret.setLastDir(path);
             }
         }
 
         return ret;
+    }
+
+    public static File parseOutput(JCommander commander, Arg arg, File lastDir) {
+        if(StrUtil.isBlank(arg.getOutput())) {
+            return lastDir;
+        }
+
+        File output = FileUtil2.getAbsoluteFile(arg.getOutput());
+
+        if(!FileUtil.exist(output)) {
+            return FileUtil.mkParentDirs(output);
+        } else {
+            FileUtil2.assertDirectory(output);
+            return output;
+        }
     }
 
 }

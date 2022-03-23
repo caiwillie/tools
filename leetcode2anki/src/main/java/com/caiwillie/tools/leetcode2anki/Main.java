@@ -27,9 +27,9 @@ public class Main {
             CommanderUtil.parseHelp(commander, arg);
 
             // 解析需要扫描的文件
-            inputPath = CommanderUtil.parseSrc(commander, arg);
+            inputPath = CommanderUtil.parseInput(commander, arg);
 
-            output = CommanderUtil.parseOutput(commander, arg, inputPath.getRoot());
+            output = CommanderUtil.parseOutput(commander, arg, inputPath.getLastDir());
 
         } catch (Exception e) {
             // 捕获异常，并且展示
