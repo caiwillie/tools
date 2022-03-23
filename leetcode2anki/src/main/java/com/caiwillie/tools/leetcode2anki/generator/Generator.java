@@ -18,6 +18,8 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import static com.caiwillie.tools.leetcode2anki.common.Constant.CSV_NAME;
+
 public class Generator {
 
     public static void generate(JCommander commander, ArgDto arg) {
@@ -32,14 +34,12 @@ public class Generator {
 
         File root = arg.getRoot();
 
-        String csvName = "leetcode.csv";
-
-        try (Writer writer = IoUtil.getWriter(new FileOutputStream(new File(root.getParentFile(), csvName)), StandardCharsets.UTF_8)) {
+        try (Writer writer = IoUtil.getWriter(new FileOutputStream(new File(root.getParentFile(), CSV_NAME)), StandardCharsets.UTF_8)) {
             CSVWriterBuilder builder = new CSVWriterBuilder(writer);
             ICSVWriter csvWriter = builder.withSeparator('\t').build();
             csvWriter.writeAll(data);
         } catch (Exception e) {
-            commander.getConsole().println(StrUtil.format("写入文件 {} 错误", csvName));
+            commander.getConsole().println(StrUtil.format("写入文件 {} 错误", CSV_NAME));
         }
     }
 
