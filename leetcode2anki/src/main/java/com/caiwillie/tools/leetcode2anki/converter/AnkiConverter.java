@@ -34,7 +34,7 @@ public class AnkiConverter {
 
         for (Question question : questions) {
             String sn = StrUtil.format(SN_TEMPLATE, TAG, question.getId());
-            String title = StrUtil.format(TITLE_TEMPLATE, question.getId(), question.getTitle());
+            String title = HTMLFormatter.wrapP(StrUtil.format(TITLE_TEMPLATE, question.getId(), question.getTitle()));
             String front = StrUtil.join("", title, question.getContent());
             String back = HTMLFormatter.wrapXMP(question.getCode());
 
