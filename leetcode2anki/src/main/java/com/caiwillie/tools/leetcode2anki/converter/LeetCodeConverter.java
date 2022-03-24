@@ -60,7 +60,9 @@ public class LeetCodeConverter {
 
             Question question = new Question();
 
-            String title = FileNameUtil.getName(codeFile).substring(String.valueOf(id).length() + 2);
+            String codeFileName = FileNameUtil.getName(codeFile);
+            // 去除前面的 _xxx_ 和后面的 java
+            String title = StrUtil.sub(codeFileName, String.valueOf(id).length() + 2, codeFileName.length() - 5);
 
             question.setId(String.valueOf(id));
             question.setCode(code);
