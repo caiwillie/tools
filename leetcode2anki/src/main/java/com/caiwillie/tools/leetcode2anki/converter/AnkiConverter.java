@@ -33,7 +33,7 @@ public class AnkiConverter {
         for (Question question : questions) {
             String front = question.getContent();
             String back = HTMLFormatter.wrapXMP(question.getCode());
-            String sn = StrUtil.format(SN_TEMPLATE, TAG, question.getSn());
+            String sn = StrUtil.format(SN_TEMPLATE, TAG, question.getId());
 
             AnkiCard card = new AnkiCard();
             card.setSn(AnkiFormatter.removeBlank(sn));

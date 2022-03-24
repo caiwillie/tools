@@ -59,7 +59,7 @@ public class LeetCodeConverter {
             String content = FileUtil.readUtf8String(contentFile);
 
             Question question = new Question();
-            question.setSn(String.valueOf(sn));
+            question.setId(String.valueOf(sn));
             question.setCode(code);
             question.setContent(content);
 

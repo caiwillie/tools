@@ -8,7 +8,9 @@ import lombok.Data;
 @Data
 public class Question {
 
-    public String sn;
+    public String id;
+
+    public String title;
 
     public String content;
 
