@@ -42,13 +42,13 @@ public class LeetCodeConverter {
         TreeMap<Integer, File> contentMap = getFileMap(arg.getContentPath(), Constant.MD);
 
         for (Map.Entry<Integer, File> entry : codeMap.entrySet()) {
-            Integer sn = entry.getKey();
+            Integer id = entry.getKey();
             File codeFile = entry.getValue();
-            if(!contentMap.containsKey(sn)) {
+            if(!contentMap.containsKey(id)) {
                 throw new RuntimeException(StrUtil.format("路径 {} 对应的描述文件不存在", codeFile.getAbsolutePath()));
             }
 
-            File contentFile = contentMap.get(sn);
+            File contentFile = contentMap.get(id);
 
             String codeTemp = FileUtil.readUtf8String(codeFile);
 
@@ -59,8 +59,12 @@ public class LeetCodeConverter {
             String content = FileUtil.readUtf8String(contentFile);
 
             Question question = new Question();
-            question.setId(String.valueOf(sn));
+
+            String title = FileNameUtil.getName(codeFile).substring(String.valueOf(id).length() + 2);
+
+            question.setId(String.valueOf(id));
             question.setCode(code);
+            question.setTitle(title);
             question.setContent(content);
 
             ret.add(question);

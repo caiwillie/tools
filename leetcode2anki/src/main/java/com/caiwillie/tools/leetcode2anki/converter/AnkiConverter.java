@@ -20,6 +20,8 @@ public class AnkiConverter {
 
     private static String SN_TEMPLATE = "{}_{}";
 
+    private static String TITLE_TEMPLATE = "{}. {}";
+
     public Anki convert(List<Question> questions) {
         Anki ret = new Anki();
         ret.setTag(TAG);
@@ -31,9 +33,10 @@ public class AnkiConverter {
         }
 
         for (Question question : questions) {
-            String front = question.getContent();
-            String back = HTMLFormatter.wrapXMP(question.getCode());
             String sn = StrUtil.format(SN_TEMPLATE, TAG, question.getId());
+            String title = StrUtil.format(TITLE_TEMPLATE, question.getId(), question.getTitle());
+            String front = StrUtil.join("", title, question.getContent());
+            String back = HTMLFormatter.wrapXMP(question.getCode());
 
             AnkiCard card = new AnkiCard();
             card.setSn(AnkiFormatter.removeBlank(sn));

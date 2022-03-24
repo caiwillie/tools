@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  */
 public class HTMLFormatter {
 
-    private static final String CODE_TEMPLATE = "<xmp>{}</xmp>";
+    private static final String CODE_TEMPLATE = "<xmp>{}</xmp>\n";
 
     private static final Pattern LESS_THEN_PATTERN = Pattern.compile("<");
 
@@ -22,9 +22,9 @@ public class HTMLFormatter {
 
     private static final String GRATE_THEN = "&gt;";
 
-    private static final String P = "<p>{}</p>";
+    private static final String P = "<p>{}</p>\n";
 
-    private static final String BR = "{}</br>";
+    private static final String BR = "{}</br>\n";
 
     private static final String INDENT = "&nbsp;&nbsp;&nbsp;&nbsp;";
 
