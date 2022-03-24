@@ -6,7 +6,10 @@ BASE_HOME=$(dirname $SCRIPT_ABSPATH)
 
 app=$1
 
-if [ -z "${app}" ]; then
+if [ "${app}" == "all" ]; then
+  mvn -Dmaven.test.skip=true -U clean package
+  exit 0
+elif [ -z "${app}" ]; then
   echo "应用名称不能为空"
   exit 1
 elif [ ! -d "${BASE_HOME}/${app}" ]; then
