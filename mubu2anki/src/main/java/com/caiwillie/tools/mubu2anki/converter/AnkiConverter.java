@@ -30,6 +30,7 @@ public class AnkiConverter {
             return null;
         }
 
+        // 移除blank
         tag = AnkiFormatter.removeBlank(outline.getText());
 
         cs.push(outline);
@@ -74,8 +75,11 @@ public class AnkiConverter {
             back.add(outline.getText());
         }
 
+        String sn = StrUtil.format(SN_TEMPLATE, tag, ss.get(0).getSn());
+
         AnkiCard ankiCard = new AnkiCard();
-        ankiCard.setSn(AnkiFormatter.removeBlank(StrUtil.format(SN_TEMPLATE, tag, ss.get(0).getSn())));
+        // 移除blank
+        ankiCard.setSn(AnkiFormatter.removeBlank(sn));
         ankiCard.setFront(AnkiFormatter.replaceTAB(HTMLFormatter.formatIndent(front)));
         ankiCard.setBack(AnkiFormatter.replaceTAB(HTMLFormatter.formatList(back)));
         cards.add(ankiCard);
