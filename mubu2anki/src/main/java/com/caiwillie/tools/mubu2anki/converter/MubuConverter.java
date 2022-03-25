@@ -11,7 +11,13 @@ import cn.hutool.core.net.URLDecoder;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONUtil;
+import com.caiwillie.tools.mubu2anki.model.MubuImage;
 import com.caiwillie.tools.mubu2anki.model.MubuOutline;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -24,13 +30,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.caiwillie.tools.mubu2anki.common.Constant.LEFT_BRACKET;
-import static com.caiwillie.tools.mubu2anki.common.Constant.MUBU_TEXT;
+import static com.caiwillie.tools.mubu2anki.common.Constant.*;
 
 /**
  * @author caiwillie
  */
 public class MubuConverter {
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    private static final CollectionType IMAGE_ARRAY_TYPE =
+            objectMapper.getTypeFactory().constructCollectionType(List.class, MubuImage.class);
 
     private static final Pattern SN_PATTERN = Pattern.compile("^(\\d{1,}(\\.\\d{1,}){0,} |（([\\u2E80-\\u9FFF]|\\w){1,}）)");
 
@@ -61,7 +71,7 @@ public class MubuConverter {
 
         // 检查sn
         checkSN(mubuOutlines, title);
-        root.setSn(title);
+        root.setId(title);
 
         root.setChildern(mubuOutlines);
 
@@ -84,21 +94,54 @@ public class MubuConverter {
 
     private MubuOutline convert(Outline outline) {
         String mubuText = outline.getAttribute(MUBU_TEXT);
+        String mubuImages = outline.getAttribute(MUBU_IMAGES);
+
+        String id = getId(mubuText);
+        List<MubuImage> images = getImages(mubuImages);
+
+        MubuOutline ret = new MubuOutline();
+        ret.setId(id);
+        ret.setText(mubuText);
+        ret.setImages(images);
+
+        List<MubuOutline> children = convert(outline.getSubElements());
+        ret.setChildern(children);
+        return ret;
+    }
+
+    private String getId(String mubuText) {
         String html = URLDecoder.decode(mubuText, StandardCharsets.UTF_8);
         // 将html格式的text内容解析成doc
         Document doc = Jsoup.parse(html);
         Elements spans = doc.getElementsByTag("span");
 
         String span0 = CollUtil.isEmpty(spans) ? null : StrUtil.trim(spans.get(0).text());
-        String group0 = ReUtil.getGroup0(SN_PATTERN, span0);
+        return ReUtil.getGroup0(SN_PATTERN, span0);
+    }
 
-        MubuOutline ret = new MubuOutline();
-        ret.setSn(group0);
-        ret.setText(span0);
+    private List<MubuImage> getImages(String mubuImages) {
+        List<MubuImage> ret = new ArrayList<>();
+        if(StrUtil.isBlank(mubuImages)) {
+            return ret;
+        }
 
-        List<MubuOutline> children = convert(outline.getSubElements());
-        ret.setChildern(children);
-        return ret;
+        try {
+            List<MubuImage> tempList = objectMapper.readValue(mubuImages, IMAGE_ARRAY_TYPE);
+
+            if(CollUtil.isNotEmpty(tempList)) {
+                for (MubuImage mubuImage : tempList) {
+                    Assert.notNull(mubuImage.getUri(), "幕布图片地址不能为空");
+                    Assert.isTrue(mubuImage.getW() > 0, "幕布图片宽度必须大于0");
+                    ret.add(mubuImage);
+                }
+            }
+
+            return ret;
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("幕布图片列表解析失败");
+        }
+
     }
 
     private void checkSN(List<MubuOutline> mubuOutlines, String parentSN) {
@@ -111,7 +154,7 @@ public class MubuConverter {
         for (int i = 0; i < mubuOutlines.size(); i++) {
             MubuOutline mubuOutline = mubuOutlines.get(i);
 
-            String sn = mubuOutline.getSn();
+            String sn = mubuOutline.getId();
             String text = mubuOutline.getText();
             if(StrUtil.isBlank(text)) {
                 throw new RuntimeException(StrUtil.format("文件 {} 中 父级 {} 下存在空行", path.getAbsolutePath(), parentSN));
@@ -145,7 +188,7 @@ public class MubuConverter {
                 } else {
                     sn = sn.substring(1, sn.length() - 1);
                 }
-                mubuOutline.setSn(sn);
+                mubuOutline.setId(sn);
             } else if (CollUtil.isNotEmpty(mubuOutline.getChildern())) {
                 throw new RuntimeException(StrUtil.format("文件 {} 中的 {} 没有序号", path.getAbsolutePath(), text));
             }

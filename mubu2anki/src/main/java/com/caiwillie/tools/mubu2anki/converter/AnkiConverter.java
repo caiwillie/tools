@@ -75,7 +75,7 @@ public class AnkiConverter {
             back.add(outline.getText());
         }
 
-        String sn = StrUtil.format(SN_TEMPLATE, tag, ss.get(0).getSn());
+        String sn = StrUtil.format(SN_TEMPLATE, tag, ss.get(0).getId());
 
         AnkiCard ankiCard = new AnkiCard();
         // 移除blank

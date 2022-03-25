@@ -4,9 +4,9 @@ public interface Constant {
 
     String MUBU_TEXT = "_mubu_text";
 
-    String OPML = "opml";
+    String MUBU_IMAGES = "_mubu_images";
 
-    String SN = "sn";
+    String OPML = "opml";
 
     char LEFT_BRACKET = '（';
 }

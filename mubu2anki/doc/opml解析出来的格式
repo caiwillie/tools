@@ -1,0 +1,26 @@
+_mubu_text="%3Cspan%3E8.0%20Spring%20IoC%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BA%8F%E5%9B%BE%3C/span%3E"
+<span>8.0 Spring IoC运行时序图</span>
+
+
+_mubu_images="%5B%7B%22id%22%3A%22INKaavunNP%22%2C%22uri%22%3A%22document_image%2F440bf4c5-55f7-484f-ae98-8639869d13bb-17072876.jpg%22%2C%22ow%22%3A3088%2C%22oh%22%3A1601%2C%22w%22%3A400%7D%5D"
+
+[{
+	"id": "INKaavunNP",
+	"uri": "document_image/440bf4c5-55f7-484f-ae98-8639869d13bb-17072876.jpg",
+	"ow": 3088,
+	"oh": 1601,
+	"w": 400
+}]
+
+
+<p>
+    {text}
+</p>
+
+<ul>
+    <li>
+        <img style="width: {w}px; height: auto;" src="https://api2.mubu.com/v3/{uri}" alt="image">
+    </li>
+</ul>
+
+
