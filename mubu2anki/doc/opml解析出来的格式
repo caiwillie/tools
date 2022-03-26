@@ -24,3 +24,8 @@ _mubu_images="%5B%7B%22id%22%3A%22INKaavunNP%22%2C%22uri%22%3A%22document_image%
 </ul>
 
 
+ul li{
+list-style-type:none;
+}
+
+

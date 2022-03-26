@@ -5,12 +5,10 @@ import cn.hutool.core.util.StrUtil;
 import com.caiwillie.tools.anki.model.Anki;
 import com.caiwillie.tools.anki.model.AnkiCard;
 import com.caiwillie.tools.formatter.AnkiFormatter;
-import com.caiwillie.tools.formatter.HTMLFormatter;
 import com.caiwillie.tools.mubu2anki.model.MubuImage;
 import com.caiwillie.tools.mubu2anki.model.MubuOutline;
-import j2html.tags.ContainerTag;
 import j2html.tags.DomContent;
-import j2html.tags.Tag;
+import j2html.tags.specialized.DivTag;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -73,35 +71,40 @@ public class AnkiConverter {
     }
 
     private void add() {
-        List<String> front = new ArrayList<>();
-        for (int i = ss.size() - 1; i >= 0; i--) {
-            front.add(ss.get(i).getText());
-        }
-        List<String> back = new ArrayList<>();
-        for (MubuOutline outline : ss.get(0).getChildern()) {
-            back.add(outline.getText());
-        }
-
         String sn = StrUtil.format(SN_TEMPLATE, tag, ss.get(0).getId());
+        String front = formatFront();
+        String back = formatBack();
 
         AnkiCard ankiCard = new AnkiCard();
         // 移除blank
         ankiCard.setSn(AnkiFormatter.removeBlank(sn));
-        ankiCard.setFront(AnkiFormatter.replaceTAB(HTMLFormatter.formatIndent(front)));
-        ankiCard.setBack(AnkiFormatter.replaceTAB(HTMLFormatter.formatList(back)));
+        ankiCard.setFront(AnkiFormatter.replaceTAB(front));
+        ankiCard.setBack(AnkiFormatter.replaceTAB(back));
         cards.add(ankiCard);
     }
 
 
     private String formatFront() {
-        List<DomContent> items = new ArrayList<>();
+        List<DivTag> items = new ArrayList<>();
         for (int i = ss.size() - 1; i >= 0; i--) {
             items.add(formatOutline(ss.get(i)));
         }
 
-        List<DomContent> divs = new ArrayList<>();
+        List<DivTag> divs = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
+            DivTag div = items.get(i);
+            div.withClass("mubu_outline");
+            // 增加缩进
             divs.add(div(join(indent(i), items.get(i))));
+        }
+
+        return div(divs.toArray(new DomContent[0])).renderFormatted();
+    }
+
+    private String formatBack() {
+        List<DivTag> divs = new ArrayList<>();
+        for (MubuOutline outline : ss.get(0).getChildern()) {
+            divs.add(formatOutline(outline));
         }
 
         return div(divs.toArray(new DomContent[0])).renderFormatted();
@@ -112,11 +115,11 @@ public class AnkiConverter {
         for (int i = 0; i < index; i++) {
             sb.append(INDENT);
         }
+        sb.append("\n");
         return sb.toString();
     }
 
-
-    private DomContent formatOutline(MubuOutline mubuOutline) {
+    private DivTag formatOutline(MubuOutline mubuOutline) {
         String text = mubuOutline.getText();
         List<MubuImage> images = mubuOutline.getImages();
 
