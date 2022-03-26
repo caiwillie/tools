@@ -98,8 +98,8 @@ public class MubuConverter {
     }
 
     private MubuOutline convert(Outline outline) {
-        String mubuText = outline.getAttribute(MUBU_TEXT);
-        String mubuImages = outline.getAttribute(MUBU_IMAGES);
+        String mubuText = URLDecoder.decode(outline.getAttribute(MUBU_TEXT), StandardCharsets.UTF_8);
+        String mubuImages = URLDecoder.decode(outline.getAttribute(MUBU_IMAGES), StandardCharsets.UTF_8);
 
         String id = getId(mubuText);
         List<MubuImage> images = getImages(mubuImages);
@@ -114,8 +114,7 @@ public class MubuConverter {
         return ret;
     }
 
-    private String getId(String mubuText) {
-        String content = URLDecoder.decode(mubuText, StandardCharsets.UTF_8);
+    private String getId(String content) {
         // 将html格式的text内容解析成doc
         Document doc = Jsoup.parse(content);
         Elements spans = doc.getElementsByTag("span");
@@ -124,13 +123,11 @@ public class MubuConverter {
         return ReUtil.getGroup0(SN_PATTERN, span0);
     }
 
-    private List<MubuImage> getImages(String mubuImages) {
+    private List<MubuImage> getImages(String content) {
         List<MubuImage> ret = new ArrayList<>();
-        if(StrUtil.isBlank(mubuImages)) {
+        if(StrUtil.isBlank(content)) {
             return ret;
         }
-
-        String content = URLDecoder.decode(mubuImages, StandardCharsets.UTF_8);
 
         try {
 
