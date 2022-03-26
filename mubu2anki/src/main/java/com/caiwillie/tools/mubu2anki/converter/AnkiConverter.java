@@ -83,7 +83,6 @@ public class AnkiConverter {
         cards.add(ankiCard);
     }
 
-
     private String formatFront() {
         List<DivTag> items = new ArrayList<>();
         for (int i = ss.size() - 1; i >= 0; i--) {

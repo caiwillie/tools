@@ -14,6 +14,7 @@ import cn.hutool.core.util.StrUtil;
 import com.caiwillie.tools.mubu2anki.model.MubuImage;
 import com.caiwillie.tools.mubu2anki.model.MubuOutline;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import org.jsoup.Jsoup;
@@ -35,14 +36,20 @@ import static com.caiwillie.tools.mubu2anki.common.Constant.*;
  */
 public class MubuConverter {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER;
 
-    private static final CollectionType IMAGE_ARRAY_TYPE =
-            objectMapper.getTypeFactory().constructCollectionType(List.class, MubuImage.class);
+    private static final CollectionType IMAGE_ARRAY_TYPE;
 
     private static final Pattern SN_PATTERN = Pattern.compile("^(\\d{1,}(\\.\\d{1,}){0,} |（([\\u2E80-\\u9FFF]|\\w){1,}）)");
 
     private static final Pattern SN_PATTERN_2 = Pattern.compile("^\\d{1,}(\\.\\d{1,}){0,}$");
+
+
+    static {
+        OBJECT_MAPPER = new ObjectMapper();
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        IMAGE_ARRAY_TYPE = OBJECT_MAPPER.getTypeFactory().constructCollectionType(List.class, MubuImage.class);
+    }
 
     private File path;
 
@@ -108,9 +115,9 @@ public class MubuConverter {
     }
 
     private String getId(String mubuText) {
-        String html = URLDecoder.decode(mubuText, StandardCharsets.UTF_8);
+        String content = URLDecoder.decode(mubuText, StandardCharsets.UTF_8);
         // 将html格式的text内容解析成doc
-        Document doc = Jsoup.parse(html);
+        Document doc = Jsoup.parse(content);
         Elements spans = doc.getElementsByTag("span");
 
         String span0 = CollUtil.isEmpty(spans) ? null : StrUtil.trim(spans.get(0).text());
@@ -123,8 +130,11 @@ public class MubuConverter {
             return ret;
         }
 
+        String content = URLDecoder.decode(mubuImages, StandardCharsets.UTF_8);
+
         try {
-            List<MubuImage> tempList = objectMapper.readValue(mubuImages, IMAGE_ARRAY_TYPE);
+
+            List<MubuImage> tempList = OBJECT_MAPPER.readValue(content, IMAGE_ARRAY_TYPE);
 
             if(CollUtil.isNotEmpty(tempList)) {
                 for (MubuImage mubuImage : tempList) {
