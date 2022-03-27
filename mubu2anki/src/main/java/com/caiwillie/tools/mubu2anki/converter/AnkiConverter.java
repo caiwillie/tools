@@ -75,7 +75,16 @@ public class AnkiConverter {
     }
 
     private void add() {
-        String sn = StrUtil.format(SN_TEMPLATE, tag, ss.get(0).getId());
+        String id = ss.get(0).getId();
+        String sn;
+        if(StrUtil.isBlank(id)) {
+            // 如果是开头，就直接用标题
+            sn = tag;
+        } else {
+            sn = StrUtil.format(SN_TEMPLATE, tag, id);
+        }
+
+
         String front = formatFront();
         String back = formatBack();
 

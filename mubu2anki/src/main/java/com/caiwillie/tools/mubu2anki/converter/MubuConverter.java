@@ -73,9 +73,8 @@ public class MubuConverter {
 
         List<MubuOutline> mubuOutlines = convert(opml.getBody().getOutlines());
 
-        // 检查sn
+        // 处理sn
         handleId(mubuOutlines, title);
-        root.setId(title);
 
         root.setChildern(mubuOutlines);
 
