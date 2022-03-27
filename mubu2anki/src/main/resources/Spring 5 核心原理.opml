@@ -17,7 +17,7 @@
     <outline text="（三）Spring核心原理" _mubu_text="%3Cspan%3E%EF%BC%88%E4%B8%89%EF%BC%89Spring%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note="">
       <outline text="7 用300行代码手写提炼Spring核心原理" _mubu_text="%3Cspan%3E7%20%E7%94%A8300%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%89%8B%E5%86%99%E6%8F%90%E7%82%BCSpring%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
       <outline text="8 一步一步手绘Spring IoC运行时序图" _mubu_text="%3Cspan%3E8%20%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E6%89%8B%E7%BB%98Spring%20IoC%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BA%8F%E5%9B%BE%3C/span%3E" _note="" _mubu_note="">
-        <outline text="8.0 Spring IoC运行时序图" _mubu_text="%3Cspan%3E8.0%20Spring%20IoC%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BA%8F%E5%9B%BE%3C/span%3E" _note="" _mubu_note="" _mubu_images="%5B%7B%22id%22%3A%22INKaavunNP%22%2C%22uri%22%3A%22document_image%2F440bf4c5-55f7-484f-ae98-8639869d13bb-17072876.jpg%22%2C%22ow%22%3A3088%2C%22oh%22%3A1601%2C%22w%22%3A400%7D%5D"/>
+        <outline text="8.0 Spring IoC运行时序图" _mubu_text="%3Cspan%3E8.0%20Spring%20IoC%E8%BF%90%E8%A1%8C%E6%97%B6%E5%BA%8F%E5%9B%BE%3C/span%3E" _note="" _mubu_note="" _mubu_images="%5B%7B%22id%22%3A%22INKaavunNP%22%2C%22oh%22%3A1601%2C%22ow%22%3A3088%2C%22uri%22%3A%22document_image%2F440bf4c5-55f7-484f-ae98-8639869d13bb-17072876.jpg%22%2C%22w%22%3A400%7D%5D"/>
         <outline text="8.1 Spring核心之IoC容器初体验" _mubu_text="%3Cspan%3E8.1%20Spring%E6%A0%B8%E5%BF%83%E4%B9%8BIoC%E5%AE%B9%E5%99%A8%E5%88%9D%E4%BD%93%E9%AA%8C%3C/span%3E" _note="" _mubu_note="">
           <outline text="8.1.1 再谈IoC与DI" _mubu_text="%3Cspan%3E8.1.1%20%E5%86%8D%E8%B0%88IoC%E4%B8%8EDI%3C/span%3E" _note="" _mubu_note=""/>
           <outline text="8.1.2 Spring核心容器类图" _mubu_text="%3Cspan%3E8.1.2%20Spring%E6%A0%B8%E5%BF%83%E5%AE%B9%E5%99%A8%E7%B1%BB%E5%9B%BE%3C/span%3E" _note="" _mubu_note="">
@@ -47,14 +47,14 @@
           <outline text="向容器注册" _mubu_text="%3Cspan%3E%E5%90%91%E5%AE%B9%E5%99%A8%E6%B3%A8%E5%86%8C%3C/span%3E" _note="" _mubu_note=""/>
         </outline>
         <outline text="8.3 基于注解的IoC初始化" _mubu_text="%3Cspan%3E8.3%20%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E7%9A%84IoC%E5%88%9D%E5%A7%8B%E5%8C%96%3C/span%3E" _note="" _mubu_note="">
-          <outline text="注解的前世今生" _mubu_text="%3Cspan%3E%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%3C/span%3E" _note="" _mubu_note="">
+          <outline text="8.3.1 注解的前世今生" _mubu_text="%3Cspan%3E8.3.1%20%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F%3C/span%3E" _note="" _mubu_note="">
             <outline text="类级别的注解" _mubu_text="%3Cspan%3E%E7%B1%BB%E7%BA%A7%E5%88%AB%E7%9A%84%E6%B3%A8%E8%A7%A3%3C/span%3E" _note="" _mubu_note=""/>
             <outline text="类内部的注解" _mubu_text="%3Cspan%3E%E7%B1%BB%E5%86%85%E9%83%A8%E7%9A%84%E6%B3%A8%E8%A7%A3%3C/span%3E" _note="" _mubu_note=""/>
           </outline>
-          <outline text="定位Bean扫描路径" _mubu_text="%3Cspan%3E%E5%AE%9A%E4%BD%8DBean%E6%89%AB%E6%8F%8F%E8%B7%AF%E5%BE%84%3C/span%3E" _note="" _mubu_note=""/>
-          <outline text="读取注解的元数据" _mubu_text="%3Cspan%3E%E8%AF%BB%E5%8F%96%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%85%83%E6%95%B0%E6%8D%AE%3C/span%3E" _note="" _mubu_note=""/>
-          <outline text="扫描指定包并解析为BeanDefinition" _mubu_text="%3Cspan%3E%E6%89%AB%E6%8F%8F%E6%8C%87%E5%AE%9A%E5%8C%85%E5%B9%B6%E8%A7%A3%E6%9E%90%E4%B8%BABeanDefinition%3C/span%3E" _note="" _mubu_note=""/>
-          <outline text="注册注解BeanDefinition" _mubu_text="%3Cspan%3E%E6%B3%A8%E5%86%8C%E6%B3%A8%E8%A7%A3BeanDefinition%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="8.3.2 定位Bean扫描路径" _mubu_text="%3Cspan%3E8.3.2%20%E5%AE%9A%E4%BD%8DBean%E6%89%AB%E6%8F%8F%E8%B7%AF%E5%BE%84%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="8.3.3 读取注解的元数据" _mubu_text="%3Cspan%3E8.3.3%20%E8%AF%BB%E5%8F%96%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%85%83%E6%95%B0%E6%8D%AE%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="8.3.4 扫描指定包并解析为BeanDefinition" _mubu_text="%3Cspan%3E8.3.4%20%E6%89%AB%E6%8F%8F%E6%8C%87%E5%AE%9A%E5%8C%85%E5%B9%B6%E8%A7%A3%E6%9E%90%E4%B8%BABeanDefinition%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="8.3.5 注册注解BeanDefinition" _mubu_text="%3Cspan%3E8.3.5%20%E6%B3%A8%E5%86%8C%E6%B3%A8%E8%A7%A3BeanDefinition%3C/span%3E" _note="" _mubu_note=""/>
         </outline>
         <outline text="8.4 IoC容器初始化小结" _mubu_text="%3Cspan%3E8.4%20IoC%E5%AE%B9%E5%99%A8%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B0%8F%E7%BB%93%3C/span%3E" _note="" _mubu_note=""/>
       </outline>

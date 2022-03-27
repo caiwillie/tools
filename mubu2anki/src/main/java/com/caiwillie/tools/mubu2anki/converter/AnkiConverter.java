@@ -10,9 +10,7 @@ import com.caiwillie.tools.mubu2anki.model.MubuOutline;
 import j2html.tags.DomContent;
 import j2html.tags.specialized.DivTag;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static j2html.TagCreator.*;
 
@@ -23,6 +21,12 @@ public class AnkiConverter {
 
     private static final String INDENT = "&nbsp;&nbsp;&nbsp;&nbsp;";
     private static final String SN_TEMPLATE = "{}_{}";
+    private static final String MUBU_OUTLINE_CONTAINER_CLASSS = "mubu_outline_container";
+    private static final String MUBU_OUTLINE_CLASS = "mubu_outline";
+    private static final String IMAGE_STYLE_TEMPLATE = "width: {}px; height: auto;";
+    private static final String IMAGE_URL_TEMPLATE = "https://api2.mubu.com/v3/{}";
+
+
 
     private final List<AnkiCard> cards = new ArrayList<>();
     private MubuOutline parent = null;
@@ -92,9 +96,8 @@ public class AnkiConverter {
         List<DivTag> divs = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             DivTag div = items.get(i);
-            div.withClass("mubu_outline");
             // 增加缩进
-            divs.add(div(join(indent(i), items.get(i))));
+            divs.add(div(join(indent(i), items.get(i))).withClass(MUBU_OUTLINE_CONTAINER_CLASSS));
         }
 
         return div(divs.toArray(new DomContent[0])).renderFormatted();
@@ -103,7 +106,7 @@ public class AnkiConverter {
     private String formatBack() {
         List<DivTag> divs = new ArrayList<>();
         for (MubuOutline outline : ss.get(0).getChildern()) {
-            divs.add(formatOutline(outline));
+            divs.add(formatOutline(outline).withClass(MUBU_OUTLINE_CONTAINER_CLASSS));
         }
 
         return div(divs.toArray(new DomContent[0])).renderFormatted();
@@ -120,18 +123,19 @@ public class AnkiConverter {
 
     private DivTag formatOutline(MubuOutline mubuOutline) {
         String text = mubuOutline.getText();
-        List<MubuImage> images = mubuOutline.getImages();
+        List<MubuImage> images = Optional.ofNullable(mubuOutline.getImages()).orElse(Collections.emptyList());
 
         return
                 div(
-                        p(rawHtml(text)),
+                        div(rawHtml(text)),
                         ul(
-                                each(images, image -> li(img()
+                                each(images, image -> li
+                                        (img()
                                         .withAlt("image")
-                                        .withStyle(StrUtil.format("width: {}px; height: auto;", image.getW()))
-                                        .withSrc(StrUtil.format("https://api2.mubu.com/v3/{}", image.getUri())))
+                                        .withStyle(StrUtil.format(IMAGE_STYLE_TEMPLATE, image.getW()))
+                                        .withSrc(StrUtil.format(IMAGE_URL_TEMPLATE, image.getUri())))
                                 )
                         )
-                );
+                ).withClass(MUBU_OUTLINE_CLASS);
     }
 }
