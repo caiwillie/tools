@@ -10,7 +10,11 @@ import com.caiwillie.tools.mubu2anki.model.MubuOutline;
 import j2html.tags.DomContent;
 import j2html.tags.specialized.DivTag;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static j2html.TagCreator.*;
 
@@ -23,9 +27,9 @@ public class AnkiConverter {
     private static final String SN_TEMPLATE = "{}_{}";
     private static final String MUBU_OUTLINE_CONTAINER_CLASSS = "mubu_outline_container";
     private static final String MUBU_OUTLINE_CLASS = "mubu_outline";
+    private static final String PADDING_LEFT_TEMPLATE = "padding-left:{}px;";
     private static final String IMAGE_STYLE_TEMPLATE = "width: {}px; height: auto;";
     private static final String IMAGE_URL_TEMPLATE = "https://api2.mubu.com/v3/{}";
-
 
 
     private final List<AnkiCard> cards = new ArrayList<>();
@@ -77,7 +81,7 @@ public class AnkiConverter {
     private void add() {
         String id = ss.get(0).getId();
         String sn;
-        if(StrUtil.isBlank(id)) {
+        if (StrUtil.isBlank(id)) {
             // 如果是开头，就直接用标题
             sn = tag;
         } else {
@@ -97,16 +101,10 @@ public class AnkiConverter {
     }
 
     private String formatFront() {
-        List<DivTag> items = new ArrayList<>();
-        for (int i = ss.size() - 1; i >= 0; i--) {
-            items.add(formatOutline(ss.get(i)));
-        }
-
         List<DivTag> divs = new ArrayList<>();
-        for (int i = 0; i < items.size(); i++) {
-            DivTag div = items.get(i);
-            // 增加缩进
-            divs.add(div(join(indent(i), items.get(i))).withClass(MUBU_OUTLINE_CONTAINER_CLASSS));
+        for (int i = ss.size() - 1; i >= 0; i--) {
+            int indent = ss.size() - 1 - i;
+            divs.add(formatOutline(indent, ss.get(i)));
         }
 
         return div(divs.toArray(new DomContent[0])).renderFormatted();
@@ -115,7 +113,7 @@ public class AnkiConverter {
     private String formatBack() {
         List<DivTag> divs = new ArrayList<>();
         for (MubuOutline outline : ss.get(0).getChildern()) {
-            divs.add(formatOutline(outline).withClass(MUBU_OUTLINE_CONTAINER_CLASSS));
+            divs.add(formatOutline(0, outline));
         }
 
         return div(divs.toArray(new DomContent[0])).renderFormatted();
@@ -130,21 +128,23 @@ public class AnkiConverter {
         return sb.toString();
     }
 
-    private DivTag formatOutline(MubuOutline mubuOutline) {
+    private DivTag formatOutline(int indent, MubuOutline mubuOutline) {
         String text = mubuOutline.getText();
-        List<MubuImage> images = Optional.ofNullable(mubuOutline.getImages()).orElse(Collections.emptyList());
+        List<MubuImage> images = Optional.ofNullable(mubuOutline.getImages()).orElse(new ArrayList<>());
 
-        return
-                div(
-                        div(rawHtml(text)),
-                        ul(
-                                each(images, image -> li
-                                        (img()
-                                        .withAlt("image")
-                                        .withStyle(StrUtil.format(IMAGE_STYLE_TEMPLATE, image.getW()))
-                                        .withSrc(StrUtil.format(IMAGE_URL_TEMPLATE, image.getUri())))
-                                )
-                        )
-                ).withClass(MUBU_OUTLINE_CLASS);
+        List<DivTag> imageList = images.stream().map(image -> div(img()
+                .withAlt("image")
+                .withStyle(StrUtil.format(IMAGE_STYLE_TEMPLATE, image.getW()))
+                .withSrc(StrUtil.format(IMAGE_URL_TEMPLATE, image.getUri()))))
+                .collect(Collectors.toList());
+
+        DivTag outlineDiv = div().withClass(MUBU_OUTLINE_CLASS)
+                .withStyle(StrUtil.format(PADDING_LEFT_TEMPLATE, 40 * indent))
+                .with(
+                        rawHtml(text),
+                        iff(CollUtil.isNotEmpty(imageList), join(imageList.toArray()))
+                );
+
+        return div().withClass(MUBU_OUTLINE_CONTAINER_CLASSS).with(outlineDiv);
     }
 }

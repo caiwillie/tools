@@ -19,7 +19,7 @@ _mubu_images="%5B%7B%22id%22%3A%22INKaavunNP%22%2C%22uri%22%3A%22document_image%
 
 <ul>
     <li>
-        <img style="width: {w}px; height: auto;" src="https://api2.mubu.com/v3/{uri}" alt="image">
+        <img style="width: 400px; height: auto;" src="https://api2.mubu.com/v3/document_image/440bf4c5-55f7-484f-ae98-8639869d13bb-17072876.jpg" alt="image">
     </li>
 </ul>
 
@@ -27,5 +27,9 @@ _mubu_images="%5B%7B%22id%22%3A%22INKaavunNP%22%2C%22uri%22%3A%22document_image%
 ul li{
 list-style-type:none;
 }
+
+
+<div style="display:inline-block; overflow:auto; white-space:nowrap;">JUC显示锁的原理与实战sdasdasdasdasdasdaswedsadasdweqwesadasdasdasdqwe  </div>
+
 
 
