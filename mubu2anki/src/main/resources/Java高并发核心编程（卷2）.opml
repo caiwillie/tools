@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>Java高并发核心编程（卷2）</title>
+  </head>
+  <body>
+    <outline text="1 多线程原理与实战" _mubu_text="%3Cspan%3E1%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%98%3C/span%3E" _note="" _mubu_note="">
+      <outline text="1.1 两个技术面试故事" _mubu_text="%3Cspan%3E1.1%20%E4%B8%A4%E4%B8%AA%E6%8A%80%E6%9C%AF%E9%9D%A2%E8%AF%95%E6%95%85%E4%BA%8B%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="1.2 无处不在的进程和线程" _mubu_text="%3Cspan%3E1.2%20%E6%97%A0%E5%A4%84%E4%B8%8D%E5%9C%A8%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%3C/span%3E" _note="" _mubu_note="">
+        <outline text="1.2.1 进程的基本原理" _mubu_text="%3Cspan%3E1.2.1%20%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.2.2 线程的基本原理" _mubu_text="%3Cspan%3E1.2.2%20%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.2.3 进程与线程的区别" _mubu_text="%3Cspan%3E1.2.3%20%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%8C%BA%E5%88%AB%3C/span%3E" _note="" _mubu_note="">
+          <outline text="线程是&quot;进程代码段&quot;的一次顺序执行流程。一个进程由一个或者多个线程组成。" _mubu_text="%3Cspan%3E%E7%BA%BF%E7%A8%8B%E6%98%AF%22%E8%BF%9B%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%AE%B5%22%E7%9A%84%E4%B8%80%E6%AC%A1%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E3%80%82%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B%E7%94%B1%E4%B8%80%E4%B8%AA%E6%88%96%E8%80%85%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E7%BB%84%E6%88%90%E3%80%82%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="线程是调度的最小单位，进程是分配资源的最小单位。" _mubu_text="%3Cspan%3E%E7%BA%BF%E7%A8%8B%E6%98%AF%E8%B0%83%E5%BA%A6%E7%9A%84%E6%9C%80%E5%B0%8F%E5%8D%95%E4%BD%8D%EF%BC%8C%E8%BF%9B%E7%A8%8B%E6%98%AF%E5%88%86%E9%85%8D%E8%B5%84%E6%BA%90%E7%9A%84%E6%9C%80%E5%B0%8F%E5%8D%95%E4%BD%8D%E3%80%82%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+      <outline text="1.3 创建线程的4中方法" _mubu_text="%3Cspan%3E1.3%20%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%844%E4%B8%AD%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note="">
+        <outline text="1.3.1 Thread类详解" _mubu_text="%3Cspan%3E1.3.1%20Thread%E7%B1%BB%E8%AF%A6%E8%A7%A3%3C/span%3E" _note="" _mubu_note="">
+          <outline text="线程ID" _mubu_text="%3Cspan%3E%E7%BA%BF%E7%A8%8BID%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="线程名称" _mubu_text="%3Cspan%3E%E7%BA%BF%E7%A8%8B%E5%90%8D%E7%A7%B0%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="线程优先级" _mubu_text="%3Cspan%3E%E7%BA%BF%E7%A8%8B%E4%BC%98%E5%85%88%E7%BA%A7%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="是否守护线程" _mubu_text="%3Cspan%3E%E6%98%AF%E5%90%A6%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="1.3.2 创建一个空线程" _mubu_text="%3Cspan%3E1.3.2%20%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%A9%BA%E7%BA%BF%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.3.3 线程创建方法一：继承Thread创建线程类" _mubu_text="%3Cspan%3E1.3.3%20%E7%BA%BF%E7%A8%8B%E5%88%9B%E5%BB%BA%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E7%BB%A7%E6%89%BFThread%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%B1%BB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.3.4 线程创建方法二：实现Runnable接口创建线程目标类" _mubu_text="%3Cspan%3E1.3.4%20%E7%BA%BF%E7%A8%8B%E5%88%9B%E5%BB%BA%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9B%AE%E6%A0%87%E7%B1%BB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.3.5 优雅创建Runnable线程目标类的两种方式" _mubu_text="%3Cspan%3E1.3.5%20%E4%BC%98%E9%9B%85%E5%88%9B%E5%BB%BARunnable%E7%BA%BF%E7%A8%8B%E7%9B%AE%E6%A0%87%E7%B1%BB%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.3.6 通过实现Runnable接口的方式创建线程目标类的优缺点" _mubu_text="%3Cspan%3E1.3.6%20%E9%80%9A%E8%BF%87%E5%AE%9E%E7%8E%B0Runnable%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%96%B9%E5%BC%8F%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9B%AE%E6%A0%87%E7%B1%BB%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.3.7 线程创建方法三：使用Callable和FutureTask创建线程" _mubu_text="%3Cspan%3E1.3.7%20%E7%BA%BF%E7%A8%8B%E5%88%9B%E5%BB%BA%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E4%BD%BF%E7%94%A8Callable%E5%92%8CFutureTask%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%3C/span%3E" _note="" _mubu_note="">
+          <outline text="1.3.7.1 Callable接口" _mubu_text="%3Cspan%3E1.3.7.1%20Callable%E6%8E%A5%E5%8F%A3%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="1.3.7.2 RunnableFuture接口" _mubu_text="%3Cspan%3E1.3.7.2%20RunnableFuture%E6%8E%A5%E5%8F%A3%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="1.3.7.3 Future接口" _mubu_text="%3Cspan%3E1.3.7.3%20Future%E6%8E%A5%E5%8F%A3%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="1.3.7.4 FutureTask类" _mubu_text="%3Cspan%3E1.3.7.4%20FutureTask%E7%B1%BB%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="1.3.7.5 使用Callable和FutureTask创建线程的具体步骤" _mubu_text="%3Cspan%3E1.3.7.5%20%E4%BD%BF%E7%94%A8Callable%E5%92%8CFutureTask%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%85%B7%E4%BD%93%E6%AD%A5%E9%AA%A4%3C/span%3E" _note="" _mubu_note="">
+            <outline text="创建一个Callable接口的实现类" _mubu_text="%3Cspan%3E%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AACallable%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%B1%BB%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="使用Callable实现类的实例构造FutureTask实例" _mubu_text="%3Cspan%3E%E4%BD%BF%E7%94%A8Callable%E5%AE%9E%E7%8E%B0%E7%B1%BB%E7%9A%84%E5%AE%9E%E4%BE%8B%E6%9E%84%E9%80%A0FutureTask%E5%AE%9E%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="使用FutureTask实例作为Thread构造器的target入参" _mubu_text="%3Cspan%3E%E4%BD%BF%E7%94%A8FutureTask%E5%AE%9E%E4%BE%8B%E4%BD%9C%E4%B8%BAThread%E6%9E%84%E9%80%A0%E5%99%A8%E7%9A%84target%E5%85%A5%E5%8F%82%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+        </outline>
+        <outline text="1.3.8 线程创建方法四：通过线程池创建线程" _mubu_text="%3Cspan%3E1.3.8%20%E7%BA%BF%E7%A8%8B%E5%88%9B%E5%BB%BA%E6%96%B9%E6%B3%95%E5%9B%9B%EF%BC%9A%E9%80%9A%E8%BF%87%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="1.4 线程的核心原理" _mubu_text="%3Cspan%3E1.4%20%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note="">
+        <outline text="1.4.1 线程的调度与时间片" _mubu_text="%3Cspan%3E1.4.1%20%E7%BA%BF%E7%A8%8B%E7%9A%84%E8%B0%83%E5%BA%A6%E4%B8%8E%E6%97%B6%E9%97%B4%E7%89%87%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.4.2 线程的优先级" _mubu_text="%3Cspan%3E1.4.2%20%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.4.3 线程的生命周期" _mubu_text="%3Cspan%3E1.4.3%20%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.4.4 一个线程状态的简单演示案例" _mubu_text="%3Cspan%3E1.4.4%20%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E7%9A%84%E7%AE%80%E5%8D%95%E6%BC%94%E7%A4%BA%E6%A1%88%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.4.5 使用Jstack工具查看线程状态" _mubu_text="%3Cspan%3E1.4.5%20%E4%BD%BF%E7%94%A8Jstack%E5%B7%A5%E5%85%B7%E6%9F%A5%E7%9C%8B%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="1.5 线程的基本操作" _mubu_text="%3Cspan%3E1.5%20%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%3C/span%3E" _note="" _mubu_note="">
+        <outline text="1.5.1 线程名称的设置和获取" _mubu_text="%3Cspan%3E1.5.1%20%E7%BA%BF%E7%A8%8B%E5%90%8D%E7%A7%B0%E7%9A%84%E8%AE%BE%E7%BD%AE%E5%92%8C%E8%8E%B7%E5%8F%96%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.5.2 线程的sleep操作" _mubu_text="%3Cspan%3E1.5.2%20%E7%BA%BF%E7%A8%8B%E7%9A%84sleep%E6%93%8D%E4%BD%9C%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.5.3 线程的interrupt操作" _mubu_text="%3Cspan%3E1.5.3%20%E7%BA%BF%E7%A8%8B%E7%9A%84interrupt%E6%93%8D%E4%BD%9C%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.5.4 线程的join操作" _mubu_text="%3Cspan%3E1.5.4%20%E7%BA%BF%E7%A8%8B%E7%9A%84join%E6%93%8D%E4%BD%9C%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.5.5 线程的yield操作" _mubu_text="%3Cspan%3E1.5.5%20%E7%BA%BF%E7%A8%8B%E7%9A%84yield%E6%93%8D%E4%BD%9C%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.5.6 线程的daemon操作" _mubu_text="%3Cspan%3E1.5.6%20%E7%BA%BF%E7%A8%8B%E7%9A%84daemon%E6%93%8D%E4%BD%9C%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.5.7 线程状态总结" _mubu_text="%3Cspan%3E1.5.7%20%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E6%80%BB%E7%BB%93%3C/span%3E" _note="" _mubu_note="">
+          <outline text="1.5.7.1 NEW：新建" _mubu_text="%3Cspan%3E1.5.7.1%20NEW%EF%BC%9A%E6%96%B0%E5%BB%BA%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="1.5.7.2 RUNNABLE：Ready（就绪）和Running（执行）两种状态合并为一种状态" _mubu_text="%3Cspan%3E1.5.7.2%20RUNNABLE%EF%BC%9AReady%EF%BC%88%E5%B0%B1%E7%BB%AA%EF%BC%89%E5%92%8CRunning%EF%BC%88%E6%89%A7%E8%A1%8C%EF%BC%89%E4%B8%A4%E7%A7%8D%E7%8A%B6%E6%80%81%E5%90%88%E5%B9%B6%E4%B8%BA%E4%B8%80%E7%A7%8D%E7%8A%B6%E6%80%81%3C/span%3E" _note="" _mubu_note="">
+            <outline text="1.5.7.2.1 进入Ready（就绪）状态的条件" _mubu_text="%3Cspan%3E1.5.7.2.1%20%E8%BF%9B%E5%85%A5Ready%EF%BC%88%E5%B0%B1%E7%BB%AA%EF%BC%89%E7%8A%B6%E6%80%81%E7%9A%84%E6%9D%A1%E4%BB%B6%3C/span%3E" _note="" _mubu_note="">
+              <outline text="调用线程的start()方法" _mubu_text="%3Cspan%3E%E8%B0%83%E7%94%A8%E7%BA%BF%E7%A8%8B%E7%9A%84start()%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="当前线程的执行时间片用完" _mubu_text="%3Cspan%3E%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E6%97%B6%E9%97%B4%E7%89%87%E7%94%A8%E5%AE%8C%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="当前线程睡眠（sleep）操作结束" _mubu_text="%3Cspan%3E%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E7%9D%A1%E7%9C%A0%EF%BC%88sleep%EF%BC%89%E6%93%8D%E4%BD%9C%E7%BB%93%E6%9D%9F%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="当前线程IO阻塞结束" _mubu_text="%3Cspan%3E%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8BIO%E9%98%BB%E5%A1%9E%E7%BB%93%E6%9D%9F%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="当前线程争抢到对象锁（Object Monitor）" _mubu_text="%3Cspan%3E%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E4%BA%89%E6%8A%A2%E5%88%B0%E5%AF%B9%E8%B1%A1%E9%94%81%EF%BC%88Object%20Monitor%EF%BC%89%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="当前线程调用了yield()方法让出" _mubu_text="%3Cspan%3E%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E8%B0%83%E7%94%A8%E4%BA%86yield()%E6%96%B9%E6%B3%95%E8%AE%A9%E5%87%BA%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="其他线程（join）操作结束" _mubu_text="%3Cspan%3E%E5%85%B6%E4%BB%96%E7%BA%BF%E7%A8%8B%EF%BC%88join%EF%BC%89%E6%93%8D%E4%BD%9C%E7%BB%93%E6%9D%9F%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="其他线程唤醒 Object.notify()/Object.notifyAll()" _mubu_text="%3Cspan%3E%E5%85%B6%E4%BB%96%E7%BA%BF%E7%A8%8B%E5%94%A4%E9%86%92%20Object.notify()/Object.notifyAll()%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="其他线程LockSupport.unpark(Thread)" _mubu_text="%3Cspan%3E%E5%85%B6%E4%BB%96%E7%BA%BF%E7%A8%8BLockSupport.unpark(Thread)%3C/span%3E" _note="" _mubu_note=""/>
+            </outline>
+            <outline text="1.5.7.2.2 进入Running（执行）状态的条件" _mubu_text="%3Cspan%3E1.5.7.2.2%20%E8%BF%9B%E5%85%A5Running%EF%BC%88%E6%89%A7%E8%A1%8C%EF%BC%89%E7%8A%B6%E6%80%81%E7%9A%84%E6%9D%A1%E4%BB%B6%3C/span%3E" _note="" _mubu_note="">
+              <outline text="线程调度程序从就绪状态中选择一个线程执行，该线程状态变成Running" _mubu_text="%3Cspan%3E%E7%BA%BF%E7%A8%8B%E8%B0%83%E5%BA%A6%E7%A8%8B%E5%BA%8F%E4%BB%8E%E5%B0%B1%E7%BB%AA%E7%8A%B6%E6%80%81%E4%B8%AD%E9%80%89%E6%8B%A9%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E6%89%A7%E8%A1%8C%EF%BC%8C%E8%AF%A5%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81%E5%8F%98%E6%88%90Running%3C/span%3E" _note="" _mubu_note=""/>
+            </outline>
+          </outline>
+          <outline text="1.5.7.3 BLOCKED" _mubu_text="%3Cspan%3E1.5.7.3%20BLOCKED%3C/span%3E" _note="" _mubu_note="">
+            <outline text="1.5.7.3.1 进入BLOCKED的条件" _mubu_text="%3Cspan%3E1.5.7.3.1%20%E8%BF%9B%E5%85%A5BLOCKED%E7%9A%84%E6%9D%A1%E4%BB%B6%3C/span%3E" _note="" _mubu_note="">
+              <outline text="线程等待获取对象锁" _mubu_text="%3Cspan%3E%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E8%8E%B7%E5%8F%96%E5%AF%B9%E8%B1%A1%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="IO阻塞" _mubu_text="%3Cspan%3EIO%E9%98%BB%E5%A1%9E%3C/span%3E" _note="" _mubu_note=""/>
+            </outline>
+          </outline>
+          <outline text="1.5.7.4 WAITING" _mubu_text="%3Cspan%3E1.5.7.4%20WAITING%3C/span%3E" _note="" _mubu_note="">
+            <outline text="1.5.7.4.1 进入WAITING的条件" _mubu_text="%3Cspan%3E1.5.7.4.1%20%E8%BF%9B%E5%85%A5WAITING%E7%9A%84%E6%9D%A1%E4%BB%B6%3C/span%3E" _note="" _mubu_note="">
+              <outline text="Object.wait()" _mubu_text="%3Cspan%3EObject.wait()%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="Thread.join()" _mubu_text="%3Cspan%3EThread.join()%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="LockSupport.park()" _mubu_text="%3Cspan%3ELockSupport.park()%3C/span%3E" _note="" _mubu_note=""/>
+            </outline>
+          </outline>
+          <outline text="1.5.7.5 TIMED_WAITING" _mubu_text="%3Cspan%3E1.5.7.5%20TIMED_WAITING%3C/span%3E" _note="" _mubu_note="">
+            <outline text="1.5.7.5.1 进入TIMED_WAITING条件" _mubu_text="%3Cspan%3E1.5.7.5.1%20%E8%BF%9B%E5%85%A5TIMED_WAITING%E6%9D%A1%E4%BB%B6%3C/span%3E" _note="" _mubu_note="">
+              <outline text="Thread.sleep(time)" _mubu_text="%3Cspan%3EThread.sleep(time)%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="Object.wait(time)" _mubu_text="%3Cspan%3EObject.wait(time)%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="LockSupport.parkUntil(time)" _mubu_text="%3Cspan%3ELockSupport.parkUntil(time)%3C/span%3E" _note="" _mubu_note=""/>
+            </outline>
+          </outline>
+          <outline text="1.5.7.6 TERMINATED" _mubu_text="%3Cspan%3E1.5.7.6%20TERMINATED%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+      <outline text="1.6 线程池原理与实战" _mubu_text="%3Cspan%3E1.6%20%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%98%3C/span%3E" _note="" _mubu_note="">
+        <outline text="1.6.1 JUC的线程池架构" _mubu_text="%3Cspan%3E1.6.1%20JUC%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%9E%B6%E6%9E%84%3C/span%3E" _note="" _mubu_note="">
+          <outline text="Executor：接口，“任务执行者”的角色，提供execute()" _mubu_text="%3Cspan%3EExecutor%EF%BC%9A%E6%8E%A5%E5%8F%A3%EF%BC%8C%E2%80%9C%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C%E8%80%85%E2%80%9D%E7%9A%84%E8%A7%92%E8%89%B2%EF%BC%8C%E6%8F%90%E4%BE%9Bexecute()%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="ExecutorService：接口，继承自Executor，“任务提交者”的角色，提供submit()等方法" _mubu_text="%3Cspan%3EExecutorService%EF%BC%9A%E6%8E%A5%E5%8F%A3%EF%BC%8C%E7%BB%A7%E6%89%BF%E8%87%AAExecutor%EF%BC%8C%E2%80%9C%E4%BB%BB%E5%8A%A1%E6%8F%90%E4%BA%A4%E8%80%85%E2%80%9D%E7%9A%84%E8%A7%92%E8%89%B2%EF%BC%8C%E6%8F%90%E4%BE%9Bsubmit()%E7%AD%89%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="AbstractExecutorService：抽象类，ExecutorService的默认实现" _mubu_text="%3Cspan%3EAbstractExecutorService%EF%BC%9A%E6%8A%BD%E8%B1%A1%E7%B1%BB%EF%BC%8CExecutorService%E7%9A%84%E9%BB%98%E8%AE%A4%E5%AE%9E%E7%8E%B0%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="ThreadPoolExecutor：实现类，继承自AbstractExecutorService" _mubu_text="%3Cspan%3EThreadPoolExecutor%EF%BC%9A%E5%AE%9E%E7%8E%B0%E7%B1%BB%EF%BC%8C%E7%BB%A7%E6%89%BF%E8%87%AAAbstractExecutorService%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="ScheduledExecutorService：接口，继承自ExecutoreService，提供周期性的任务调度" _mubu_text="%3Cspan%3EScheduledExecutorService%EF%BC%9A%E6%8E%A5%E5%8F%A3%EF%BC%8C%E7%BB%A7%E6%89%BF%E8%87%AAExecutoreService%EF%BC%8C%E6%8F%90%E4%BE%9B%E5%91%A8%E6%9C%9F%E6%80%A7%E7%9A%84%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="ScheduledThreadPoolExecutor：实现类，继承自ThreadPoolExecutor" _mubu_text="%3Cspan%3EScheduledThreadPoolExecutor%EF%BC%9A%E5%AE%9E%E7%8E%B0%E7%B1%BB%EF%BC%8C%E7%BB%A7%E6%89%BF%E8%87%AAThreadPoolExecutor%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="Executors：静态工厂类，提供快捷的创建线程的方法" _mubu_text="%3Cspan%3EExecutors%EF%BC%9A%E9%9D%99%E6%80%81%E5%B7%A5%E5%8E%82%E7%B1%BB%EF%BC%8C%E6%8F%90%E4%BE%9B%E5%BF%AB%E6%8D%B7%E7%9A%84%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="1.6.2 Executors的4种快捷创建线程池的方法" _mubu_text="%3Cspan%3E1.6.2%20Executors%E7%9A%844%E7%A7%8D%E5%BF%AB%E6%8D%B7%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note="">
+          <outline text="1.6.2.1 newSingleThreadExecutor创建“单线程化线程池”" _mubu_text="%3Cspan%3E1.6.2.1%20newSingleThreadExecutor%E5%88%9B%E5%BB%BA%E2%80%9C%E5%8D%95%E7%BA%BF%E7%A8%8B%E5%8C%96%E7%BA%BF%E7%A8%8B%E6%B1%A0%E2%80%9D%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="1.6.2.2 newFixedThreadPool创建“固定数量的线程池”" _mubu_text="%3Cspan%3E1.6.2.2%20newFixedThreadPool%E5%88%9B%E5%BB%BA%E2%80%9C%E5%9B%BA%E5%AE%9A%E6%95%B0%E9%87%8F%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0%E2%80%9D%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="1.6.2.3 newCachedThreadPool创建“可缓存线程池”：核心线程为0，最大线程为极大值，任何任务都会创建新线程，所有线程空闲时都可以回收" _mubu_text="%3Cspan%3E1.6.2.3%20newCachedThreadPool%E5%88%9B%E5%BB%BA%E2%80%9C%E5%8F%AF%E7%BC%93%E5%AD%98%E7%BA%BF%E7%A8%8B%E6%B1%A0%E2%80%9D%EF%BC%9A%E6%A0%B8%E5%BF%83%E7%BA%BF%E7%A8%8B%E4%B8%BA0%EF%BC%8C%E6%9C%80%E5%A4%A7%E7%BA%BF%E7%A8%8B%E4%B8%BA%E6%9E%81%E5%A4%A7%E5%80%BC%EF%BC%8C%E4%BB%BB%E4%BD%95%E4%BB%BB%E5%8A%A1%E9%83%BD%E4%BC%9A%E5%88%9B%E5%BB%BA%E6%96%B0%E7%BA%BF%E7%A8%8B%EF%BC%8C%E6%89%80%E6%9C%89%E7%BA%BF%E7%A8%8B%E7%A9%BA%E9%97%B2%E6%97%B6%E9%83%BD%E5%8F%AF%E4%BB%A5%E5%9B%9E%E6%94%B6%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="1.6.2.4 newScheduledThreadPool创建“可调度线程池”" _mubu_text="%3Cspan%3E1.6.2.4%20newScheduledThreadPool%E5%88%9B%E5%BB%BA%E2%80%9C%E5%8F%AF%E8%B0%83%E5%BA%A6%E7%BA%BF%E7%A8%8B%E6%B1%A0%E2%80%9D%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="1.6.3 线程池的标准创建方式" _mubu_text="%3Cspan%3E1.6.3%20%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E6%A0%87%E5%87%86%E5%88%9B%E5%BB%BA%E6%96%B9%E5%BC%8F%3C/span%3E" _note="" _mubu_note="">
+          <outline text="1.6.3.1 核心和最大线程设置" _mubu_text="%3Cspan%3E1.6.3.1%20%E6%A0%B8%E5%BF%83%E5%92%8C%E6%9C%80%E5%A4%A7%E7%BA%BF%E7%A8%8B%E8%AE%BE%E7%BD%AE%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="1.6.3.2 BlockingQueue：存储待执行的任务" _mubu_text="%3Cspan%3E1.6.3.2%20BlockingQueue%EF%BC%9A%E5%AD%98%E5%82%A8%E5%BE%85%E6%89%A7%E8%A1%8C%E7%9A%84%E4%BB%BB%E5%8A%A1%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="1.6.3.3 keepAliveTime：设置最大空闲时间，超过这个时间就被回收，默认不包括核心线程，也可以设置成包括" _mubu_text="%3Cspan%3E1.6.3.3%20keepAliveTime%EF%BC%9A%E8%AE%BE%E7%BD%AE%E6%9C%80%E5%A4%A7%E7%A9%BA%E9%97%B2%E6%97%B6%E9%97%B4%EF%BC%8C%E8%B6%85%E8%BF%87%E8%BF%99%E4%B8%AA%E6%97%B6%E9%97%B4%E5%B0%B1%E8%A2%AB%E5%9B%9E%E6%94%B6%EF%BC%8C%E9%BB%98%E8%AE%A4%E4%B8%8D%E5%8C%85%E6%8B%AC%E6%A0%B8%E5%BF%83%E7%BA%BF%E7%A8%8B%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E8%AE%BE%E7%BD%AE%E6%88%90%E5%8C%85%E6%8B%AC%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="1.6.4 向线程池提交任务的两种方式" _mubu_text="%3Cspan%3E1.6.4%20%E5%90%91%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%8F%90%E4%BA%A4%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.6.5 线程池的任务调度流程" _mubu_text="%3Cspan%3E1.6.5%20%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B%3C/span%3E" _note="" _mubu_note="">
+          <outline text="接收到新任务，判断工作中的线程数是否达到核心线程数，没有的话创建（或唤醒）线程执行" _mubu_text="%3Cspan%3E%E6%8E%A5%E6%94%B6%E5%88%B0%E6%96%B0%E4%BB%BB%E5%8A%A1%EF%BC%8C%E5%88%A4%E6%96%AD%E5%B7%A5%E4%BD%9C%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%95%B0%E6%98%AF%E5%90%A6%E8%BE%BE%E5%88%B0%E6%A0%B8%E5%BF%83%E7%BA%BF%E7%A8%8B%E6%95%B0%EF%BC%8C%E6%B2%A1%E6%9C%89%E7%9A%84%E8%AF%9D%E5%88%9B%E5%BB%BA%EF%BC%88%E6%88%96%E5%94%A4%E9%86%92%EF%BC%89%E7%BA%BF%E7%A8%8B%E6%89%A7%E8%A1%8C%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="是的话，判断队列是否满，不是的话，加入队列等待" _mubu_text="%3Cspan%3E%E6%98%AF%E7%9A%84%E8%AF%9D%EF%BC%8C%E5%88%A4%E6%96%AD%E9%98%9F%E5%88%97%E6%98%AF%E5%90%A6%E6%BB%A1%EF%BC%8C%E4%B8%8D%E6%98%AF%E7%9A%84%E8%AF%9D%EF%BC%8C%E5%8A%A0%E5%85%A5%E9%98%9F%E5%88%97%E7%AD%89%E5%BE%85%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="是的话，判断工作中的线程数是否达到最大线程数，没有的话创建（或唤醒）线程执行" _mubu_text="%3Cspan%3E%E6%98%AF%E7%9A%84%E8%AF%9D%EF%BC%8C%E5%88%A4%E6%96%AD%E5%B7%A5%E4%BD%9C%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%95%B0%E6%98%AF%E5%90%A6%E8%BE%BE%E5%88%B0%E6%9C%80%E5%A4%A7%E7%BA%BF%E7%A8%8B%E6%95%B0%EF%BC%8C%E6%B2%A1%E6%9C%89%E7%9A%84%E8%AF%9D%E5%88%9B%E5%BB%BA%EF%BC%88%E6%88%96%E5%94%A4%E9%86%92%EF%BC%89%E7%BA%BF%E7%A8%8B%E6%89%A7%E8%A1%8C%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="是的话，执行拒绝策略" _mubu_text="%3Cspan%3E%E6%98%AF%E7%9A%84%E8%AF%9D%EF%BC%8C%E6%89%A7%E8%A1%8C%E6%8B%92%E7%BB%9D%E7%AD%96%E7%95%A5%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="1.6.6 ThreadFactory（线程工厂）" _mubu_text="%3Cspan%3E1.6.6%20ThreadFactory%EF%BC%88%E7%BA%BF%E7%A8%8B%E5%B7%A5%E5%8E%82%EF%BC%89%3C/span%3E" _note="" _mubu_note="">
+          <outline text="Java线程工厂接口，可以实现该接口，然后将实现类实例传入ExecutorService中，使用该实例为提交的Runnable实例创建线程" _mubu_text="%3Cspan%3EJava%E7%BA%BF%E7%A8%8B%E5%B7%A5%E5%8E%82%E6%8E%A5%E5%8F%A3%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%AE%9E%E7%8E%B0%E8%AF%A5%E6%8E%A5%E5%8F%A3%EF%BC%8C%E7%84%B6%E5%90%8E%E5%B0%86%E5%AE%9E%E7%8E%B0%E7%B1%BB%E5%AE%9E%E4%BE%8B%E4%BC%A0%E5%85%A5ExecutorService%E4%B8%AD%EF%BC%8C%E4%BD%BF%E7%94%A8%E8%AF%A5%E5%AE%9E%E4%BE%8B%E4%B8%BA%E6%8F%90%E4%BA%A4%E7%9A%84Runnable%E5%AE%9E%E4%BE%8B%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="1.6.7 任务阻塞队列" _mubu_text="%3Cspan%3E1.6.7%20%E4%BB%BB%E5%8A%A1%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%3C/span%3E" _note="" _mubu_note="">
+          <outline text="ArrayBlockingQueue" _mubu_text="%3Cspan%3EArrayBlockingQueue%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="LinkedBlockingQueue" _mubu_text="%3Cspan%3ELinkedBlockingQueue%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="PriorityBlockingQueue" _mubu_text="%3Cspan%3EPriorityBlockingQueue%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="DelayQueue" _mubu_text="%3Cspan%3EDelayQueue%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="SynchronousQueue" _mubu_text="%3Cspan%3ESynchronousQueue%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="1.6.8 调度器的钩子方法" _mubu_text="%3Cspan%3E1.6.8%20%E8%B0%83%E5%BA%A6%E5%99%A8%E7%9A%84%E9%92%A9%E5%AD%90%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.6.9 线程池的拒绝策略" _mubu_text="%3Cspan%3E1.6.9%20%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E6%8B%92%E7%BB%9D%E7%AD%96%E7%95%A5%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.6.10 线程池的优雅关闭" _mubu_text="%3Cspan%3E1.6.10%20%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BC%98%E9%9B%85%E5%85%B3%E9%97%AD%3C/span%3E" _note="" _mubu_note="">
+          <outline text="1.6.10.1 线程池状态" _mubu_text="%3Cspan%3E1.6.10.1%20%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%8A%B6%E6%80%81%3C/span%3E" _note="" _mubu_note="">
+            <outline text="RUNNING：线程出创建之后的初始状态" _mubu_text="%3Cspan%3ERUNNING%EF%BC%9A%E7%BA%BF%E7%A8%8B%E5%87%BA%E5%88%9B%E5%BB%BA%E4%B9%8B%E5%90%8E%E7%9A%84%E5%88%9D%E5%A7%8B%E7%8A%B6%E6%80%81%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="SHUTDOWN：不再接受新任务，但是会将队列中的任务执行完毕" _mubu_text="%3Cspan%3ESHUTDOWN%EF%BC%9A%E4%B8%8D%E5%86%8D%E6%8E%A5%E5%8F%97%E6%96%B0%E4%BB%BB%E5%8A%A1%EF%BC%8C%E4%BD%86%E6%98%AF%E4%BC%9A%E5%B0%86%E9%98%9F%E5%88%97%E4%B8%AD%E7%9A%84%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C%E5%AE%8C%E6%AF%95%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="STOP：不再接受新任务，不会队列中的任务执行完毕，并且中断所有工作中的线程" _mubu_text="%3Cspan%3ESTOP%EF%BC%9A%E4%B8%8D%E5%86%8D%E6%8E%A5%E5%8F%97%E6%96%B0%E4%BB%BB%E5%8A%A1%EF%BC%8C%E4%B8%8D%E4%BC%9A%E9%98%9F%E5%88%97%E4%B8%AD%E7%9A%84%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C%E5%AE%8C%E6%AF%95%EF%BC%8C%E5%B9%B6%E4%B8%94%E4%B8%AD%E6%96%AD%E6%89%80%E6%9C%89%E5%B7%A5%E4%BD%9C%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="TIDYING：所有任务都已经终止或者处理完毕，将执行terminated()钩子方法" _mubu_text="%3Cspan%3ETIDYING%EF%BC%9A%E6%89%80%E6%9C%89%E4%BB%BB%E5%8A%A1%E9%83%BD%E5%B7%B2%E7%BB%8F%E7%BB%88%E6%AD%A2%E6%88%96%E8%80%85%E5%A4%84%E7%90%86%E5%AE%8C%E6%AF%95%EF%BC%8C%E5%B0%86%E6%89%A7%E8%A1%8Cterminated()%E9%92%A9%E5%AD%90%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="TERMINATED：执行完terminated ()" _mubu_text="%3Cspan%3ETERMINATED%EF%BC%9A%E6%89%A7%E8%A1%8C%E5%AE%8Cterminated%20()%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+          <outline text="1.6.10.2 方法" _mubu_text="%3Cspan%3E1.6.10.2%20%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note="">
+            <outline text="shutdown()" _mubu_text="%3Cspan%3Eshutdown()%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="shutdownNow()" _mubu_text="%3Cspan%3EshutdownNow()%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="awaitTermination()" _mubu_text="%3Cspan%3EawaitTermination()%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+          <outline text="1.6.10.3 优雅的关闭" _mubu_text="%3Cspan%3E1.6.10.3%20%E4%BC%98%E9%9B%85%E7%9A%84%E5%85%B3%E9%97%AD%3C/span%3E" _note="" _mubu_note="">
+            <outline text="shutdown()" _mubu_text="%3Cspan%3Eshutdown()%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="awaitTermination(long time)" _mubu_text="%3Cspan%3EawaitTermination(long%20time)%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="超时未关闭，循环执行以下shutdownNow() 与 awaitTermination(long time) 直至关闭" _mubu_text="%3Cspan%3E%E8%B6%85%E6%97%B6%E6%9C%AA%E5%85%B3%E9%97%AD%EF%BC%8C%E5%BE%AA%E7%8E%AF%E6%89%A7%E8%A1%8C%E4%BB%A5%E4%B8%8BshutdownNow()%20%E4%B8%8E%20awaitTermination(long%20time)%20%E7%9B%B4%E8%87%B3%E5%85%B3%E9%97%AD%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+        </outline>
+        <outline text="1.6.11 Executors快捷创建线程池的潜在问题" _mubu_text="%3Cspan%3E1.6.11%20Executors%E5%BF%AB%E6%8D%B7%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E6%BD%9C%E5%9C%A8%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="1.7 确定线程池的线程数" _mubu_text="%3Cspan%3E1.7%20%E7%A1%AE%E5%AE%9A%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%95%B0%3C/span%3E" _note="" _mubu_note="">
+        <outline text="1.7.1 按照任务类型堆线程池进行分类" _mubu_text="%3Cspan%3E1.7.1%20%E6%8C%89%E7%85%A7%E4%BB%BB%E5%8A%A1%E7%B1%BB%E5%9E%8B%E5%A0%86%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%BF%9B%E8%A1%8C%E5%88%86%E7%B1%BB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.7.2 为IO密集型任务确定线程数" _mubu_text="%3Cspan%3E1.7.2%20%E4%B8%BAIO%E5%AF%86%E9%9B%86%E5%9E%8B%E4%BB%BB%E5%8A%A1%E7%A1%AE%E5%AE%9A%E7%BA%BF%E7%A8%8B%E6%95%B0%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.7.3 为CPU密集型任务确定线程数" _mubu_text="%3Cspan%3E1.7.3%20%E4%B8%BACPU%E5%AF%86%E9%9B%86%E5%9E%8B%E4%BB%BB%E5%8A%A1%E7%A1%AE%E5%AE%9A%E7%BA%BF%E7%A8%8B%E6%95%B0%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.7.4 为混合型任务确定线程数" _mubu_text="%3Cspan%3E1.7.4%20%E4%B8%BA%E6%B7%B7%E5%90%88%E5%9E%8B%E4%BB%BB%E5%8A%A1%E7%A1%AE%E5%AE%9A%E7%BA%BF%E7%A8%8B%E6%95%B0%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="1.8 ThreadLocal原理与实战" _mubu_text="%3Cspan%3E1.8%20ThreadLocal%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%98%3C/span%3E" _note="" _mubu_note="">
+        <outline text="1.8.1 ThreadLocal的基本使用" _mubu_text="%3Cspan%3E1.8.1%20ThreadLocal%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.8.2 ThreadLocal的使用场景" _mubu_text="%3Cspan%3E1.8.2%20ThreadLocal%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.8.3 使用ThreadLocal进行线程隔离" _mubu_text="%3Cspan%3E1.8.3%20%E4%BD%BF%E7%94%A8ThreadLocal%E8%BF%9B%E8%A1%8C%E7%BA%BF%E7%A8%8B%E9%9A%94%E7%A6%BB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.8.4 使用ThreadLocal进行跨函数数据传递" _mubu_text="%3Cspan%3E1.8.4%20%E4%BD%BF%E7%94%A8ThreadLocal%E8%BF%9B%E8%A1%8C%E8%B7%A8%E5%87%BD%E6%95%B0%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="1.8.5 ThreadLocal内部结构演进" _mubu_text="%3Cspan%3E1.8.5%20ThreadLocal%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84%E6%BC%94%E8%BF%9B%3C/span%3E" _note="" _mubu_note="">
+          <outline text="1.8.5.1 JDK8和JDK8之前内部实现变化" _mubu_text="%3Cspan%3E1.8.5.1%20JDK8%E5%92%8CJDK8%E4%B9%8B%E5%89%8D%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%E5%8F%98%E5%8C%96%3C/span%3E" _note="" _mubu_note="">
+            <outline text="拥有者发生了变化：新版本的ThreadLocalMap拥有者为Thread，早期版本的ThreadLocalMap拥有者为ThreadLocal" _mubu_text="%3Cspan%3E%E6%8B%A5%E6%9C%89%E8%80%85%E5%8F%91%E7%94%9F%E4%BA%86%E5%8F%98%E5%8C%96%EF%BC%9A%E6%96%B0%E7%89%88%E6%9C%AC%E7%9A%84ThreadLocalMap%E6%8B%A5%E6%9C%89%E8%80%85%E4%B8%BAThread%EF%BC%8C%E6%97%A9%E6%9C%9F%E7%89%88%E6%9C%AC%E7%9A%84ThreadLocalMap%E6%8B%A5%E6%9C%89%E8%80%85%E4%B8%BAThreadLocal%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="Key发生了变化：新版本的Key为ThreadLocal实例，早期版本的Key为Thread实例" _mubu_text="%3Cspan%3EKey%E5%8F%91%E7%94%9F%E4%BA%86%E5%8F%98%E5%8C%96%EF%BC%9A%E6%96%B0%E7%89%88%E6%9C%AC%E7%9A%84Key%E4%B8%BAThreadLocal%E5%AE%9E%E4%BE%8B%EF%BC%8C%E6%97%A9%E6%9C%9F%E7%89%88%E6%9C%AC%E7%9A%84Key%E4%B8%BAThread%E5%AE%9E%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+          <outline text="1.8.5.2 JDK8和JDK8之前相比的优势" _mubu_text="%3Cspan%3E1.8.5.2%20JDK8%E5%92%8CJDK8%E4%B9%8B%E5%89%8D%E7%9B%B8%E6%AF%94%E7%9A%84%E4%BC%98%E5%8A%BF%3C/span%3E" _note="" _mubu_note="">
+            <outline text="每个ThreadLocalMap存储的键值对数量变少。" _mubu_text="%3Cspan%3E%E6%AF%8F%E4%B8%AAThreadLocalMap%E5%AD%98%E5%82%A8%E7%9A%84%E9%94%AE%E5%80%BC%E5%AF%B9%E6%95%B0%E9%87%8F%E5%8F%98%E5%B0%91%E3%80%82%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="ThreadLocalMap随Thread消毁而销毁，一定程度上减少内存泄漏" _mubu_text="%3Cspan%3EThreadLocalMap%E9%9A%8FThread%E6%B6%88%E6%AF%81%E8%80%8C%E9%94%80%E6%AF%81%EF%BC%8C%E4%B8%80%E5%AE%9A%E7%A8%8B%E5%BA%A6%E4%B8%8A%E5%87%8F%E5%B0%91%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+        </outline>
+        <outline text="1.8.6 ThreadLocal源码分析" _mubu_text="%3Cspan%3E1.8.6%20ThreadLocal%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%3C/span%3E" _note="" _mubu_note="">
+          <outline text="获取当前线程，然后获取线程中的ThreadLocalMap，实际都是调用ThreadLocalMap进行set，get" _mubu_text="%3Cspan%3E%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%EF%BC%8C%E7%84%B6%E5%90%8E%E8%8E%B7%E5%8F%96%E7%BA%BF%E7%A8%8B%E4%B8%AD%E7%9A%84ThreadLocalMap%EF%BC%8C%E5%AE%9E%E9%99%85%E9%83%BD%E6%98%AF%E8%B0%83%E7%94%A8ThreadLocalMap%E8%BF%9B%E8%A1%8Cset%EF%BC%8Cget%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="1.8.7 ThreadLocalMap源码分析" _mubu_text="%3Cspan%3E1.8.7%20ThreadLocalMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%3C/span%3E" _note="" _mubu_note="">
+          <outline text="1.8.7.1 ThreadLocalMap的主要成员变量" _mubu_text="%3Cspan%3E1.8.7.1%20ThreadLocalMap%E7%9A%84%E4%B8%BB%E8%A6%81%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="1.8.7.2 Entry的key需要使用弱引用" _mubu_text="%3Cspan%3E1.8.7.2%20Entry%E7%9A%84key%E9%9C%80%E8%A6%81%E4%BD%BF%E7%94%A8%E5%BC%B1%E5%BC%95%E7%94%A8%3C/span%3E" _note="" _mubu_note="">
+            <outline text="1.8.7.2.1 自动清理流程" _mubu_text="%3Cspan%3E1.8.7.2.1%20%E8%87%AA%E5%8A%A8%E6%B8%85%E7%90%86%E6%B5%81%E7%A8%8B%3C/span%3E" _note="" _mubu_note="">
+              <outline text="可以使那些没有被强引用指向，但还在ThreadLocalMap中键中存在的ThreadLocal实例可以被顺利回收。回收之后Entry的key就变成null。后续触发任何get()，set()都可以清理key为null的Entry" _mubu_text="%3Cspan%3E%E5%8F%AF%E4%BB%A5%E4%BD%BF%E9%82%A3%E4%BA%9B%E6%B2%A1%E6%9C%89%E8%A2%AB%E5%BC%BA%E5%BC%95%E7%94%A8%E6%8C%87%E5%90%91%EF%BC%8C%E4%BD%86%E8%BF%98%E5%9C%A8ThreadLocalMap%E4%B8%AD%E9%94%AE%E4%B8%AD%E5%AD%98%E5%9C%A8%E7%9A%84ThreadLocal%E5%AE%9E%E4%BE%8B%E5%8F%AF%E4%BB%A5%E8%A2%AB%E9%A1%BA%E5%88%A9%E5%9B%9E%E6%94%B6%E3%80%82%E5%9B%9E%E6%94%B6%E4%B9%8B%E5%90%8EEntry%E7%9A%84key%E5%B0%B1%E5%8F%98%E6%88%90null%E3%80%82%E5%90%8E%E7%BB%AD%E8%A7%A6%E5%8F%91%E4%BB%BB%E4%BD%95get()%EF%BC%8Cset()%E9%83%BD%E5%8F%AF%E4%BB%A5%E6%B8%85%E7%90%86key%E4%B8%BAnull%E7%9A%84Entry%3C/span%3E" _note="" _mubu_note=""/>
+            </outline>
+            <outline text="1.8.7.2.2 发生内存泄漏的前提" _mubu_text="%3Cspan%3E1.8.7.2.2%20%E5%8F%91%E7%94%9F%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E7%9A%84%E5%89%8D%E6%8F%90%3C/span%3E" _note="" _mubu_note="">
+              <outline text="线程长时间运行而没有被销毁。（线程池中Thread实例很容易满足）" _mubu_text="%3Cspan%3E%E7%BA%BF%E7%A8%8B%E9%95%BF%E6%97%B6%E9%97%B4%E8%BF%90%E8%A1%8C%E8%80%8C%E6%B2%A1%E6%9C%89%E8%A2%AB%E9%94%80%E6%AF%81%E3%80%82%EF%BC%88%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B8%ADThread%E5%AE%9E%E4%BE%8B%E5%BE%88%E5%AE%B9%E6%98%93%E6%BB%A1%E8%B6%B3%EF%BC%89%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="ThreadLocal引用被设置为null或者销毁后，后续一直没触发get()，set()等操作" _mubu_text="%3Cspan%3EThreadLocal%E5%BC%95%E7%94%A8%E8%A2%AB%E8%AE%BE%E7%BD%AE%E4%B8%BAnull%E6%88%96%E8%80%85%E9%94%80%E6%AF%81%E5%90%8E%EF%BC%8C%E5%90%8E%E7%BB%AD%E4%B8%80%E7%9B%B4%E6%B2%A1%E8%A7%A6%E5%8F%91get()%EF%BC%8Cset()%E7%AD%89%E6%93%8D%E4%BD%9C%3C/span%3E" _note="" _mubu_note=""/>
+            </outline>
+          </outline>
+          <outline text="1.8.7.3 编程规范推荐使用static final 修饰ThreadLocal对象" _mubu_text="%3Cspan%3E1.8.7.3%20%E7%BC%96%E7%A8%8B%E8%A7%84%E8%8C%83%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8static%20final%20%E4%BF%AE%E9%A5%B0ThreadLocal%E5%AF%B9%E8%B1%A1%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="1.8.8 ThreadLocal综合使用案例" _mubu_text="%3Cspan%3E1.8.8%20ThreadLocal%E7%BB%BC%E5%90%88%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B%3C/span%3E" _note="" _mubu_note="">
+          <outline text="尽量使用private static final修饰ThreadLocal实例。" _mubu_text="%3Cspan%3E%E5%B0%BD%E9%87%8F%E4%BD%BF%E7%94%A8private%20static%20final%E4%BF%AE%E9%A5%B0ThreadLocal%E5%AE%9E%E4%BE%8B%E3%80%82%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="ThreadLocal使用完成之后务必使用remove()方法。这是简单有效避免内存泄漏的方法。" _mubu_text="%3Cspan%3EThreadLocal%E4%BD%BF%E7%94%A8%E5%AE%8C%E6%88%90%E4%B9%8B%E5%90%8E%E5%8A%A1%E5%BF%85%E4%BD%BF%E7%94%A8remove()%E6%96%B9%E6%B3%95%E3%80%82%E8%BF%99%E6%98%AF%E7%AE%80%E5%8D%95%E6%9C%89%E6%95%88%E9%81%BF%E5%85%8D%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E7%9A%84%E6%96%B9%E6%B3%95%E3%80%82%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+    </outline>
+    <outline text="2 Java内置锁的核心原理" _mubu_text="%3Cspan%3E2%20Java%E5%86%85%E7%BD%AE%E9%94%81%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note="">
+      <outline text="2.1 线程安全问题" _mubu_text="%3Cspan%3E2.1%20%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note="">
+        <outline text="2.1.1 自增运算不是线程安全的" _mubu_text="%3Cspan%3E2.1.1%20%E8%87%AA%E5%A2%9E%E8%BF%90%E7%AE%97%E4%B8%8D%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%3C/span%3E" _note="" _mubu_note="">
+          <outline text="自增运算是一个复合操作：“内存取值”，“寄存器增加1”，“存值到内存”是独立进行的" _mubu_text="%3Cspan%3E%E8%87%AA%E5%A2%9E%E8%BF%90%E7%AE%97%E6%98%AF%E4%B8%80%E4%B8%AA%E5%A4%8D%E5%90%88%E6%93%8D%E4%BD%9C%EF%BC%9A%E2%80%9C%E5%86%85%E5%AD%98%E5%8F%96%E5%80%BC%E2%80%9D%EF%BC%8C%E2%80%9C%E5%AF%84%E5%AD%98%E5%99%A8%E5%A2%9E%E5%8A%A01%E2%80%9D%EF%BC%8C%E2%80%9C%E5%AD%98%E5%80%BC%E5%88%B0%E5%86%85%E5%AD%98%E2%80%9D%E6%98%AF%E7%8B%AC%E7%AB%8B%E8%BF%9B%E8%A1%8C%E7%9A%84%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="2.1.2 临界区资源与临界区代码段" _mubu_text="%3Cspan%3E2.1.2%20%E4%B8%B4%E7%95%8C%E5%8C%BA%E8%B5%84%E6%BA%90%E4%B8%8E%E4%B8%B4%E7%95%8C%E5%8C%BA%E4%BB%A3%E7%A0%81%E6%AE%B5%3C/span%3E" _note="" _mubu_note="">
+          <outline text="临界区资源：表示可以被多个线程使用的公共资源或者共享数据，但是每一次只能有一个线程使用" _mubu_text="%3Cspan%3E%E4%B8%B4%E7%95%8C%E5%8C%BA%E8%B5%84%E6%BA%90%EF%BC%9A%E8%A1%A8%E7%A4%BA%E5%8F%AF%E4%BB%A5%E8%A2%AB%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E4%BD%BF%E7%94%A8%E7%9A%84%E5%85%AC%E5%85%B1%E8%B5%84%E6%BA%90%E6%88%96%E8%80%85%E5%85%B1%E4%BA%AB%E6%95%B0%E6%8D%AE%EF%BC%8C%E4%BD%86%E6%98%AF%E6%AF%8F%E4%B8%80%E6%AC%A1%E5%8F%AA%E8%83%BD%E6%9C%89%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E4%BD%BF%E7%94%A8%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="临界区代码段：每个线程中用到临界区资源的那段代码，进入区之前申请资源，执行完成后释放" _mubu_text="%3Cspan%3E%E4%B8%B4%E7%95%8C%E5%8C%BA%E4%BB%A3%E7%A0%81%E6%AE%B5%EF%BC%9A%E6%AF%8F%E4%B8%AA%E7%BA%BF%E7%A8%8B%E4%B8%AD%E7%94%A8%E5%88%B0%E4%B8%B4%E7%95%8C%E5%8C%BA%E8%B5%84%E6%BA%90%E7%9A%84%E9%82%A3%E6%AE%B5%E4%BB%A3%E7%A0%81%EF%BC%8C%E8%BF%9B%E5%85%A5%E5%8C%BA%E4%B9%8B%E5%89%8D%E7%94%B3%E8%AF%B7%E8%B5%84%E6%BA%90%EF%BC%8C%E6%89%A7%E8%A1%8C%E5%AE%8C%E6%88%90%E5%90%8E%E9%87%8A%E6%94%BE%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="静态条件：由于执行临界区代码段时没有互斥访问而导致的特殊情况" _mubu_text="%3Cspan%3E%E9%9D%99%E6%80%81%E6%9D%A1%E4%BB%B6%EF%BC%9A%E7%94%B1%E4%BA%8E%E6%89%A7%E8%A1%8C%E4%B8%B4%E7%95%8C%E5%8C%BA%E4%BB%A3%E7%A0%81%E6%AE%B5%E6%97%B6%E6%B2%A1%E6%9C%89%E4%BA%92%E6%96%A5%E8%AE%BF%E9%97%AE%E8%80%8C%E5%AF%BC%E8%87%B4%E7%9A%84%E7%89%B9%E6%AE%8A%E6%83%85%E5%86%B5%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+      <outline text="2.2 synchronized关键字" _mubu_text="%3Cspan%3E2.2%20synchronized%E5%85%B3%E9%94%AE%E5%AD%97%3C/span%3E" _note="" _mubu_note="">
+        <outline text="2.2.1 synchronized同步方法" _mubu_text="%3Cspan%3E2.2.1%20synchronized%E5%90%8C%E6%AD%A5%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.2.2 synchronized同步块" _mubu_text="%3Cspan%3E2.2.2%20synchronized%E5%90%8C%E6%AD%A5%E5%9D%97%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.2.3 静态的同步方法" _mubu_text="%3Cspan%3E2.2.3%20%E9%9D%99%E6%80%81%E7%9A%84%E5%90%8C%E6%AD%A5%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="2.3 生产者-消费者问题" _mubu_text="%3Cspan%3E2.3%20%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note="">
+        <outline text="2.3.1 生产者-消费者模式" _mubu_text="%3Cspan%3E2.3.1%20%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.3.2 一个线程不安全的实现版本" _mubu_text="%3Cspan%3E2.3.2%20%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%89%88%E6%9C%AC%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.3.3 一个线程安全的实现版本" _mubu_text="%3Cspan%3E2.3.3%20%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%89%88%E6%9C%AC%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="2.4 Java对象结构与内置锁" _mubu_text="%3Cspan%3E2.4%20Java%E5%AF%B9%E8%B1%A1%E7%BB%93%E6%9E%84%E4%B8%8E%E5%86%85%E7%BD%AE%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+        <outline text="2.4.1 Java对象结构" _mubu_text="%3Cspan%3E2.4.1%20Java%E5%AF%B9%E8%B1%A1%E7%BB%93%E6%9E%84%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.4.2 Mark Word的结构信息" _mubu_text="%3Cspan%3E2.4.2%20Mark%20Word%E7%9A%84%E7%BB%93%E6%9E%84%E4%BF%A1%E6%81%AF%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.4.3 使用JOL工具查看对象的布局" _mubu_text="%3Cspan%3E2.4.3%20%E4%BD%BF%E7%94%A8JOL%E5%B7%A5%E5%85%B7%E6%9F%A5%E7%9C%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B8%83%E5%B1%80%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.4.4 大小端问题" _mubu_text="%3Cspan%3E2.4.4%20%E5%A4%A7%E5%B0%8F%E7%AB%AF%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.4.5 无锁、偏向锁、轻量级锁和重量级锁" _mubu_text="%3Cspan%3E2.4.5%20%E6%97%A0%E9%94%81%E3%80%81%E5%81%8F%E5%90%91%E9%94%81%E3%80%81%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E5%92%8C%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="2.5 偏向锁的原理与实战" _mubu_text="%3Cspan%3E2.5%20%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%98%3C/span%3E" _note="" _mubu_note="">
+        <outline text="2.5.1 偏向锁的核心原理" _mubu_text="%3Cspan%3E2.5.1%20%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.5.2 偏向锁的演示案例" _mubu_text="%3Cspan%3E2.5.2%20%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E6%BC%94%E7%A4%BA%E6%A1%88%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.5.3 偏向锁的膨胀和撤销" _mubu_text="%3Cspan%3E2.5.3%20%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E8%86%A8%E8%83%80%E5%92%8C%E6%92%A4%E9%94%80%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="2.6 轻量级锁的原理与实战" _mubu_text="%3Cspan%3E2.6%20%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%98%3C/span%3E" _note="" _mubu_note="">
+        <outline text="2.6.1 轻量级锁的核心原理" _mubu_text="%3Cspan%3E2.6.1%20%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.6.2 轻量级锁的演示案例" _mubu_text="%3Cspan%3E2.6.2%20%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E7%9A%84%E6%BC%94%E7%A4%BA%E6%A1%88%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.6.3 轻量级锁的分类" _mubu_text="%3Cspan%3E2.6.3%20%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E7%9A%84%E5%88%86%E7%B1%BB%3C/span%3E" _note="" _mubu_note="">
+          <outline text="普通自旋锁" _mubu_text="%3Cspan%3E%E6%99%AE%E9%80%9A%E8%87%AA%E6%97%8B%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="自适应自旋锁" _mubu_text="%3Cspan%3E%E8%87%AA%E9%80%82%E5%BA%94%E8%87%AA%E6%97%8B%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="2.6.4 轻量级锁的膨胀" _mubu_text="%3Cspan%3E2.6.4%20%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E7%9A%84%E8%86%A8%E8%83%80%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="2.7 重量级锁的原理与实战" _mubu_text="%3Cspan%3E2.7%20%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%98%3C/span%3E" _note="" _mubu_note="">
+        <outline text="2.7.1 重量级锁的核心原理" _mubu_text="%3Cspan%3E2.7.1%20%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note="">
+          <outline text="每个对象都会有一个显示器" _mubu_text="%3Cspan%3E%E6%AF%8F%E4%B8%AA%E5%AF%B9%E8%B1%A1%E9%83%BD%E4%BC%9A%E6%9C%89%E4%B8%80%E4%B8%AA%E6%98%BE%E7%A4%BA%E5%99%A8%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="2.7.2 重量级锁的开销" _mubu_text="%3Cspan%3E2.7.2%20%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81%E7%9A%84%E5%BC%80%E9%94%80%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.7.3 重量级锁的演示案例" _mubu_text="%3Cspan%3E2.7.3%20%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81%E7%9A%84%E6%BC%94%E7%A4%BA%E6%A1%88%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="2.8 偏向锁、轻量级锁与重量级锁的对比" _mubu_text="%3Cspan%3E2.8%20%E5%81%8F%E5%90%91%E9%94%81%E3%80%81%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E4%B8%8E%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81%E7%9A%84%E5%AF%B9%E6%AF%94%3C/span%3E" _note="" _mubu_note="">
+        <outline text="2.8.1 synchronized执行过程" _mubu_text="%3Cspan%3E2.8.1%20synchronized%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B%3C/span%3E" _note="" _mubu_note="">
+          <outline text="线程抢锁" _mubu_text="%3Cspan%3E%E7%BA%BF%E7%A8%8B%E6%8A%A2%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+      <outline text="2.9 线程间通信" _mubu_text="%3Cspan%3E2.9%20%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%3C/span%3E" _note="" _mubu_note="">
+        <outline text="2.9.1 线程间通信的定义" _mubu_text="%3Cspan%3E2.9.1%20%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E7%9A%84%E5%AE%9A%E4%B9%89%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.9.2 低效的线程轮询" _mubu_text="%3Cspan%3E2.9.2%20%E4%BD%8E%E6%95%88%E7%9A%84%E7%BA%BF%E7%A8%8B%E8%BD%AE%E8%AF%A2%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.9.3 wait方法和notify方法的原理" _mubu_text="%3Cspan%3E2.9.3%20wait%E6%96%B9%E6%B3%95%E5%92%8Cnotify%E6%96%B9%E6%B3%95%E7%9A%84%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.9.4 “等待-通知”通信模式演示案例" _mubu_text="%3Cspan%3E2.9.4%20%E2%80%9C%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E2%80%9D%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%BC%8F%E6%BC%94%E7%A4%BA%E6%A1%88%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.9.5 生产者-消费者之间的线程间通信" _mubu_text="%3Cspan%3E2.9.5%20%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E4%B9%8B%E9%97%B4%E7%9A%84%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="2.9.6 需要在synchronized同步块的内部使用wait和notify" _mubu_text="%3Cspan%3E2.9.6%20%E9%9C%80%E8%A6%81%E5%9C%A8synchronized%E5%90%8C%E6%AD%A5%E5%9D%97%E7%9A%84%E5%86%85%E9%83%A8%E4%BD%BF%E7%94%A8wait%E5%92%8Cnotify%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+    </outline>
+    <outline text="3 CAS原理与JUC原子类" _mubu_text="%3Cspan%3E3%20CAS%E5%8E%9F%E7%90%86%E4%B8%8EJUC%E5%8E%9F%E5%AD%90%E7%B1%BB%3C/span%3E" _note="" _mubu_note="">
+      <outline text="3.1 什么是CAS" _mubu_text="%3Cspan%3E3.1%20%E4%BB%80%E4%B9%88%E6%98%AFCAS%3C/span%3E" _note="" _mubu_note="">
+        <outline text="3.1.1 Unsafe类中的CAS方法" _mubu_text="%3Cspan%3E3.1.1%20Unsafe%E7%B1%BB%E4%B8%AD%E7%9A%84CAS%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note="">
+          <outline text="获取Unsafe实例" _mubu_text="%3Cspan%3E%E8%8E%B7%E5%8F%96Unsafe%E5%AE%9E%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="调用Unsafe提供的CAS方法" _mubu_text="%3Cspan%3E%E8%B0%83%E7%94%A8Unsafe%E6%8F%90%E4%BE%9B%E7%9A%84CAS%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="调用Unsafe提供的获取偏移量方法" _mubu_text="%3Cspan%3E%E8%B0%83%E7%94%A8Unsafe%E6%8F%90%E4%BE%9B%E7%9A%84%E8%8E%B7%E5%8F%96%E5%81%8F%E7%A7%BB%E9%87%8F%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="3.1.2 使用CAS进行无锁编程" _mubu_text="%3Cspan%3E3.1.2%20%E4%BD%BF%E7%94%A8CAS%E8%BF%9B%E8%A1%8C%E6%97%A0%E9%94%81%E7%BC%96%E7%A8%8B%3C/span%3E" _note="" _mubu_note="">
+          <outline text="获取字段的期望值" _mubu_text="%3Cspan%3E%E8%8E%B7%E5%8F%96%E5%AD%97%E6%AE%B5%E7%9A%84%E6%9C%9F%E6%9C%9B%E5%80%BC%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="计算出需要替换的新值" _mubu_text="%3Cspan%3E%E8%AE%A1%E7%AE%97%E5%87%BA%E9%9C%80%E8%A6%81%E6%9B%BF%E6%8D%A2%E7%9A%84%E6%96%B0%E5%80%BC%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="通过CAS设置新值，如果失败就自旋" _mubu_text="%3Cspan%3E%E9%80%9A%E8%BF%87CAS%E8%AE%BE%E7%BD%AE%E6%96%B0%E5%80%BC%EF%BC%8C%E5%A6%82%E6%9E%9C%E5%A4%B1%E8%B4%A5%E5%B0%B1%E8%87%AA%E6%97%8B%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="3.1.3 使用无锁编程实现轻量级安全自增" _mubu_text="%3Cspan%3E3.1.3%20%E4%BD%BF%E7%94%A8%E6%97%A0%E9%94%81%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0%E8%BD%BB%E9%87%8F%E7%BA%A7%E5%AE%89%E5%85%A8%E8%87%AA%E5%A2%9E%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="3.1.4 字段偏移量的计算" _mubu_text="%3Cspan%3E3.1.4%20%E5%AD%97%E6%AE%B5%E5%81%8F%E7%A7%BB%E9%87%8F%E7%9A%84%E8%AE%A1%E7%AE%97%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="3.2 JUC原子类" _mubu_text="%3Cspan%3E3.2%20JUC%E5%8E%9F%E5%AD%90%E7%B1%BB%3C/span%3E" _note="" _mubu_note="">
+        <outline text="3.2.1 JUC中的Atomic原子操作包" _mubu_text="%3Cspan%3E3.2.1%20JUC%E4%B8%AD%E7%9A%84Atomic%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E5%8C%85%3C/span%3E" _note="" _mubu_note="">
+          <outline text="基本原子类：AtomicInteger，AtomicLong，AtomicBoolean" _mubu_text="%3Cspan%3E%E5%9F%BA%E6%9C%AC%E5%8E%9F%E5%AD%90%E7%B1%BB%EF%BC%9AAtomicInteger%EF%BC%8CAtomicLong%EF%BC%8CAtomicBoolean%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="数组原子类：AtomicIntegerArray，AtomicLongArray，AtomicReferenceArray" _mubu_text="%3Cspan%3E%E6%95%B0%E7%BB%84%E5%8E%9F%E5%AD%90%E7%B1%BB%EF%BC%9AAtomicIntegerArray%EF%BC%8CAtomicLongArray%EF%BC%8CAtomicReferenceArray%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="引用原子类：AtomicReference，AtomicMarkableReference，AtomicStampedReference" _mubu_text="%3Cspan%3E%E5%BC%95%E7%94%A8%E5%8E%9F%E5%AD%90%E7%B1%BB%EF%BC%9AAtomicReference%EF%BC%8CAtomicMarkableReference%EF%BC%8CAtomicStampedReference%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="3.2.2 基础原子类AtomicInteger" _mubu_text="%3Cspan%3E3.2.2%20%E5%9F%BA%E7%A1%80%E5%8E%9F%E5%AD%90%E7%B1%BBAtomicInteger%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="3.2.3 数组原子类AtomicIntegerArray" _mubu_text="%3Cspan%3E3.2.3%20%E6%95%B0%E7%BB%84%E5%8E%9F%E5%AD%90%E7%B1%BBAtomicIntegerArray%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="3.2.4 AtomicInteger线程安全原理" _mubu_text="%3Cspan%3E3.2.4%20AtomicInteger%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="3.3 对象操作的原子性" _mubu_text="%3Cspan%3E3.3%20%E5%AF%B9%E8%B1%A1%E6%93%8D%E4%BD%9C%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%3C/span%3E" _note="" _mubu_note="">
+        <outline text="3.3.1 引用类型原子类" _mubu_text="%3Cspan%3E3.3.1%20%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B%E5%8E%9F%E5%AD%90%E7%B1%BB%3C/span%3E" _note="" _mubu_note="">
+          <outline text="使用原子引用类型AtomicReference只能保证被包装引用对象的原子性，不能保证对象中字段的原子性" _mubu_text="%3Cspan%3E%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8BAtomicReference%E5%8F%AA%E8%83%BD%E4%BF%9D%E8%AF%81%E8%A2%AB%E5%8C%85%E8%A3%85%E5%BC%95%E7%94%A8%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%EF%BC%8C%E4%B8%8D%E8%83%BD%E4%BF%9D%E8%AF%81%E5%AF%B9%E8%B1%A1%E4%B8%AD%E5%AD%97%E6%AE%B5%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="3.3.2 属性更新原子类" _mubu_text="%3Cspan%3E3.3.2%20%E5%B1%9E%E6%80%A7%E6%9B%B4%E6%96%B0%E5%8E%9F%E5%AD%90%E7%B1%BB%3C/span%3E" _note="" _mubu_note="">
+          <outline text="第一步，更新的对象属性必须使用public volatile修饰" _mubu_text="%3Cspan%3E%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%8C%E6%9B%B4%E6%96%B0%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7%E5%BF%85%E9%A1%BB%E4%BD%BF%E7%94%A8public%20volatile%E4%BF%AE%E9%A5%B0%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="第二步，必须调用静态方法newUpdater()创建更新器" _mubu_text="%3Cspan%3E%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%8C%E5%BF%85%E9%A1%BB%E8%B0%83%E7%94%A8%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95newUpdater()%E5%88%9B%E5%BB%BA%E6%9B%B4%E6%96%B0%E5%99%A8%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+      <outline text="3.4 ABA问题" _mubu_text="%3Cspan%3E3.4%20ABA%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note="">
+        <outline text="3.4.1 了解ABA问题" _mubu_text="%3Cspan%3E3.4.1%20%E4%BA%86%E8%A7%A3ABA%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="3.4.2 ABA问题解决方案" _mubu_text="%3Cspan%3E3.4.2%20ABA%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="3.4.3 使用AtomicStampedReference解决ABA问题" _mubu_text="%3Cspan%3E3.4.3%20%E4%BD%BF%E7%94%A8AtomicStampedReference%E8%A7%A3%E5%86%B3ABA%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="3.4.4 使用AtomicMarkableReference解决ABA问题" _mubu_text="%3Cspan%3E3.4.4%20%E4%BD%BF%E7%94%A8AtomicMarkableReference%E8%A7%A3%E5%86%B3ABA%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="3.5 提升高并发场景下CAS操作的性能" _mubu_text="%3Cspan%3E3.5%20%E6%8F%90%E5%8D%87%E9%AB%98%E5%B9%B6%E5%8F%91%E5%9C%BA%E6%99%AF%E4%B8%8BCAS%E6%93%8D%E4%BD%9C%E7%9A%84%E6%80%A7%E8%83%BD%3C/span%3E" _note="" _mubu_note="">
+        <outline text="3.5.1 以空间还时间：LongAdder" _mubu_text="%3Cspan%3E3.5.1%20%E4%BB%A5%E7%A9%BA%E9%97%B4%E8%BF%98%E6%97%B6%E9%97%B4%EF%BC%9ALongAdder%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="3.5.2 LongAdder的原理" _mubu_text="%3Cspan%3E3.5.2%20LongAdder%E7%9A%84%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note="">
+          <outline text="基本思路是分散热点，将value值分散到一个数组中，不同线程会命中到数组的不同槽中，如果要获取完整的值，只要将各个槽中的变量值累加" _mubu_text="%3Cspan%3E%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF%E6%98%AF%E5%88%86%E6%95%A3%E7%83%AD%E7%82%B9%EF%BC%8C%E5%B0%86value%E5%80%BC%E5%88%86%E6%95%A3%E5%88%B0%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E4%B8%AD%EF%BC%8C%E4%B8%8D%E5%90%8C%E7%BA%BF%E7%A8%8B%E4%BC%9A%E5%91%BD%E4%B8%AD%E5%88%B0%E6%95%B0%E7%BB%84%E7%9A%84%E4%B8%8D%E5%90%8C%E6%A7%BD%E4%B8%AD%EF%BC%8C%E5%A6%82%E6%9E%9C%E8%A6%81%E8%8E%B7%E5%8F%96%E5%AE%8C%E6%95%B4%E7%9A%84%E5%80%BC%EF%BC%8C%E5%8F%AA%E8%A6%81%E5%B0%86%E5%90%84%E4%B8%AA%E6%A7%BD%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E5%80%BC%E7%B4%AF%E5%8A%A0%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+      <outline text="3.6 CAS在JDK中的广泛应用" _mubu_text="%3Cspan%3E3.6%20CAS%E5%9C%A8JDK%E4%B8%AD%E7%9A%84%E5%B9%BF%E6%B3%9B%E5%BA%94%E7%94%A8%3C/span%3E" _note="" _mubu_note="">
+        <outline text="3.6.1 CAS操作的弊端和规避措施" _mubu_text="%3Cspan%3E3.6.1%20CAS%E6%93%8D%E4%BD%9C%E7%9A%84%E5%BC%8A%E7%AB%AF%E5%92%8C%E8%A7%84%E9%81%BF%E6%8E%AA%E6%96%BD%3C/span%3E" _note="" _mubu_note="">
+          <outline text="3.6.1.1 ABA问题" _mubu_text="%3Cspan%3E3.6.1.1%20ABA%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note="">
+            <outline text="使用版本号" _mubu_text="%3Cspan%3E%E4%BD%BF%E7%94%A8%E7%89%88%E6%9C%AC%E5%8F%B7%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+          <outline text="3.6.1.2 只能保证一个共享变量之间的原子性操作" _mubu_text="%3Cspan%3E3.6.1.2%20%E5%8F%AA%E8%83%BD%E4%BF%9D%E8%AF%81%E4%B8%80%E4%B8%AA%E5%85%B1%E4%BA%AB%E5%8F%98%E9%87%8F%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E6%93%8D%E4%BD%9C%3C/span%3E" _note="" _mubu_note="">
+            <outline text="把多个共享变量合并成一个共享变量" _mubu_text="%3Cspan%3E%E6%8A%8A%E5%A4%9A%E4%B8%AA%E5%85%B1%E4%BA%AB%E5%8F%98%E9%87%8F%E5%90%88%E5%B9%B6%E6%88%90%E4%B8%80%E4%B8%AA%E5%85%B1%E4%BA%AB%E5%8F%98%E9%87%8F%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+          <outline text="3.6.1.3 开销问题" _mubu_text="%3Cspan%3E3.6.1.3%20%E5%BC%80%E9%94%80%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note="">
+            <outline text="分散热点操作：LongAdder" _mubu_text="%3Cspan%3E%E5%88%86%E6%95%A3%E7%83%AD%E7%82%B9%E6%93%8D%E4%BD%9C%EF%BC%9ALongAdder%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="使用队列削峰：将发生CAS竞争的线程加入队列中排队（AQS采用CHL队列）" _mubu_text="%3Cspan%3E%E4%BD%BF%E7%94%A8%E9%98%9F%E5%88%97%E5%89%8A%E5%B3%B0%EF%BC%9A%E5%B0%86%E5%8F%91%E7%94%9FCAS%E7%AB%9E%E4%BA%89%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%8A%A0%E5%85%A5%E9%98%9F%E5%88%97%E4%B8%AD%E6%8E%92%E9%98%9F%EF%BC%88AQS%E9%87%87%E7%94%A8CHL%E9%98%9F%E5%88%97%EF%BC%89%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+        </outline>
+        <outline text="3.6.2 CAS操作在JDK中的应用" _mubu_text="%3Cspan%3E3.6.2%20CAS%E6%93%8D%E4%BD%9C%E5%9C%A8JDK%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+    </outline>
+    <outline text="4 可见性与有序性的原理" _mubu_text="%3Cspan%3E4%20%E5%8F%AF%E8%A7%81%E6%80%A7%E4%B8%8E%E6%9C%89%E5%BA%8F%E6%80%A7%E7%9A%84%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note="">
+      <outline text="4.1 CPU物理缓存结构" _mubu_text="%3Cspan%3E4.1%20CPU%E7%89%A9%E7%90%86%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%3C/span%3E" _note="" _mubu_note="">
+        <outline text="L1：容量最小，速度最快，每个核独立" _mubu_text="%3Cspan%3EL1%EF%BC%9A%E5%AE%B9%E9%87%8F%E6%9C%80%E5%B0%8F%EF%BC%8C%E9%80%9F%E5%BA%A6%E6%9C%80%E5%BF%AB%EF%BC%8C%E6%AF%8F%E4%B8%AA%E6%A0%B8%E7%8B%AC%E7%AB%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="L2：容量第二小，速度第二快，每个核独立" _mubu_text="%3Cspan%3EL2%EF%BC%9A%E5%AE%B9%E9%87%8F%E7%AC%AC%E4%BA%8C%E5%B0%8F%EF%BC%8C%E9%80%9F%E5%BA%A6%E7%AC%AC%E4%BA%8C%E5%BF%AB%EF%BC%8C%E6%AF%8F%E4%B8%AA%E6%A0%B8%E7%8B%AC%E7%AB%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="L3：容量第二大，速度第二慢，所有核共享" _mubu_text="%3Cspan%3EL3%EF%BC%9A%E5%AE%B9%E9%87%8F%E7%AC%AC%E4%BA%8C%E5%A4%A7%EF%BC%8C%E9%80%9F%E5%BA%A6%E7%AC%AC%E4%BA%8C%E6%85%A2%EF%BC%8C%E6%89%80%E6%9C%89%E6%A0%B8%E5%85%B1%E4%BA%AB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="主存：容量最大，速度最慢，所有核共享" _mubu_text="%3Cspan%3E%E4%B8%BB%E5%AD%98%EF%BC%9A%E5%AE%B9%E9%87%8F%E6%9C%80%E5%A4%A7%EF%BC%8C%E9%80%9F%E5%BA%A6%E6%9C%80%E6%85%A2%EF%BC%8C%E6%89%80%E6%9C%89%E6%A0%B8%E5%85%B1%E4%BA%AB%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="4.2 并发编程的三大问题" _mubu_text="%3Cspan%3E4.2%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%9A%84%E4%B8%89%E5%A4%A7%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note="">
+        <outline text="4.2.1 原子性问题" _mubu_text="%3Cspan%3E4.2.1%20%E5%8E%9F%E5%AD%90%E6%80%A7%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.2.2 可见性问题" _mubu_text="%3Cspan%3E4.2.2%20%E5%8F%AF%E8%A7%81%E6%80%A7%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.2.3 有序性问题" _mubu_text="%3Cspan%3E4.2.3%20%E6%9C%89%E5%BA%8F%E6%80%A7%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="4.3 硬件层的MESI协议原理" _mubu_text="%3Cspan%3E4.3%20%E7%A1%AC%E4%BB%B6%E5%B1%82%E7%9A%84MESI%E5%8D%8F%E8%AE%AE%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note="">
+        <outline text="4.3.1 总线锁和缓存锁" _mubu_text="%3Cspan%3E4.3.1%20%E6%80%BB%E7%BA%BF%E9%94%81%E5%92%8C%E7%BC%93%E5%AD%98%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+          <outline text="4.3.1.1 总线锁" _mubu_text="%3Cspan%3E4.3.1.1%20%E6%80%BB%E7%BA%BF%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+            <outline text="原理：多核CPU系统中，当其中一个CPU要对主存或者共享缓存进行操作时，在总线上发出一个LOCK#信号，使得其他CPU不能访问主存或者共享缓存。" _mubu_text="%3Cspan%3E%E5%8E%9F%E7%90%86%EF%BC%9A%E5%A4%9A%E6%A0%B8CPU%E7%B3%BB%E7%BB%9F%E4%B8%AD%EF%BC%8C%E5%BD%93%E5%85%B6%E4%B8%AD%E4%B8%80%E4%B8%AACPU%E8%A6%81%E5%AF%B9%E4%B8%BB%E5%AD%98%E6%88%96%E8%80%85%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%E6%97%B6%EF%BC%8C%E5%9C%A8%E6%80%BB%E7%BA%BF%E4%B8%8A%E5%8F%91%E5%87%BA%E4%B8%80%E4%B8%AALOCK#%E4%BF%A1%E5%8F%B7%EF%BC%8C%E4%BD%BF%E5%BE%97%E5%85%B6%E4%BB%96CPU%E4%B8%8D%E8%83%BD%E8%AE%BF%E9%97%AE%E4%B8%BB%E5%AD%98%E6%88%96%E8%80%85%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E3%80%82%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="特点：总线锁颗粒度太大，效率低，开销大。" _mubu_text="%3Cspan%3E%E7%89%B9%E7%82%B9%EF%BC%9A%E6%80%BB%E7%BA%BF%E9%94%81%E9%A2%97%E7%B2%92%E5%BA%A6%E5%A4%AA%E5%A4%A7%EF%BC%8C%E6%95%88%E7%8E%87%E4%BD%8E%EF%BC%8C%E5%BC%80%E9%94%80%E5%A4%A7%E3%80%82%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+          <outline text="4.3.1.2 缓存锁" _mubu_text="%3Cspan%3E4.3.1.2%20%E7%BC%93%E5%AD%98%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+            <outline text="4.3.1.2.1 原理：各个CPU实现缓存一致性协议后，当CPU对高速缓存中的数据进行操作后，通知到总线上，其他CPU通过嗅探总线上传播的数据来检查自己私有高速缓存中的值是否过期，如果过期重新从主存读取新值" _mubu_text="%3Cspan%3E4.3.1.2.1%20%E5%8E%9F%E7%90%86%EF%BC%9A%E5%90%84%E4%B8%AACPU%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%E5%90%8E%EF%BC%8C%E5%BD%93CPU%E5%AF%B9%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E6%93%8D%E4%BD%9C%E5%90%8E%EF%BC%8C%E9%80%9A%E7%9F%A5%E5%88%B0%E6%80%BB%E7%BA%BF%E4%B8%8A%EF%BC%8C%E5%85%B6%E4%BB%96CPU%E9%80%9A%E8%BF%87%E5%97%85%E6%8E%A2%E6%80%BB%E7%BA%BF%E4%B8%8A%E4%BC%A0%E6%92%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9D%A5%E6%A3%80%E6%9F%A5%E8%87%AA%E5%B7%B1%E7%A7%81%E6%9C%89%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E4%B8%AD%E7%9A%84%E5%80%BC%E6%98%AF%E5%90%A6%E8%BF%87%E6%9C%9F%EF%BC%8C%E5%A6%82%E6%9E%9C%E8%BF%87%E6%9C%9F%E9%87%8D%E6%96%B0%E4%BB%8E%E4%B8%BB%E5%AD%98%E8%AF%BB%E5%8F%96%E6%96%B0%E5%80%BC%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="4.3.1.2.2 特点：降低了锁的颗粒度，实现复杂" _mubu_text="%3Cspan%3E4.3.1.2.2%20%E7%89%B9%E7%82%B9%EF%BC%9A%E9%99%8D%E4%BD%8E%E4%BA%86%E9%94%81%E7%9A%84%E9%A2%97%E7%B2%92%E5%BA%A6%EF%BC%8C%E5%AE%9E%E7%8E%B0%E5%A4%8D%E6%9D%82%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="4.3.1.2.3 缓存一致性协议：常见的有MSI、MESI和MOSI" _mubu_text="%3Cspan%3E4.3.1.2.3%20%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%EF%BC%9A%E5%B8%B8%E8%A7%81%E7%9A%84%E6%9C%89MSI%E3%80%81MESI%E5%92%8CMOSI%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="4.3.1.2.4 CPU写入模式" _mubu_text="%3Cspan%3E4.3.1.2.4%20CPU%E5%86%99%E5%85%A5%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note="">
+              <outline text="Write-Through（直写）：同时更新高速缓存和主存，" _mubu_text="%3Cspan%3EWrite-Through%EF%BC%88%E7%9B%B4%E5%86%99%EF%BC%89%EF%BC%9A%E5%90%8C%E6%97%B6%E6%9B%B4%E6%96%B0%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E5%92%8C%E4%B8%BB%E5%AD%98%EF%BC%8C%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="Write-Back（回写）：" _mubu_text="%3Cspan%3EWrite-Back%EF%BC%88%E5%9B%9E%E5%86%99%EF%BC%89%EF%BC%9A%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="大多数CPU都采用Write-Back模式" _mubu_text="%3Cspan%3E%E5%A4%A7%E5%A4%9A%E6%95%B0CPU%E9%83%BD%E9%87%87%E7%94%A8Write-Back%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+            </outline>
+          </outline>
+        </outline>
+        <outline text="4.3.2 MSI协议" _mubu_text="%3Cspan%3E4.3.2%20MSI%E5%8D%8F%E8%AE%AE%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.3.3 MESI协议及RFO请求" _mubu_text="%3Cspan%3E4.3.3%20MESI%E5%8D%8F%E8%AE%AE%E5%8F%8ARFO%E8%AF%B7%E6%B1%82%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.3.4 volatile原理" _mubu_text="%3Cspan%3E4.3.4%20volatile%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="4.4 有序性与内存屏障" _mubu_text="%3Cspan%3E4.4%20%E6%9C%89%E5%BA%8F%E6%80%A7%E4%B8%8E%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C%3C/span%3E" _note="" _mubu_note="">
+        <outline text="4.4.1 重排序" _mubu_text="%3Cspan%3E4.4.1%20%E9%87%8D%E6%8E%92%E5%BA%8F%3C/span%3E" _note="" _mubu_note="">
+          <outline text="4.4.1.1 编译器重排序" _mubu_text="%3Cspan%3E4.4.1.1%20%E7%BC%96%E8%AF%91%E5%99%A8%E9%87%8D%E6%8E%92%E5%BA%8F%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="4.4.1.2 CPU重排序" _mubu_text="%3Cspan%3E4.4.1.2%20CPU%E9%87%8D%E6%8E%92%E5%BA%8F%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="4.4.2 As-if-Serial规则" _mubu_text="%3Cspan%3E4.4.2%20As-if-Serial%E8%A7%84%E5%88%99%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.4.3 硬件层面的内存屏障" _mubu_text="%3Cspan%3E4.4.3%20%E7%A1%AC%E4%BB%B6%E5%B1%82%E9%9D%A2%E7%9A%84%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="4.5 JMM详解" _mubu_text="%3Cspan%3E4.5%20JMM%E8%AF%A6%E8%A7%A3%3C/span%3E" _note="" _mubu_note="">
+        <outline text="4.5.1 什么是Java内存模型" _mubu_text="%3Cspan%3E4.5.1%20%E4%BB%80%E4%B9%88%E6%98%AFJava%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.5.2 JMM与JVM物理内存的区别" _mubu_text="%3Cspan%3E4.5.2%20JMM%E4%B8%8EJVM%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%9A%84%E5%8C%BA%E5%88%AB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.5.3 JMM的8个操作" _mubu_text="%3Cspan%3E4.5.3%20JMM%E7%9A%848%E4%B8%AA%E6%93%8D%E4%BD%9C%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.5.4 JMM如何解决有序性问题" _mubu_text="%3Cspan%3E4.5.4%20JMM%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E6%9C%89%E5%BA%8F%E6%80%A7%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.5.5 volatile语义中的内存屏障" _mubu_text="%3Cspan%3E4.5.5%20volatile%E8%AF%AD%E4%B9%89%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="4.6 Happens-Before规则" _mubu_text="%3Cspan%3E4.6%20Happens-Before%E8%A7%84%E5%88%99%3C/span%3E" _note="" _mubu_note="">
+        <outline text="4.6.1 Happens-Before规则介绍" _mubu_text="%3Cspan%3E4.6.1%20Happens-Before%E8%A7%84%E5%88%99%E4%BB%8B%E7%BB%8D%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.6.2 规则1：顺序性规则" _mubu_text="%3Cspan%3E4.6.2%20%E8%A7%84%E5%88%991%EF%BC%9A%E9%A1%BA%E5%BA%8F%E6%80%A7%E8%A7%84%E5%88%99%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.6.3 规则2：volatile规则" _mubu_text="%3Cspan%3E4.6.3%20%E8%A7%84%E5%88%992%EF%BC%9Avolatile%E8%A7%84%E5%88%99%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.6.4 规则3：传递性规则" _mubu_text="%3Cspan%3E4.6.4%20%E8%A7%84%E5%88%993%EF%BC%9A%E4%BC%A0%E9%80%92%E6%80%A7%E8%A7%84%E5%88%99%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.6.5 规则4：监视锁规则" _mubu_text="%3Cspan%3E4.6.5%20%E8%A7%84%E5%88%994%EF%BC%9A%E7%9B%91%E8%A7%86%E9%94%81%E8%A7%84%E5%88%99%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.6.6 规则5：start()规则" _mubu_text="%3Cspan%3E4.6.6%20%E8%A7%84%E5%88%995%EF%BC%9Astart()%E8%A7%84%E5%88%99%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.6.7 规则6：join()规则" _mubu_text="%3Cspan%3E4.6.7%20%E8%A7%84%E5%88%996%EF%BC%9Ajoin()%E8%A7%84%E5%88%99%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="4.7 volatile不具备原子性" _mubu_text="%3Cspan%3E4.7%20volatile%E4%B8%8D%E5%85%B7%E5%A4%87%E5%8E%9F%E5%AD%90%E6%80%A7%3C/span%3E" _note="" _mubu_note="">
+        <outline text="4.7.1 volatile变量的自增实例" _mubu_text="%3Cspan%3E4.7.1%20volatile%E5%8F%98%E9%87%8F%E7%9A%84%E8%87%AA%E5%A2%9E%E5%AE%9E%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="4.7.2 volatile变量的复合操作不具备原子性的原理" _mubu_text="%3Cspan%3E4.7.2%20volatile%E5%8F%98%E9%87%8F%E7%9A%84%E5%A4%8D%E5%90%88%E6%93%8D%E4%BD%9C%E4%B8%8D%E5%85%B7%E5%A4%87%E5%8E%9F%E5%AD%90%E6%80%A7%E7%9A%84%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+    </outline>
+    <outline text="5 JUC显示锁的原理与实战" _mubu_text="%3Cspan%3E5%20JUC%E6%98%BE%E7%A4%BA%E9%94%81%E7%9A%84%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%98%3C/span%3E" _note="" _mubu_note="">
+      <outline text="5.1 显示锁" _mubu_text="%3Cspan%3E5.1%20%E6%98%BE%E7%A4%BA%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+        <outline text="5.1.1 显示锁Lock接口" _mubu_text="%3Cspan%3E5.1.1%20%E6%98%BE%E7%A4%BA%E9%94%81Lock%E6%8E%A5%E5%8F%A3%3C/span%3E" _note="" _mubu_note="">
+          <outline text="5.1.1.1 显示锁比Java内置锁多了以下优势" _mubu_text="%3Cspan%3E5.1.1.1%20%E6%98%BE%E7%A4%BA%E9%94%81%E6%AF%94Java%E5%86%85%E7%BD%AE%E9%94%81%E5%A4%9A%E4%BA%86%E4%BB%A5%E4%B8%8B%E4%BC%98%E5%8A%BF%3C/span%3E" _note="" _mubu_note="">
+            <outline text="可中断获取锁" _mubu_text="%3Cspan%3E%E5%8F%AF%E4%B8%AD%E6%96%AD%E8%8E%B7%E5%8F%96%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="可非阻塞获取锁" _mubu_text="%3Cspan%3E%E5%8F%AF%E9%9D%9E%E9%98%BB%E5%A1%9E%E8%8E%B7%E5%8F%96%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="可限时抢锁" _mubu_text="%3Cspan%3E%E5%8F%AF%E9%99%90%E6%97%B6%E6%8A%A2%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+        </outline>
+        <outline text="5.1.2 可重入锁ReentrantLock" _mubu_text="%3Cspan%3E5.1.2%20%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81ReentrantLock%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="5.1.3 使用显示锁的模板代码" _mubu_text="%3Cspan%3E5.1.3%20%E4%BD%BF%E7%94%A8%E6%98%BE%E7%A4%BA%E9%94%81%E7%9A%84%E6%A8%A1%E6%9D%BF%E4%BB%A3%E7%A0%81%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="5.1.4 基于显示锁进行“等待-通知”方式的线程间通信" _mubu_text="%3Cspan%3E5.1.4%20%E5%9F%BA%E4%BA%8E%E6%98%BE%E7%A4%BA%E9%94%81%E8%BF%9B%E8%A1%8C%E2%80%9C%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E2%80%9D%E6%96%B9%E5%BC%8F%E7%9A%84%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="5.1.5 LockSupport" _mubu_text="%3Cspan%3E5.1.5%20LockSupport%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="5.1.6 显示锁的分类" _mubu_text="%3Cspan%3E5.1.6%20%E6%98%BE%E7%A4%BA%E9%94%81%E7%9A%84%E5%88%86%E7%B1%BB%3C/span%3E" _note="" _mubu_note="">
+          <outline text="可重入锁与不可重入锁" _mubu_text="%3Cspan%3E%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81%E4%B8%8E%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="悲观锁与乐观锁" _mubu_text="%3Cspan%3E%E6%82%B2%E8%A7%82%E9%94%81%E4%B8%8E%E4%B9%90%E8%A7%82%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="公平锁与非公平锁屏" _mubu_text="%3Cspan%3E%E5%85%AC%E5%B9%B3%E9%94%81%E4%B8%8E%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81%E5%B1%8F%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="可中断锁与不可中断锁" _mubu_text="%3Cspan%3E%E5%8F%AF%E4%B8%AD%E6%96%AD%E9%94%81%E4%B8%8E%E4%B8%8D%E5%8F%AF%E4%B8%AD%E6%96%AD%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="共享锁与独占锁" _mubu_text="%3Cspan%3E%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E7%8B%AC%E5%8D%A0%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+      <outline text="5.2 悲观锁和乐观锁" _mubu_text="%3Cspan%3E5.2%20%E6%82%B2%E8%A7%82%E9%94%81%E5%92%8C%E4%B9%90%E8%A7%82%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+        <outline text="5.2.1 悲观锁存在的问题" _mubu_text="%3Cspan%3E5.2.1%20%E6%82%B2%E8%A7%82%E9%94%81%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98%3C/span%3E" _note="" _mubu_note="">
+          <outline text="5.2.1.1 线程切换较多，性能开销大" _mubu_text="%3Cspan%3E5.2.1.1%20%E7%BA%BF%E7%A8%8B%E5%88%87%E6%8D%A2%E8%BE%83%E5%A4%9A%EF%BC%8C%E6%80%A7%E8%83%BD%E5%BC%80%E9%94%80%E5%A4%A7%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="5.2.1.2 通过CAS实现乐观锁：乐观锁是一种思想，而CAS是这种思想的一种实现" _mubu_text="%3Cspan%3E5.2.1.2%20%E9%80%9A%E8%BF%87CAS%E5%AE%9E%E7%8E%B0%E4%B9%90%E8%A7%82%E9%94%81%EF%BC%9A%E4%B9%90%E8%A7%82%E9%94%81%E6%98%AF%E4%B8%80%E7%A7%8D%E6%80%9D%E6%83%B3%EF%BC%8C%E8%80%8CCAS%E6%98%AF%E8%BF%99%E7%A7%8D%E6%80%9D%E6%83%B3%E7%9A%84%E4%B8%80%E7%A7%8D%E5%AE%9E%E7%8E%B0%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="5.2.1.3 不可重入的自旋锁" _mubu_text="%3Cspan%3E5.2.1.3%20%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%85%A5%E7%9A%84%E8%87%AA%E6%97%8B%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="5.2.1.4 可重入的自旋锁" _mubu_text="%3Cspan%3E5.2.1.4%20%E5%8F%AF%E9%87%8D%E5%85%A5%E7%9A%84%E8%87%AA%E6%97%8B%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="5.2.1.5 CAS可能导致&quot;总线风暴&quot;" _mubu_text="%3Cspan%3E5.2.1.5%20CAS%E5%8F%AF%E8%83%BD%E5%AF%BC%E8%87%B4%22%E6%80%BB%E7%BA%BF%E9%A3%8E%E6%9A%B4%22%3C/span%3E" _note="" _mubu_note="">
+            <outline text="5.2.1.5.1 原理：由于使用lock前缀指令的Java操作（包括CAS，volatile）会产生缓存一致性流量，当很多线程同时执行lock前缀指令操作时，在SMP架构的CPU上会导致总线风暴。总线风暴和CPU的架构和设计有关，不是所有的CPU都会产生总线风暴" _mubu_text="%3Cspan%3E5.2.1.5.1%20%E5%8E%9F%E7%90%86%EF%BC%9A%E7%94%B1%E4%BA%8E%E4%BD%BF%E7%94%A8lock%E5%89%8D%E7%BC%80%E6%8C%87%E4%BB%A4%E7%9A%84Java%E6%93%8D%E4%BD%9C%EF%BC%88%E5%8C%85%E6%8B%ACCAS%EF%BC%8Cvolatile%EF%BC%89%E4%BC%9A%E4%BA%A7%E7%94%9F%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E6%B5%81%E9%87%8F%EF%BC%8C%E5%BD%93%E5%BE%88%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%97%B6%E6%89%A7%E8%A1%8Clock%E5%89%8D%E7%BC%80%E6%8C%87%E4%BB%A4%E6%93%8D%E4%BD%9C%E6%97%B6%EF%BC%8C%E5%9C%A8SMP%E6%9E%B6%E6%9E%84%E7%9A%84CPU%E4%B8%8A%E4%BC%9A%E5%AF%BC%E8%87%B4%E6%80%BB%E7%BA%BF%E9%A3%8E%E6%9A%B4%E3%80%82%E6%80%BB%E7%BA%BF%E9%A3%8E%E6%9A%B4%E5%92%8CCPU%E7%9A%84%E6%9E%B6%E6%9E%84%E5%92%8C%E8%AE%BE%E8%AE%A1%E6%9C%89%E5%85%B3%EF%BC%8C%E4%B8%8D%E6%98%AF%E6%89%80%E6%9C%89%E7%9A%84CPU%E9%83%BD%E4%BC%9A%E4%BA%A7%E7%94%9F%E6%80%BB%E7%BA%BF%E9%A3%8E%E6%9A%B4%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="5.2.1.5.2 CPU架构" _mubu_text="%3Cspan%3E5.2.1.5.2%20CPU%E6%9E%B6%E6%9E%84%3C/span%3E" _note="" _mubu_note="">
+              <outline text="多处理器架构：Symmetric Multi-Processer，SMP" _mubu_text="%3Cspan%3E%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E6%9E%B6%E6%9E%84%EF%BC%9ASymmetric%20Multi-Processer%EF%BC%8CSMP%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="非一致存储访问架构：" _mubu_text="%3Cspan%3E%E9%9D%9E%E4%B8%80%E8%87%B4%E5%AD%98%E5%82%A8%E8%AE%BF%E9%97%AE%E6%9E%B6%E6%9E%84%EF%BC%9A%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="海量并行处理架构：" _mubu_text="%3Cspan%3E%E6%B5%B7%E9%87%8F%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86%E6%9E%B6%E6%9E%84%EF%BC%9A%3C/span%3E" _note="" _mubu_note=""/>
+            </outline>
+          </outline>
+          <outline text="5.2.1.6 CLH自旋锁" _mubu_text="%3Cspan%3E5.2.1.6%20CLH%E8%87%AA%E6%97%8B%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+            <outline text="5.2.1.6.1 原理：是基于单链表实现，申请加锁的线程会通过CAS在单链表的尾部增加一个节点，之后该线程只需要在其前驱节点上进行普通自旋，等待前驱节点释放锁即可。" _mubu_text="%3Cspan%3E5.2.1.6.1%20%E5%8E%9F%E7%90%86%EF%BC%9A%E6%98%AF%E5%9F%BA%E4%BA%8E%E5%8D%95%E9%93%BE%E8%A1%A8%E5%AE%9E%E7%8E%B0%EF%BC%8C%E7%94%B3%E8%AF%B7%E5%8A%A0%E9%94%81%E7%9A%84%E7%BA%BF%E7%A8%8B%E4%BC%9A%E9%80%9A%E8%BF%87CAS%E5%9C%A8%E5%8D%95%E9%93%BE%E8%A1%A8%E7%9A%84%E5%B0%BE%E9%83%A8%E5%A2%9E%E5%8A%A0%E4%B8%80%E4%B8%AA%E8%8A%82%E7%82%B9%EF%BC%8C%E4%B9%8B%E5%90%8E%E8%AF%A5%E7%BA%BF%E7%A8%8B%E5%8F%AA%E9%9C%80%E8%A6%81%E5%9C%A8%E5%85%B6%E5%89%8D%E9%A9%B1%E8%8A%82%E7%82%B9%E4%B8%8A%E8%BF%9B%E8%A1%8C%E6%99%AE%E9%80%9A%E8%87%AA%E6%97%8B%EF%BC%8C%E7%AD%89%E5%BE%85%E5%89%8D%E9%A9%B1%E8%8A%82%E7%82%B9%E9%87%8A%E6%94%BE%E9%94%81%E5%8D%B3%E5%8F%AF%E3%80%82%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="5.2.1.6.2 优点：加入队列之后，抢锁线程不需要CAS自旋，只需要普通自旋，能减少CAS操作，避免总线风暴。" _mubu_text="%3Cspan%3E5.2.1.6.2%20%E4%BC%98%E7%82%B9%EF%BC%9A%E5%8A%A0%E5%85%A5%E9%98%9F%E5%88%97%E4%B9%8B%E5%90%8E%EF%BC%8C%E6%8A%A2%E9%94%81%E7%BA%BF%E7%A8%8B%E4%B8%8D%E9%9C%80%E8%A6%81CAS%E8%87%AA%E6%97%8B%EF%BC%8C%E5%8F%AA%E9%9C%80%E8%A6%81%E6%99%AE%E9%80%9A%E8%87%AA%E6%97%8B%EF%BC%8C%E8%83%BD%E5%87%8F%E5%B0%91CAS%E6%93%8D%E4%BD%9C%EF%BC%8C%E9%81%BF%E5%85%8D%E6%80%BB%E7%BA%BF%E9%A3%8E%E6%9A%B4%E3%80%82%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="5.2.1.6.3 JUC中的显示锁基于AQS，AQS是CLH的一个变种" _mubu_text="%3Cspan%3E5.2.1.6.3%20JUC%E4%B8%AD%E7%9A%84%E6%98%BE%E7%A4%BA%E9%94%81%E5%9F%BA%E4%BA%8EAQS%EF%BC%8CAQS%E6%98%AFCLH%E7%9A%84%E4%B8%80%E4%B8%AA%E5%8F%98%E7%A7%8D%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="5.2.1.6.4 实现CLH锁的一个学习版本" _mubu_text="%3Cspan%3E5.2.1.6.4%20%E5%AE%9E%E7%8E%B0CLH%E9%94%81%E7%9A%84%E4%B8%80%E4%B8%AA%E5%AD%A6%E4%B9%A0%E7%89%88%E6%9C%AC%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="5.2.1.6.5 CLHLock锁的测试用例" _mubu_text="%3Cspan%3E5.2.1.6.5%20CLHLock%E9%94%81%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="5.2.1.6.6 CLH锁的原理分析" _mubu_text="%3Cspan%3E5.2.1.6.6%20CLH%E9%94%81%E7%9A%84%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%3C/span%3E" _note="" _mubu_note="">
+              <outline text="5.2.1.6.6.1 初始状态队列尾部属性（tail）指向一个EMPTY节点" _mubu_text="%3Cspan%3E5.2.1.6.6.1%20%E5%88%9D%E5%A7%8B%E7%8A%B6%E6%80%81%E9%98%9F%E5%88%97%E5%B0%BE%E9%83%A8%E5%B1%9E%E6%80%A7%EF%BC%88tail%EF%BC%89%E6%8C%87%E5%90%91%E4%B8%80%E4%B8%AAEMPTY%E8%8A%82%E7%82%B9%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="5.2.1.6.6.2 Thread在抢锁时会创建一个新的Node加入等待队列尾部：tail指向新的Node，同时新的Node的preNode属性指向tail之前指向的节点，兵器以上操作通过CAS自旋完成" _mubu_text="%3Cspan%3E5.2.1.6.6.2%20Thread%E5%9C%A8%E6%8A%A2%E9%94%81%E6%97%B6%E4%BC%9A%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84Node%E5%8A%A0%E5%85%A5%E7%AD%89%E5%BE%85%E9%98%9F%E5%88%97%E5%B0%BE%E9%83%A8%EF%BC%9Atail%E6%8C%87%E5%90%91%E6%96%B0%E7%9A%84Node%EF%BC%8C%E5%90%8C%E6%97%B6%E6%96%B0%E7%9A%84Node%E7%9A%84preNode%E5%B1%9E%E6%80%A7%E6%8C%87%E5%90%91tail%E4%B9%8B%E5%89%8D%E6%8C%87%E5%90%91%E7%9A%84%E8%8A%82%E7%82%B9%EF%BC%8C%E5%85%B5%E5%99%A8%E4%BB%A5%E4%B8%8A%E6%93%8D%E4%BD%9C%E9%80%9A%E8%BF%87CAS%E8%87%AA%E6%97%8B%E5%AE%8C%E6%88%90%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="5.2.1.6.6.3 Thread加入抢锁队列之后，会在前驱节点上自旋；循环判断前驱节点的locked属性是否为false，如果为false就表示前驱节点释放了锁，当前线程可以抢占到锁" _mubu_text="%3Cspan%3E5.2.1.6.6.3%20Thread%E5%8A%A0%E5%85%A5%E6%8A%A2%E9%94%81%E9%98%9F%E5%88%97%E4%B9%8B%E5%90%8E%EF%BC%8C%E4%BC%9A%E5%9C%A8%E5%89%8D%E9%A9%B1%E8%8A%82%E7%82%B9%E4%B8%8A%E8%87%AA%E6%97%8B%EF%BC%9B%E5%BE%AA%E7%8E%AF%E5%88%A4%E6%96%AD%E5%89%8D%E9%A9%B1%E8%8A%82%E7%82%B9%E7%9A%84locked%E5%B1%9E%E6%80%A7%E6%98%AF%E5%90%A6%E4%B8%BAfalse%EF%BC%8C%E5%A6%82%E6%9E%9C%E4%B8%BAfalse%E5%B0%B1%E8%A1%A8%E7%A4%BA%E5%89%8D%E9%A9%B1%E8%8A%82%E7%82%B9%E9%87%8A%E6%94%BE%E4%BA%86%E9%94%81%EF%BC%8C%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E5%8F%AF%E4%BB%A5%E6%8A%A2%E5%8D%A0%E5%88%B0%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="5.2.1.6.6.4 Thread抢占到锁之后，它的locked属性一直为true，一直到临界区代码执行完，然后调用unlock()方法释放锁，释放之后其locked属性才能为false" _mubu_text="%3Cspan%3E5.2.1.6.6.4%20Thread%E6%8A%A2%E5%8D%A0%E5%88%B0%E9%94%81%E4%B9%8B%E5%90%8E%EF%BC%8C%E5%AE%83%E7%9A%84locked%E5%B1%9E%E6%80%A7%E4%B8%80%E7%9B%B4%E4%B8%BAtrue%EF%BC%8C%E4%B8%80%E7%9B%B4%E5%88%B0%E4%B8%B4%E7%95%8C%E5%8C%BA%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E5%AE%8C%EF%BC%8C%E7%84%B6%E5%90%8E%E8%B0%83%E7%94%A8unlock()%E6%96%B9%E6%B3%95%E9%87%8A%E6%94%BE%E9%94%81%EF%BC%8C%E9%87%8A%E6%94%BE%E4%B9%8B%E5%90%8E%E5%85%B6locked%E5%B1%9E%E6%80%A7%E6%89%8D%E8%83%BD%E4%B8%BAfalse%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="5.2.1.6.6.5 举例说明：CLH锁的抢占过程" _mubu_text="%3Cspan%3E5.2.1.6.6.5%20%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E%EF%BC%9ACLH%E9%94%81%E7%9A%84%E6%8A%A2%E5%8D%A0%E8%BF%87%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="5.2.1.6.6.6 举例说明：CLH锁的释放过程" _mubu_text="%3Cspan%3E5.2.1.6.6.6%20%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E%EF%BC%9ACLH%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E8%BF%87%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+              <outline text="5.2.1.6.6.7 CLH锁的优缺点" _mubu_text="%3Cspan%3E5.2.1.6.6.7%20CLH%E9%94%81%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9%3C/span%3E" _note="" _mubu_note="">
+                <outline text="CLH队列锁在NUMA架构的CPU平台上性能很差" _mubu_text="%3Cspan%3ECLH%E9%98%9F%E5%88%97%E9%94%81%E5%9C%A8NUMA%E6%9E%B6%E6%9E%84%E7%9A%84CPU%E5%B9%B3%E5%8F%B0%E4%B8%8A%E6%80%A7%E8%83%BD%E5%BE%88%E5%B7%AE%3C/span%3E" _note="" _mubu_note=""/>
+              </outline>
+            </outline>
+          </outline>
+        </outline>
+      </outline>
+      <outline text="5.3 公平锁与非公平锁" _mubu_text="%3Cspan%3E5.3%20%E5%85%AC%E5%B9%B3%E9%94%81%E4%B8%8E%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+        <outline text="5.3.1 非公平锁实战" _mubu_text="%3Cspan%3E5.3.1%20%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81%E5%AE%9E%E6%88%98%3C/span%3E" _note="" _mubu_note="">
+          <outline text="非公平锁是指多个线程获取锁的顺序并不一定是其申请锁的顺序，可能后申请的线程比先申请的线程优先获取锁" _mubu_text="%3Cspan%3E%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81%E6%98%AF%E6%8C%87%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E8%8E%B7%E5%8F%96%E9%94%81%E7%9A%84%E9%A1%BA%E5%BA%8F%E5%B9%B6%E4%B8%8D%E4%B8%80%E5%AE%9A%E6%98%AF%E5%85%B6%E7%94%B3%E8%AF%B7%E9%94%81%E7%9A%84%E9%A1%BA%E5%BA%8F%EF%BC%8C%E5%8F%AF%E8%83%BD%E5%90%8E%E7%94%B3%E8%AF%B7%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%AF%94%E5%85%88%E7%94%B3%E8%AF%B7%E7%9A%84%E7%BA%BF%E7%A8%8B%E4%BC%98%E5%85%88%E8%8E%B7%E5%8F%96%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="5.3.2 公平锁实战" _mubu_text="%3Cspan%3E5.3.2%20%E5%85%AC%E5%B9%B3%E9%94%81%E5%AE%9E%E6%88%98%3C/span%3E" _note="" _mubu_note="">
+          <outline text="多个线程按照申锁的顺序来获取锁" _mubu_text="%3Cspan%3E%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E6%8C%89%E7%85%A7%E7%94%B3%E9%94%81%E7%9A%84%E9%A1%BA%E5%BA%8F%E6%9D%A5%E8%8E%B7%E5%8F%96%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+      <outline text="5.4 可中断锁与不可中断锁" _mubu_text="%3Cspan%3E5.4%20%E5%8F%AF%E4%B8%AD%E6%96%AD%E9%94%81%E4%B8%8E%E4%B8%8D%E5%8F%AF%E4%B8%AD%E6%96%AD%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+        <outline text="5.4.0 可中断锁是指抢占过程中可以被中断，如ReentrantLock，不可中断锁是指抢占过程中不可以被中断的锁，如Java的synchronized内置锁" _mubu_text="%3Cspan%3E5.4.0%20%E5%8F%AF%E4%B8%AD%E6%96%AD%E9%94%81%E6%98%AF%E6%8C%87%E6%8A%A2%E5%8D%A0%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%8F%AF%E4%BB%A5%E8%A2%AB%E4%B8%AD%E6%96%AD%EF%BC%8C%E5%A6%82ReentrantLock%EF%BC%8C%E4%B8%8D%E5%8F%AF%E4%B8%AD%E6%96%AD%E9%94%81%E6%98%AF%E6%8C%87%E6%8A%A2%E5%8D%A0%E8%BF%87%E7%A8%8B%E4%B8%AD%E4%B8%8D%E5%8F%AF%E4%BB%A5%E8%A2%AB%E4%B8%AD%E6%96%AD%E7%9A%84%E9%94%81%EF%BC%8C%E5%A6%82Java%E7%9A%84synchronized%E5%86%85%E7%BD%AE%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="5.4.1 锁的可中断抢占" _mubu_text="%3Cspan%3E5.4.1%20%E9%94%81%E7%9A%84%E5%8F%AF%E4%B8%AD%E6%96%AD%E6%8A%A2%E5%8D%A0%3C/span%3E" _note="" _mubu_note="">
+          <outline text="lockInterruptibly()：可中断锁在抢占过程中会处理Thread.interrupt()中断信号" _mubu_text="%3Cspan%3ElockInterruptibly()%EF%BC%9A%E5%8F%AF%E4%B8%AD%E6%96%AD%E9%94%81%E5%9C%A8%E6%8A%A2%E5%8D%A0%E8%BF%87%E7%A8%8B%E4%B8%AD%E4%BC%9A%E5%A4%84%E7%90%86Thread.interrupt()%E4%B8%AD%E6%96%AD%E4%BF%A1%E5%8F%B7%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="tryLock(long timeout, TimeUnit unit)：阻塞式（限时抢占） 锁抢占过程中会处理Thread.interrupt()中断信号" _mubu_text="%3Cspan%3EtryLock(long%20timeout,%20TimeUnit%20unit)%EF%BC%9A%E9%98%BB%E5%A1%9E%E5%BC%8F%EF%BC%88%E9%99%90%E6%97%B6%E6%8A%A2%E5%8D%A0%EF%BC%89%20%E9%94%81%E6%8A%A2%E5%8D%A0%E8%BF%87%E7%A8%8B%E4%B8%AD%E4%BC%9A%E5%A4%84%E7%90%86Thread.interrupt()%E4%B8%AD%E6%96%AD%E4%BF%A1%E5%8F%B7%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="5.4.2 死锁的监测与中断" _mubu_text="%3Cspan%3E5.4.2%20%E6%AD%BB%E9%94%81%E7%9A%84%E7%9B%91%E6%B5%8B%E4%B8%8E%E4%B8%AD%E6%96%AD%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="5.5 共享锁与独占锁" _mubu_text="%3Cspan%3E5.5%20%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E7%8B%AC%E5%8D%A0%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+        <outline text="5.5.1 独占锁" _mubu_text="%3Cspan%3E5.5.1%20%E7%8B%AC%E5%8D%A0%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+          <outline text="独占锁也叫排他锁、互斥锁，指锁同一时刻只能被一个线程持有" _mubu_text="%3Cspan%3E%E7%8B%AC%E5%8D%A0%E9%94%81%E4%B9%9F%E5%8F%AB%E6%8E%92%E4%BB%96%E9%94%81%E3%80%81%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%8C%E6%8C%87%E9%94%81%E5%90%8C%E4%B8%80%E6%97%B6%E5%88%BB%E5%8F%AA%E8%83%BD%E8%A2%AB%E4%B8%80%E4%B8%AA%E7%BA%BF%E7%A8%8B%E6%8C%81%E6%9C%89%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="5.5.2 共享锁Semaphore：像是许可管理器" _mubu_text="%3Cspan%3E5.5.2%20%E5%85%B1%E4%BA%AB%E9%94%81Semaphore%EF%BC%9A%E5%83%8F%E6%98%AF%E8%AE%B8%E5%8F%AF%E7%AE%A1%E7%90%86%E5%99%A8%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="5.5.3 共享锁CountDownLatch：相当于一个倒数门闩" _mubu_text="%3Cspan%3E5.5.3%20%E5%85%B1%E4%BA%AB%E9%94%81CountDownLatch%EF%BC%9A%E7%9B%B8%E5%BD%93%E4%BA%8E%E4%B8%80%E4%B8%AA%E5%80%92%E6%95%B0%E9%97%A8%E9%97%A9%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="5.6 读写锁" _mubu_text="%3Cspan%3E5.6%20%E8%AF%BB%E5%86%99%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+        <outline text="5.6.1 读写锁ReentrantReadWriteLock" _mubu_text="%3Cspan%3E5.6.1%20%E8%AF%BB%E5%86%99%E9%94%81ReentrantReadWriteLock%3C/span%3E" _note="" _mubu_note="">
+          <outline text="读锁是可以多线程共享的共享锁，写锁是排他锁，同一时刻不允许读锁和写锁同时被抢占" _mubu_text="%3Cspan%3E%E8%AF%BB%E9%94%81%E6%98%AF%E5%8F%AF%E4%BB%A5%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%B1%E4%BA%AB%E7%9A%84%E5%85%B1%E4%BA%AB%E9%94%81%EF%BC%8C%E5%86%99%E9%94%81%E6%98%AF%E6%8E%92%E4%BB%96%E9%94%81%EF%BC%8C%E5%90%8C%E4%B8%80%E6%97%B6%E5%88%BB%E4%B8%8D%E5%85%81%E8%AE%B8%E8%AF%BB%E9%94%81%E5%92%8C%E5%86%99%E9%94%81%E5%90%8C%E6%97%B6%E8%A2%AB%E6%8A%A2%E5%8D%A0%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="5.6.2 锁的升级与降级" _mubu_text="%3Cspan%3E5.6.2%20%E9%94%81%E7%9A%84%E5%8D%87%E7%BA%A7%E4%B8%8E%E9%99%8D%E7%BA%A7%3C/span%3E" _note="" _mubu_note="">
+          <outline text="锁升级指读锁升级为写锁，锁降级指的是写锁降级为读锁。指支持写锁降级为读锁，而不支持读锁升级为写锁。这样考虑主要是避免升级后形成死锁" _mubu_text="%3Cspan%3E%E9%94%81%E5%8D%87%E7%BA%A7%E6%8C%87%E8%AF%BB%E9%94%81%E5%8D%87%E7%BA%A7%E4%B8%BA%E5%86%99%E9%94%81%EF%BC%8C%E9%94%81%E9%99%8D%E7%BA%A7%E6%8C%87%E7%9A%84%E6%98%AF%E5%86%99%E9%94%81%E9%99%8D%E7%BA%A7%E4%B8%BA%E8%AF%BB%E9%94%81%E3%80%82%E6%8C%87%E6%94%AF%E6%8C%81%E5%86%99%E9%94%81%E9%99%8D%E7%BA%A7%E4%B8%BA%E8%AF%BB%E9%94%81%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%94%AF%E6%8C%81%E8%AF%BB%E9%94%81%E5%8D%87%E7%BA%A7%E4%B8%BA%E5%86%99%E9%94%81%E3%80%82%E8%BF%99%E6%A0%B7%E8%80%83%E8%99%91%E4%B8%BB%E8%A6%81%E6%98%AF%E9%81%BF%E5%85%8D%E5%8D%87%E7%BA%A7%E5%90%8E%E5%BD%A2%E6%88%90%E6%AD%BB%E9%94%81%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="5.6.3 StampedLock" _mubu_text="%3Cspan%3E5.6.3%20StampedLock%3C/span%3E" _note="" _mubu_note="">
+          <outline text="StampedLock是对ReentrantReadWriteLock的升级，主要改进为为：在没有写只有读的场景下，StampedLock支持不用加锁而是直接进行读操作，只有在发生过写操作之后，再加读锁才能进行读操作" _mubu_text="%3Cspan%3EStampedLock%E6%98%AF%E5%AF%B9ReentrantReadWriteLock%E7%9A%84%E5%8D%87%E7%BA%A7%EF%BC%8C%E4%B8%BB%E8%A6%81%E6%94%B9%E8%BF%9B%E4%B8%BA%E4%B8%BA%EF%BC%9A%E5%9C%A8%E6%B2%A1%E6%9C%89%E5%86%99%E5%8F%AA%E6%9C%89%E8%AF%BB%E7%9A%84%E5%9C%BA%E6%99%AF%E4%B8%8B%EF%BC%8CStampedLock%E6%94%AF%E6%8C%81%E4%B8%8D%E7%94%A8%E5%8A%A0%E9%94%81%E8%80%8C%E6%98%AF%E7%9B%B4%E6%8E%A5%E8%BF%9B%E8%A1%8C%E8%AF%BB%E6%93%8D%E4%BD%9C%EF%BC%8C%E5%8F%AA%E6%9C%89%E5%9C%A8%E5%8F%91%E7%94%9F%E8%BF%87%E5%86%99%E6%93%8D%E4%BD%9C%E4%B9%8B%E5%90%8E%EF%BC%8C%E5%86%8D%E5%8A%A0%E8%AF%BB%E9%94%81%E6%89%8D%E8%83%BD%E8%BF%9B%E8%A1%8C%E8%AF%BB%E6%93%8D%E4%BD%9C%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="stampedLock和ReentrantReadWriteLock对比" _mubu_text="%3Cspan%3EstampedLock%E5%92%8CReentrantReadWriteLock%E5%AF%B9%E6%AF%94%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="stampedLock的演示案例" _mubu_text="%3Cspan%3EstampedLock%E7%9A%84%E6%BC%94%E7%A4%BA%E6%A1%88%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+      </outline>
+    </outline>
+    <outline text="6 AQS抽象同步器的核心原理" _mubu_text="%3Cspan%3E6%20AQS%E6%8A%BD%E8%B1%A1%E5%90%8C%E6%AD%A5%E5%99%A8%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note="">
+      <outline text="6.1 锁与队列的关系" _mubu_text="%3Cspan%3E6.1%20%E9%94%81%E4%B8%8E%E9%98%9F%E5%88%97%E7%9A%84%E5%85%B3%E7%B3%BB%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="6.2 AQS的核心成员" _mubu_text="%3Cspan%3E6.2%20AQS%E7%9A%84%E6%A0%B8%E5%BF%83%E6%88%90%E5%91%98%3C/span%3E" _note="" _mubu_note="">
+        <outline text="6.2.1状态标志位" _mubu_text="%3Cspan%3E6.2.1%E7%8A%B6%E6%80%81%E6%A0%87%E5%BF%97%E4%BD%8D%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.2.2 队列节点类" _mubu_text="%3Cspan%3E6.2.2%20%E9%98%9F%E5%88%97%E8%8A%82%E7%82%B9%E7%B1%BB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.2.3 FIFO的双向同步队列" _mubu_text="%3Cspan%3E6.2.3%20FIFO%E7%9A%84%E5%8F%8C%E5%90%91%E5%90%8C%E6%AD%A5%E9%98%9F%E5%88%97%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.2.4 JUC显示锁与AQS的关系" _mubu_text="%3Cspan%3E6.2.4%20JUC%E6%98%BE%E7%A4%BA%E9%94%81%E4%B8%8EAQS%E7%9A%84%E5%85%B3%E7%B3%BB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.2.5 ReentrantLock与AQS的组合关系" _mubu_text="%3Cspan%3E6.2.5%20ReentrantLock%E4%B8%8EAQS%E7%9A%84%E7%BB%84%E5%90%88%E5%85%B3%E7%B3%BB%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="6.3 AQS中的模板模式" _mubu_text="%3Cspan%3E6.3%20AQS%E4%B8%AD%E7%9A%84%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note="">
+        <outline text="6.3.1 模板模式" _mubu_text="%3Cspan%3E6.3.1%20%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.3.2 一个模板模式的参考实现" _mubu_text="%3Cspan%3E6.3.2%20%E4%B8%80%E4%B8%AA%E6%A8%A1%E6%9D%BF%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.3.3 AQS的模板流程" _mubu_text="%3Cspan%3E6.3.3%20AQS%E7%9A%84%E6%A8%A1%E6%9D%BF%E6%B5%81%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.3.4 AQS中的钩子方法" _mubu_text="%3Cspan%3E6.3.4%20AQS%E4%B8%AD%E7%9A%84%E9%92%A9%E5%AD%90%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="6.4 通过AQS实现一把简单的独占锁" _mubu_text="%3Cspan%3E6.4%20%E9%80%9A%E8%BF%87AQS%E5%AE%9E%E7%8E%B0%E4%B8%80%E6%8A%8A%E7%AE%80%E5%8D%95%E7%9A%84%E7%8B%AC%E5%8D%A0%E9%94%81%3C/span%3E" _note="" _mubu_note="">
+        <outline text="6.4.1 简单的独占锁的实现" _mubu_text="%3Cspan%3E6.4.1%20%E7%AE%80%E5%8D%95%E7%9A%84%E7%8B%AC%E5%8D%A0%E9%94%81%E7%9A%84%E5%AE%9E%E7%8E%B0%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.4.2 SimpleMockLock测试用例" _mubu_text="%3Cspan%3E6.4.2%20SimpleMockLock%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="6.5 AQS抢占锁的原理" _mubu_text="%3Cspan%3E6.5%20AQS%E6%8A%A2%E5%8D%A0%E9%94%81%E7%9A%84%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note="">
+        <outline text="6.5.1 显示锁抢占的总体流程" _mubu_text="%3Cspan%3E6.5.1%20%E6%98%BE%E7%A4%BA%E9%94%81%E6%8A%A2%E5%8D%A0%E7%9A%84%E6%80%BB%E4%BD%93%E6%B5%81%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.5.2 AQS模板方法：acquire(arg)" _mubu_text="%3Cspan%3E6.5.2%20AQS%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%EF%BC%9Aacquire(arg)%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.5.3 钩子实现：tryAcquire(arg)" _mubu_text="%3Cspan%3E6.5.3%20%E9%92%A9%E5%AD%90%E5%AE%9E%E7%8E%B0%EF%BC%9AtryAcquire(arg)%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.5.4 直接入队：addWaiter" _mubu_text="%3Cspan%3E6.5.4%20%E7%9B%B4%E6%8E%A5%E5%85%A5%E9%98%9F%EF%BC%9AaddWaiter%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.5.5 自旋入队：enq" _mubu_text="%3Cspan%3E6.5.5%20%E8%87%AA%E6%97%8B%E5%85%A5%E9%98%9F%EF%BC%9Aenq%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.5.6 自旋抢占：acquireQueued()" _mubu_text="%3Cspan%3E6.5.6%20%E8%87%AA%E6%97%8B%E6%8A%A2%E5%8D%A0%EF%BC%9AacquireQueued()%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.5.7 挂起判断：shouldParkAfterFailedAcquired()" _mubu_text="%3Cspan%3E6.5.7%20%E6%8C%82%E8%B5%B7%E5%88%A4%E6%96%AD%EF%BC%9AshouldParkAfterFailedAcquired()%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.5.8 线程挂起：parkAndCheckInterrupt()" _mubu_text="%3Cspan%3E6.5.8%20%E7%BA%BF%E7%A8%8B%E6%8C%82%E8%B5%B7%EF%BC%9AparkAndCheckInterrupt()%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="6.6 AQS的两个关键点：节点的入队和出队" _mubu_text="%3Cspan%3E6.6%20AQS%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%85%B3%E9%94%AE%E7%82%B9%EF%BC%9A%E8%8A%82%E7%82%B9%E7%9A%84%E5%85%A5%E9%98%9F%E5%92%8C%E5%87%BA%E9%98%9F%3C/span%3E" _note="" _mubu_note="">
+        <outline text="6.6.1 节点的自旋入队" _mubu_text="%3Cspan%3E6.6.1%20%E8%8A%82%E7%82%B9%E7%9A%84%E8%87%AA%E6%97%8B%E5%85%A5%E9%98%9F%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.6.2 节点的出队" _mubu_text="%3Cspan%3E6.6.2%20%E8%8A%82%E7%82%B9%E7%9A%84%E5%87%BA%E9%98%9F%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="6.7 AQS锁释放的原理" _mubu_text="%3Cspan%3E6.7%20AQS%E9%94%81%E9%87%8A%E6%94%BE%E7%9A%84%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note="">
+        <outline text="6.7.1 SimpleMockLock独占锁的释放流程" _mubu_text="%3Cspan%3E6.7.1%20SimpleMockLock%E7%8B%AC%E5%8D%A0%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE%E6%B5%81%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.7.2 AQS模板方法：release()" _mubu_text="%3Cspan%3E6.7.2%20AQS%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%EF%BC%9Arelease()%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.7.3 钩子实现：tryRelease()" _mubu_text="%3Cspan%3E6.7.3%20%E9%92%A9%E5%AD%90%E5%AE%9E%E7%8E%B0%EF%BC%9AtryRelease()%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.7.4 唤醒后继：unparkSuccessor()" _mubu_text="%3Cspan%3E6.7.4%20%E5%94%A4%E9%86%92%E5%90%8E%E7%BB%A7%EF%BC%9AunparkSuccessor()%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="6.8 ReentrantLock的抢锁流程" _mubu_text="%3Cspan%3E6.8%20ReentrantLock%E7%9A%84%E6%8A%A2%E9%94%81%E6%B5%81%E7%A8%8B%3C/span%3E" _note="" _mubu_note="">
+        <outline text="6.8.1 ReentrantLock非公平锁的抢占流程" _mubu_text="%3Cspan%3E6.8.1%20ReentrantLock%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81%E7%9A%84%E6%8A%A2%E5%8D%A0%E6%B5%81%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.8.2 非公平锁的同步器子类" _mubu_text="%3Cspan%3E6.8.2%20%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81%E7%9A%84%E5%90%8C%E6%AD%A5%E5%99%A8%E5%AD%90%E7%B1%BB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.8.3 非公平抢占的钩子方法：tryArcquire(arg)" _mubu_text="%3Cspan%3E6.8.3%20%E9%9D%9E%E5%85%AC%E5%B9%B3%E6%8A%A2%E5%8D%A0%E7%9A%84%E9%92%A9%E5%AD%90%E6%96%B9%E6%B3%95%EF%BC%9AtryArcquire(arg)%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.8.4 ReentrantLock公平锁的抢占流程" _mubu_text="%3Cspan%3E6.8.4%20ReentrantLock%E5%85%AC%E5%B9%B3%E9%94%81%E7%9A%84%E6%8A%A2%E5%8D%A0%E6%B5%81%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.8.5 公平锁的同步器子类" _mubu_text="%3Cspan%3E6.8.5%20%E5%85%AC%E5%B9%B3%E9%94%81%E7%9A%84%E5%90%8C%E6%AD%A5%E5%99%A8%E5%AD%90%E7%B1%BB%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.8.6 公平抢占的钩子方法：tryAcquire(arg)" _mubu_text="%3Cspan%3E6.8.6%20%E5%85%AC%E5%B9%B3%E6%8A%A2%E5%8D%A0%E7%9A%84%E9%92%A9%E5%AD%90%E6%96%B9%E6%B3%95%EF%BC%9AtryAcquire(arg)%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.8.7 是否有后继节点的判断" _mubu_text="%3Cspan%3E6.8.7%20%E6%98%AF%E5%90%A6%E6%9C%89%E5%90%8E%E7%BB%A7%E8%8A%82%E7%82%B9%E7%9A%84%E5%88%A4%E6%96%AD%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="6.9 AQS条件队列" _mubu_text="%3Cspan%3E6.9%20AQS%E6%9D%A1%E4%BB%B6%E9%98%9F%E5%88%97%3C/span%3E" _note="" _mubu_note="">
+        <outline text="6.9.1 Condition基本1原理" _mubu_text="%3Cspan%3E6.9.1%20Condition%E5%9F%BA%E6%9C%AC1%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.9.2 await()等待方法原理" _mubu_text="%3Cspan%3E6.9.2%20await()%E7%AD%89%E5%BE%85%E6%96%B9%E6%B3%95%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="6.9.3 signal()唤醒方法原理" _mubu_text="%3Cspan%3E6.9.3%20signal()%E5%94%A4%E9%86%92%E6%96%B9%E6%B3%95%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="6.10 AQS的实际应用" _mubu_text="%3Cspan%3E6.10%20AQS%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%3C/span%3E" _note="" _mubu_note=""/>
+    </outline>
+    <outline text="7 JUC容器类" _mubu_text="%3Cspan%3E7%20JUC%E5%AE%B9%E5%99%A8%E7%B1%BB%3C/span%3E" _note="" _mubu_note="">
+      <outline text="7.1 线程安全的同步容器类" _mubu_text="%3Cspan%3E7.1%20%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%90%8C%E6%AD%A5%E5%AE%B9%E5%99%A8%E7%B1%BB%3C/span%3E" _note="" _mubu_note="">
+        <outline text="通过Collections.synchronizedXXX()提供的静态方法包装" _mubu_text="%3Cspan%3E%E9%80%9A%E8%BF%87Collections.synchronizedXXX()%E6%8F%90%E4%BE%9B%E7%9A%84%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%E5%8C%85%E8%A3%85%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="7.2 JUC高并发容器" _mubu_text="%3Cspan%3E7.2%20JUC%E9%AB%98%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8%3C/span%3E" _note="" _mubu_note="">
+        <outline text="7.2.1 什么是高并发容器：JUC高并发容器是基于非阻塞算法（或者无锁编程算法）实现的容器类，主要通过CAS+volatile" _mubu_text="%3Cspan%3E7.2.1%20%E4%BB%80%E4%B9%88%E6%98%AF%E9%AB%98%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8%EF%BC%9AJUC%E9%AB%98%E5%B9%B6%E5%8F%91%E5%AE%B9%E5%99%A8%E6%98%AF%E5%9F%BA%E4%BA%8E%E9%9D%9E%E9%98%BB%E5%A1%9E%E7%AE%97%E6%B3%95%EF%BC%88%E6%88%96%E8%80%85%E6%97%A0%E9%94%81%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95%EF%BC%89%E5%AE%9E%E7%8E%B0%E7%9A%84%E5%AE%B9%E5%99%A8%E7%B1%BB%EF%BC%8C%E4%B8%BB%E8%A6%81%E9%80%9A%E8%BF%87CAS+volatile%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="7.2.2 List" _mubu_text="%3Cspan%3E7.2.2%20List%3C/span%3E" _note="" _mubu_note="">
+          <outline text="CopyOnWriteArrayList，对应的基础容器为ArrayList" _mubu_text="%3Cspan%3ECopyOnWriteArrayList%EF%BC%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E5%9F%BA%E7%A1%80%E5%AE%B9%E5%99%A8%E4%B8%BAArrayList%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="7.2.3 Set" _mubu_text="%3Cspan%3E7.2.3%20Set%3C/span%3E" _note="" _mubu_note="">
+          <outline text="CopyOnWriteArraySet：继承自AbstractSet，对应的基础容器是Hashset。基于CopyOnWriteArrayList实现" _mubu_text="%3Cspan%3ECopyOnWriteArraySet%EF%BC%9A%E7%BB%A7%E6%89%BF%E8%87%AAAbstractSet%EF%BC%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E5%9F%BA%E7%A1%80%E5%AE%B9%E5%99%A8%E6%98%AFHashset%E3%80%82%E5%9F%BA%E4%BA%8ECopyOnWriteArrayList%E5%AE%9E%E7%8E%B0%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="CopyOnWriteSkipListSet：继承自AbstractSet，对应的基础容器是TreeSet，实现了NavigableSet接口，基于ConcurrentSkipListMap实现" _mubu_text="%3Cspan%3ECopyOnWriteSkipListSet%EF%BC%9A%E7%BB%A7%E6%89%BF%E8%87%AAAbstractSet%EF%BC%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E5%9F%BA%E7%A1%80%E5%AE%B9%E5%99%A8%E6%98%AFTreeSet%EF%BC%8C%E5%AE%9E%E7%8E%B0%E4%BA%86NavigableSet%E6%8E%A5%E5%8F%A3%EF%BC%8C%E5%9F%BA%E4%BA%8EConcurrentSkipListMap%E5%AE%9E%E7%8E%B0%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="7.2.4 Map" _mubu_text="%3Cspan%3E7.2.4%20Map%3C/span%3E" _note="" _mubu_note="">
+          <outline text="ConcurrentHashMap：对应的基础容器是HashMap，JDK 6中是采用“分段锁”，JDK8采用CAS + synchronized" _mubu_text="%3Cspan%3EConcurrentHashMap%EF%BC%9A%E5%AF%B9%E5%BA%94%E7%9A%84%E5%9F%BA%E7%A1%80%E5%AE%B9%E5%99%A8%E6%98%AFHashMap%EF%BC%8CJDK%206%E4%B8%AD%E6%98%AF%E9%87%87%E7%94%A8%E2%80%9C%E5%88%86%E6%AE%B5%E9%94%81%E2%80%9D%EF%BC%8CJDK8%E9%87%87%E7%94%A8CAS%20+%20synchronized%3C/span%3E" _note="" _mubu_note=""/>
+          <outline text="ConcurrentSkipListMap：对应的基础容器是TreeMap，内部的Skip List是一种可以替代平衡树的数据结构" _mubu_text="%3Cspan%3EConcurrentSkipListMap%EF%BC%9A%E5%AF%B9%E5%BA%94%E7%9A%84%E5%9F%BA%E7%A1%80%E5%AE%B9%E5%99%A8%E6%98%AFTreeMap%EF%BC%8C%E5%86%85%E9%83%A8%E7%9A%84Skip%20List%E6%98%AF%E4%B8%80%E7%A7%8D%E5%8F%AF%E4%BB%A5%E6%9B%BF%E4%BB%A3%E5%B9%B3%E8%A1%A1%E6%A0%91%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%3C/span%3E" _note="" _mubu_note=""/>
+        </outline>
+        <outline text="7.2.5 Queue" _mubu_text="%3Cspan%3E7.2.5%20Queue%3C/span%3E" _note="" _mubu_note="">
+          <outline text="7.2.5.1 单向队列" _mubu_text="%3Cspan%3E7.2.5.1%20%E5%8D%95%E5%90%91%E9%98%9F%E5%88%97%3C/span%3E" _note="" _mubu_note="">
+            <outline text="ConcurrentLInkedQueue：单向元素" _mubu_text="%3Cspan%3EConcurrentLInkedQueue%EF%BC%9A%E5%8D%95%E5%90%91%E5%85%83%E7%B4%A0%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+          <outline text="7.2.5.2 双向队列" _mubu_text="%3Cspan%3E7.2.5.2%20%E5%8F%8C%E5%90%91%E9%98%9F%E5%88%97%3C/span%3E" _note="" _mubu_note="">
+            <outline text="ConcurrentLInkedDeque：双向队列，不允许null元素，可以当做栈使用" _mubu_text="%3Cspan%3EConcurrentLInkedDeque%EF%BC%9A%E5%8F%8C%E5%90%91%E9%98%9F%E5%88%97%EF%BC%8C%E4%B8%8D%E5%85%81%E8%AE%B8null%E5%85%83%E7%B4%A0%EF%BC%8C%E5%8F%AF%E4%BB%A5%E5%BD%93%E5%81%9A%E6%A0%88%E4%BD%BF%E7%94%A8%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+          <outline text="7.2.5.3 阻塞队列" _mubu_text="%3Cspan%3E7.2.5.3%20%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%3C/span%3E" _note="" _mubu_note="">
+            <outline text="ArrayBlockingQueue：基于数组实现" _mubu_text="%3Cspan%3EArrayBlockingQueue%EF%BC%9A%E5%9F%BA%E4%BA%8E%E6%95%B0%E7%BB%84%E5%AE%9E%E7%8E%B0%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="LInkedBlockingQueue：基于链表实现" _mubu_text="%3Cspan%3ELInkedBlockingQueue%EF%BC%9A%E5%9F%BA%E4%BA%8E%E9%93%BE%E8%A1%A8%E5%AE%9E%E7%8E%B0%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="PriorityBlockingQueue：按照优先级排序" _mubu_text="%3Cspan%3EPriorityBlockingQueue%EF%BC%9A%E6%8C%89%E7%85%A7%E4%BC%98%E5%85%88%E7%BA%A7%E6%8E%92%E5%BA%8F%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="DelayQueue：按照元素Delay时间排序" _mubu_text="%3Cspan%3EDelayQueue%EF%BC%9A%E6%8C%89%E7%85%A7%E5%85%83%E7%B4%A0Delay%E6%97%B6%E9%97%B4%E6%8E%92%E5%BA%8F%3C/span%3E" _note="" _mubu_note=""/>
+            <outline text="SynchronousQueue：无缓冲等待队列" _mubu_text="%3Cspan%3ESynchronousQueue%EF%BC%9A%E6%97%A0%E7%BC%93%E5%86%B2%E7%AD%89%E5%BE%85%E9%98%9F%E5%88%97%3C/span%3E" _note="" _mubu_note=""/>
+          </outline>
+        </outline>
+      </outline>
+      <outline text="7.3 CopyOnWriteArrayList" _mubu_text="%3Cspan%3E7.3%20CopyOnWriteArrayList%3C/span%3E" _note="" _mubu_note="">
+        <outline text="CopyOnWriteArrayList的使用" _mubu_text="%3Cspan%3ECopyOnWriteArrayList%E7%9A%84%E4%BD%BF%E7%94%A8%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="CopyOnWriteArrayList的原理：CopyIOnWrite（写时复制）就是在修改器对一块内存进行修改时，不直接在原有内存上进行写操作，而是将内存复制一份，在新的内存中进行写操作，写完之后，再将原来的指针指向新内存。" _mubu_text="%3Cspan%3ECopyOnWriteArrayList%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9ACopyIOnWrite%EF%BC%88%E5%86%99%E6%97%B6%E5%A4%8D%E5%88%B6%EF%BC%89%E5%B0%B1%E6%98%AF%E5%9C%A8%E4%BF%AE%E6%94%B9%E5%99%A8%E5%AF%B9%E4%B8%80%E5%9D%97%E5%86%85%E5%AD%98%E8%BF%9B%E8%A1%8C%E4%BF%AE%E6%94%B9%E6%97%B6%EF%BC%8C%E4%B8%8D%E7%9B%B4%E6%8E%A5%E5%9C%A8%E5%8E%9F%E6%9C%89%E5%86%85%E5%AD%98%E4%B8%8A%E8%BF%9B%E8%A1%8C%E5%86%99%E6%93%8D%E4%BD%9C%EF%BC%8C%E8%80%8C%E6%98%AF%E5%B0%86%E5%86%85%E5%AD%98%E5%A4%8D%E5%88%B6%E4%B8%80%E4%BB%BD%EF%BC%8C%E5%9C%A8%E6%96%B0%E7%9A%84%E5%86%85%E5%AD%98%E4%B8%AD%E8%BF%9B%E8%A1%8C%E5%86%99%E6%93%8D%E4%BD%9C%EF%BC%8C%E5%86%99%E5%AE%8C%E4%B9%8B%E5%90%8E%EF%BC%8C%E5%86%8D%E5%B0%86%E5%8E%9F%E6%9D%A5%E7%9A%84%E6%8C%87%E9%92%88%E6%8C%87%E5%90%91%E6%96%B0%E5%86%85%E5%AD%98%E3%80%82%3C/span%3E" _note="" _mubu_note="" _mubu_images="%5B%7B%22id%22%3A%223fHQ6KQipg%22%2C%22oh%22%3A682%2C%22ow%22%3A1264%2C%22uri%22%3A%22document_image%2Ff2941406-ebc1-440f-9770-f73ec2df644d-17072876.jpg%22%2C%22w%22%3A400%7D%5D"/>
+        <outline text="CopyOnWriteArrayList读取操作" _mubu_text="%3Cspan%3ECopyOnWriteArrayList%E8%AF%BB%E5%8F%96%E6%93%8D%E4%BD%9C%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="7.4 BlockingQueue" _mubu_text="%3Cspan%3E7.4%20BlockingQueue%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="7.5 ConcurrentHashMap" _mubu_text="%3Cspan%3E7.5%20ConcurrentHashMap%3C/span%3E" _note="" _mubu_note=""/>
+    </outline>
+    <outline text="8 高并发设计模式" _mubu_text="%3Cspan%3E8%20%E9%AB%98%E5%B9%B6%E5%8F%91%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note="">
+      <outline text="8.1 线程安全的单例模式" _mubu_text="%3Cspan%3E8.1%20%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note="">
+        <outline text="8.1.1 从饿汉式单例到懒汉式单例" _mubu_text="%3Cspan%3E8.1.1%20%E4%BB%8E%E9%A5%BF%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B%E5%88%B0%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="8.1.2 食用内置锁保护懒汉单例" _mubu_text="%3Cspan%3E8.1.2%20%E9%A3%9F%E7%94%A8%E5%86%85%E7%BD%AE%E9%94%81%E4%BF%9D%E6%8A%A4%E6%87%92%E6%B1%89%E5%8D%95%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="8.1.3 双重监察锁单例模式" _mubu_text="%3Cspan%3E8.1.3%20%E5%8F%8C%E9%87%8D%E7%9B%91%E5%AF%9F%E9%94%81%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="8.1.4 使用双重监察锁+volatile" _mubu_text="%3Cspan%3E8.1.4%20%E4%BD%BF%E7%94%A8%E5%8F%8C%E9%87%8D%E7%9B%91%E5%AF%9F%E9%94%81+volatile%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="8.1.5 使用静态内部类实现懒汉式单例模式" _mubu_text="%3Cspan%3E8.1.5%20%E4%BD%BF%E7%94%A8%E9%9D%99%E6%80%81%E5%86%85%E9%83%A8%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="8.2 Master-Worker模式" _mubu_text="%3Cspan%3E8.2%20Master-Worker%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note="">
+        <outline text="8.2.1 Master-Worker模式的参考实现" _mubu_text="%3Cspan%3E8.2.1%20Master-Worker%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8F%82%E8%80%83%E5%AE%9E%E7%8E%B0%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="8.2.2 Netty中Master-Worker模式的实现" _mubu_text="%3Cspan%3E8.2.2%20Netty%E4%B8%ADMaster-Worker%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="8.2.3 Nginx中Master-Worker模式的实现" _mubu_text="%3Cspan%3E8.2.3%20Nginx%E4%B8%ADMaster-Worker%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="8.3 ForkJoin模式" _mubu_text="%3Cspan%3E8.3%20ForkJoin%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note="">
+        <outline text="8.3.1 ForkJoin模式的原理" _mubu_text="%3Cspan%3E8.3.1%20ForkJoin%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="8.3.2 ForkJoin框架" _mubu_text="%3Cspan%3E8.3.2%20ForkJoin%E6%A1%86%E6%9E%B6%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="8.3.3 ForkJoin框架使用实践" _mubu_text="%3Cspan%3E8.3.3%20ForkJoin%E6%A1%86%E6%9E%B6%E4%BD%BF%E7%94%A8%E5%AE%9E%E8%B7%B5%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="8.3.4 ForkJoin框架的核心API" _mubu_text="%3Cspan%3E8.3.4%20ForkJoin%E6%A1%86%E6%9E%B6%E7%9A%84%E6%A0%B8%E5%BF%83API%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="8.3.5 工作窃取算法" _mubu_text="%3Cspan%3E8.3.5%20%E5%B7%A5%E4%BD%9C%E7%AA%83%E5%8F%96%E7%AE%97%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="8.3.6 ForkJoin框架的原理" _mubu_text="%3Cspan%3E8.3.6%20ForkJoin%E6%A1%86%E6%9E%B6%E7%9A%84%E5%8E%9F%E7%90%86%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="8.4 生产者-消费者模式" _mubu_text="%3Cspan%3E8.4%20%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="8.5 Future模式" _mubu_text="%3Cspan%3E8.5%20Future%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note=""/>
+    </outline>
+    <outline text="9 高并发核心模式之异步回调模式" _mubu_text="%3Cspan%3E9%20%E9%AB%98%E5%B9%B6%E5%8F%91%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note="">
+      <outline text="9.1 从泡茶的案例讲起" _mubu_text="%3Cspan%3E9.1%20%E4%BB%8E%E6%B3%A1%E8%8C%B6%E7%9A%84%E6%A1%88%E4%BE%8B%E8%AE%B2%E8%B5%B7%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="9.2 join：异步阻塞之闷葫芦" _mubu_text="%3Cspan%3E9.2%20join%EF%BC%9A%E5%BC%82%E6%AD%A5%E9%98%BB%E5%A1%9E%E4%B9%8B%E9%97%B7%E8%91%AB%E8%8A%A6%3C/span%3E" _note="" _mubu_note="">
+        <outline text="9.2.1 线程的合并流程" _mubu_text="%3Cspan%3E9.2.1%20%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%90%88%E5%B9%B6%E6%B5%81%E7%A8%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="9.2.2 调用join()实现异步泡茶喝" _mubu_text="%3Cspan%3E9.2.2%20%E8%B0%83%E7%94%A8join()%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E6%B3%A1%E8%8C%B6%E5%96%9D%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="9.2.3 join()方法详解" _mubu_text="%3Cspan%3E9.2.3%20join()%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="9.3 FutureTask：异步调用之重武器" _mubu_text="%3Cspan%3E9.3%20FutureTask%EF%BC%9A%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8%E4%B9%8B%E9%87%8D%E6%AD%A6%E5%99%A8%3C/span%3E" _note="" _mubu_note="">
+        <outline text="9.3.1 通过FutureTask获取异步执行结果的步骤" _mubu_text="%3Cspan%3E9.3.1%20%E9%80%9A%E8%BF%87FutureTask%E8%8E%B7%E5%8F%96%E5%BC%82%E6%AD%A5%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E6%AD%A5%E9%AA%A4%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="9.3.2 使用FutureTask实现异步泡茶喝" _mubu_text="%3Cspan%3E9.3.2%20%E4%BD%BF%E7%94%A8FutureTask%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E6%B3%A1%E8%8C%B6%E5%96%9D%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="9.4 异步回调与主动调用" _mubu_text="%3Cspan%3E9.4%20%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%E4%B8%8E%E4%B8%BB%E5%8A%A8%E8%B0%83%E7%94%A8%3C/span%3E" _note="" _mubu_note=""/>
+      <outline text="9.5 Guava的异步回调模式" _mubu_text="%3Cspan%3E9.5%20Guava%E7%9A%84%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note="">
+        <outline text="9.5.1 详解FutureCallback" _mubu_text="%3Cspan%3E9.5.1%20%E8%AF%A6%E8%A7%A3FutureCallback%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="9.5.2 详解ListenableFuture" _mubu_text="%3Cspan%3E9.5.2%20%E8%AF%A6%E8%A7%A3ListenableFuture%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="9.5.3 ListenableFuture异步任务" _mubu_text="%3Cspan%3E9.5.3%20ListenableFuture%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="9.5.4 使用Guava实现泡茶喝的实例" _mubu_text="%3Cspan%3E9.5.4%20%E4%BD%BF%E7%94%A8Guava%E5%AE%9E%E7%8E%B0%E6%B3%A1%E8%8C%B6%E5%96%9D%E7%9A%84%E5%AE%9E%E4%BE%8B%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="9.5.5 Guava异步回调和Java异步调用的区别" _mubu_text="%3Cspan%3E9.5.5%20Guava%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%E5%92%8CJava%E5%BC%82%E6%AD%A5%E8%B0%83%E7%94%A8%E7%9A%84%E5%8C%BA%E5%88%AB%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="9.6 Netty的异步回调模式" _mubu_text="%3Cspan%3E9.6%20Netty%E7%9A%84%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%E6%A8%A1%E5%BC%8F%3C/span%3E" _note="" _mubu_note="">
+        <outline text="9.6.1 GenericFutureListener接口详解" _mubu_text="%3Cspan%3E9.6.1%20GenericFutureListener%E6%8E%A5%E5%8F%A3%E8%AF%A6%E8%A7%A3%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="9.6.2 Nettry的Future接口详解" _mubu_text="%3Cspan%3E9.6.2%20Nettry%E7%9A%84Future%E6%8E%A5%E5%8F%A3%E8%AF%A6%E8%A7%A3%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="9.6.3 ChannelFuture的使用" _mubu_text="%3Cspan%3E9.6.3%20ChannelFuture%E7%9A%84%E4%BD%BF%E7%94%A8%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="9.6.4 Netty的出站和入站异步回调" _mubu_text="%3Cspan%3E9.6.4%20Netty%E7%9A%84%E5%87%BA%E7%AB%99%E5%92%8C%E5%85%A5%E7%AB%99%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="9.7 异步回调模式小结" _mubu_text="%3Cspan%3E9.7%20%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%E6%A8%A1%E5%BC%8F%E5%B0%8F%E7%BB%93%3C/span%3E" _note="" _mubu_note=""/>
+    </outline>
+    <outline text="10 CompletableFuture异步回调" _mubu_text="%3Cspan%3E10%20CompletableFuture%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%3C/span%3E" _note="" _mubu_note="">
+      <outline text="10.1 CompletableFuture详解" _mubu_text="%3Cspan%3E10.1%20CompletableFuture%E8%AF%A6%E8%A7%A3%3C/span%3E" _note="" _mubu_note="">
+        <outline text="10.1.1 CompletableFuture的UML类关心" _mubu_text="%3Cspan%3E10.1.1%20CompletableFuture%E7%9A%84UML%E7%B1%BB%E5%85%B3%E5%BF%83%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.1.2 CompletionStage接口" _mubu_text="%3Cspan%3E10.1.2%20CompletionStage%E6%8E%A5%E5%8F%A3%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.1.3 使用runAsync和supplyAsync创建子任务" _mubu_text="%3Cspan%3E10.1.3%20%E4%BD%BF%E7%94%A8runAsync%E5%92%8CsupplyAsync%E5%88%9B%E5%BB%BA%E5%AD%90%E4%BB%BB%E5%8A%A1%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.1.4 设置子任务回调钩子" _mubu_text="%3Cspan%3E10.1.4%20%E8%AE%BE%E7%BD%AE%E5%AD%90%E4%BB%BB%E5%8A%A1%E5%9B%9E%E8%B0%83%E9%92%A9%E5%AD%90%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.1.5 调用handle()方法统一处理异常和结果" _mubu_text="%3Cspan%3E10.1.5%20%E8%B0%83%E7%94%A8handle()%E6%96%B9%E6%B3%95%E7%BB%9F%E4%B8%80%E5%A4%84%E7%90%86%E5%BC%82%E5%B8%B8%E5%92%8C%E7%BB%93%E6%9E%9C%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.1.6 线程池的使用" _mubu_text="%3Cspan%3E10.1.6%20%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%BD%BF%E7%94%A8%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="10.2 异步任务的串行执行" _mubu_text="%3Cspan%3E10.2%20%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%B8%B2%E8%A1%8C%E6%89%A7%E8%A1%8C%3C/span%3E" _note="" _mubu_note="">
+        <outline text="10.2.1 thenApply()方法" _mubu_text="%3Cspan%3E10.2.1%20thenApply()%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.2.2 thenRun()方法" _mubu_text="%3Cspan%3E10.2.2%20thenRun()%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.2.3 thenAccecpt()方法" _mubu_text="%3Cspan%3E10.2.3%20thenAccecpt()%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.2.4 thenCompose()方法" _mubu_text="%3Cspan%3E10.2.4%20thenCompose()%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.2.5 4个任务串行方法的区别" _mubu_text="%3Cspan%3E10.2.5%204%E4%B8%AA%E4%BB%BB%E5%8A%A1%E4%B8%B2%E8%A1%8C%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="10.3 异步任务的合并执行" _mubu_text="%3Cspan%3E10.3%20%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%90%88%E5%B9%B6%E6%89%A7%E8%A1%8C%3C/span%3E" _note="" _mubu_note="">
+        <outline text="10.3.1 thenCombine() 方法" _mubu_text="%3Cspan%3E10.3.1%20thenCombine()%20%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.3.2 runAfterBoth()方法" _mubu_text="%3Cspan%3E10.3.2%20runAfterBoth()%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.3.3 thenAcceptBoth()方法" _mubu_text="%3Cspan%3E10.3.3%20thenAcceptBoth()%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.3.4 allOf()等待所有的任务结束" _mubu_text="%3Cspan%3E10.3.4%20allOf()%E7%AD%89%E5%BE%85%E6%89%80%E6%9C%89%E7%9A%84%E4%BB%BB%E5%8A%A1%E7%BB%93%E6%9D%9F%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="10.4 异步任务的选择执行" _mubu_text="%3Cspan%3E10.4%20%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E7%9A%84%E9%80%89%E6%8B%A9%E6%89%A7%E8%A1%8C%3C/span%3E" _note="" _mubu_note="">
+        <outline text="10.4.1 applyToEither()方法" _mubu_text="%3Cspan%3E10.4.1%20applyToEither()%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.4.2 runAfterEither()方法" _mubu_text="%3Cspan%3E10.4.2%20runAfterEither()%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.4.3 acceptEither()方法" _mubu_text="%3Cspan%3E10.4.3%20acceptEither()%E6%96%B9%E6%B3%95%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+      <outline text="10.5 CompletableFuture的综合案例" _mubu_text="%3Cspan%3E10.5%20CompletableFuture%E7%9A%84%E7%BB%BC%E5%90%88%E6%A1%88%E4%BE%8B%3C/span%3E" _note="" _mubu_note="">
+        <outline text="10.5.1 使用CompletableFuture实现泡茶喝" _mubu_text="%3Cspan%3E10.5.1%20%E4%BD%BF%E7%94%A8CompletableFuture%E5%AE%9E%E7%8E%B0%E6%B3%A1%E8%8C%B6%E5%96%9D%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.5.2 使用CompletableFuture进行多个RPC调用" _mubu_text="%3Cspan%3E10.5.2%20%E4%BD%BF%E7%94%A8CompletableFuture%E8%BF%9B%E8%A1%8C%E5%A4%9A%E4%B8%AARPC%E8%B0%83%E7%94%A8%3C/span%3E" _note="" _mubu_note=""/>
+        <outline text="10.5.3 使用RxJava模拟RPC异步回调" _mubu_text="%3Cspan%3E10.5.3%20%E4%BD%BF%E7%94%A8RxJava%E6%A8%A1%E6%8B%9FRPC%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83%3C/span%3E" _note="" _mubu_note=""/>
+      </outline>
+    </outline>
+  </body>
+</opml>
