@@ -18,7 +18,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author caiwillie
@@ -27,27 +31,56 @@ public class Generator {
 
     private static final String CSV_EXTENSION = ".csv";
 
-    public static void generate(JCommander commander, List<File> paths, File output) {
+    public static void generate(JCommander commander, List<File> paths, File output, boolean separated) {
         if(CollUtil.isEmpty(paths)) {
             return;
         }
 
+        LinkedHashMap<String, List<String[]>> dataMap = new LinkedHashMap<>();
+
         for (File path : paths) {
-            String csvName = FileNameUtil.mainName(path.getName()) + CSV_EXTENSION;
+            String name = FileNameUtil.mainName(path.getName());
+            // String csvName =  + CSV_EXTENSION;
 
+            MubuConverter mubuConverter = new MubuConverter();
+            MubuOutline mubuOutline = mubuConverter.convert(path);
+
+            AnkiConverter ankiConverter = new AnkiConverter();
+            Anki anki = ankiConverter.converter(mubuOutline);
+            List<String[]> data = AnkiFormatter.formatWithSN(anki);
+            dataMap.put(name, data);
+        }
+
+        if(CollUtil.isEmpty(dataMap)) {
+            return;
+        }
+
+        if(separated) {
+            // 每个生成文件是独立的
+            for (Map.Entry<String, List<String[]>> entry : dataMap.entrySet()) {
+                String name = entry.getKey();
+                List<String[]> data = entry.getValue();
+                String csvName = name + CSV_EXTENSION;
+                try (Writer writer = IoUtil.getWriter(new FileOutputStream(new File(output, csvName)), StandardCharsets.UTF_8)) {
+                    CSVWriterBuilder builder = new CSVWriterBuilder(writer);
+                    ICSVWriter csvWriter = builder.withSeparator('\t').build();
+                    csvWriter.writeAll(data);
+                } catch (IOException e) {
+                    commander.getConsole().println(StrUtil.format("写入文件 {} 错误", csvName));
+                }
+            }
+        } else {
+            // 合并到一起
+            List<String[]> data = dataMap.values().stream().flatMap(List::stream).collect(Collectors.toList());
+            String csvName = output.getName() + CSV_EXTENSION;
             try (Writer writer = IoUtil.getWriter(new FileOutputStream(new File(output, csvName)), StandardCharsets.UTF_8)) {
-                MubuConverter mubuConverter = new MubuConverter();
-                MubuOutline mubuOutline = mubuConverter.convert(path);
-
-                AnkiConverter ankiConverter = new AnkiConverter();
-                Anki anki = ankiConverter.converter(mubuOutline);
-                List<String[]> data = AnkiFormatter.formatWithSN(anki);
                 CSVWriterBuilder builder = new CSVWriterBuilder(writer);
                 ICSVWriter csvWriter = builder.withSeparator('\t').build();
                 csvWriter.writeAll(data);
             } catch (IOException e) {
                 commander.getConsole().println(StrUtil.format("写入文件 {} 错误", csvName));
             }
+
         }
     }
 }

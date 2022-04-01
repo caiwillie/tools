@@ -32,25 +32,19 @@ public class CommanderUtil {
         ret.setFiles(files);
 
         String filePath = arg.getInput();
-        if(StrUtil.isBlank(filePath)) {
-            // 如果没指定文件 并且 参数也不为空
-            commander.usage();
-            System.exit(0);
-        } else  {
-            // 如果指定文件
-            File path = FileUtil2.getAbsoluteFile(filePath);
+        // 如果指定文件
+        File path = FileUtil2.getAbsoluteFile(filePath);
 
-            FileUtil2.assertExist(path);
+        FileUtil2.assertExist(path);
 
-            if(path.isFile()) {
-                // 判断后缀
-                FileUtil2.assertExtension(path, OPML);
-                files.add(path);
-                ret.setLastDir(path.getParentFile());
-            } else {
-                files.addAll(FileUtil2.loopFiles(path, OPML));
-                ret.setLastDir(path);
-            }
+        if(path.isFile()) {
+            // 判断后缀
+            FileUtil2.assertExtension(path, OPML);
+            files.add(path);
+            ret.setLastDir(path.getParentFile());
+        } else {
+            files.addAll(FileUtil2.loopFiles(path, OPML));
+            ret.setLastDir(path);
         }
 
         return ret;
