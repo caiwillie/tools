@@ -33,6 +33,6 @@ public class Main {
             System.exit(1);
         }
 
-        Generator.generate(commander, input.getFiles(), output);
+        Generator.generate(commander, input.getFiles(), output, arg.isSeparated());
     }
 }
