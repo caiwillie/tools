@@ -80,7 +80,6 @@ public class Generator {
             } catch (IOException e) {
                 commander.getConsole().println(StrUtil.format("写入文件 {} 错误", csvName));
             }
-
         }
     }
 }
