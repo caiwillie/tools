@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import static com.caiwillie.tools.mubu2anki.common.Constant.*;
@@ -51,6 +53,8 @@ public class MubuConverter {
     }
 
     private File path;
+
+    private Set<String> idSet = new HashSet<>();
 
     public MubuOutline convert(File path) {
 
@@ -188,6 +192,11 @@ public class MubuConverter {
                 } else {
                     id = rawId.substring(1, rawId.length() - 1);
                 }
+
+                if (idSet.contains(id)) {
+                    throw new RuntimeException(StrUtil.format("文件 {} 中的序号 {} 存在重复", path.getAbsolutePath(), id));
+                }
+
                 int index = StrUtil.indexOf(text, rawId, 0, false);
                 text = StrUtil.replace(text, index, index + rawId.length(), "");
                 mubuOutline.setText(text);
