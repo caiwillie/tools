@@ -21,6 +21,7 @@ import org.eclipse.text.edits.TextEdit;
 
 import java.io.File;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -52,7 +53,13 @@ public class LeetCodeConverter {
 
             String codeTemp = FileUtil.readUtf8String(codeFile);
 
-            String code = ReUtil.getGroup1(CODE_PATTERN, codeTemp);
+            String code = null;
+            Matcher matcher = CODE_PATTERN.matcher(codeTemp);
+            if(matcher.find()) {
+                code = matcher.group(1);
+            } else {
+                throw new RuntimeException(StrUtil.format("获取代码出错，题目编号：{}", id));
+            }
 
             code = formatCode(code);
 
